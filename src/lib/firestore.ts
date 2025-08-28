@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import type { Asana, Pose, Concept, PoseModifier } from '@/types';
@@ -416,9 +417,9 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     id: 'monkey',
     nombre: 'Mono\n(Monkey)',
     nivel: 2,
-    type: 'L-Basing',
-    prerequisites: ['back-bird-acro'],
-    descripcion: 'Una transición clásica donde el volador se mueve entre los hombros y los pies de la base.',
+    type: 'Standing',
+    prerequisites: ['standing-high-bird'],
+    descripcion: 'Una transición clásica de standing acro donde el volador se mueve entre los hombros y los pies de la base.',
     narrativa_detallada: `
 **Inicio:**
 1.  **Base:** De pie, con el volador sentado en sus hombros.
@@ -607,7 +608,7 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     nombre: 'Catedral\n(Cathedral)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['back-bird-acro'],
+    prerequisites: [],
     descripcion: 'Una postura de apertura de pecho donde la base sostiene al volador por los hombros, creando una forma de arco elevado.',
     narrativa_detallada: `
 **Inicio:**
@@ -967,7 +968,7 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     nombre: 'Lavadora: Sacacorchos\n(Corkscrew)',
     nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['7', '16', 'reverse-throne'],
+    prerequisites: ['7', '16', 'reverse-throne', 'back-bird-acro'],
     descripcion: 'Una lavadora clásica que implica una rotación completa del volador alrededor de las piernas de la base.',
     narrativa_detallada: `
 **Esta es una **Lavadora (Washing Machine)**, una secuencia fluida.**
@@ -998,7 +999,7 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     nombre: 'Lavadora:High Barrel Roll',
     nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['corkscrew'],
+    prerequisites: ['1', 'back-bird-acro'],
     descripcion: 'Una lavadora rotacional donde el volador "rueda" sobre el torso de la base, pasando por Pájaro Frontal y Pájaro Invertido.',
     narrativa_detallada: `
 **Inicio:**
@@ -4121,5 +4122,6 @@ export async function getAsanas(): Promise<Asana[]> {
 
 
     
+
 
 

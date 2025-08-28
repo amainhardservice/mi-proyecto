@@ -16,12 +16,14 @@ type PoseExplorerProps = {
   poses: Pose[];
   allPoses: Pose[];
   concepts: Concept[];
+  highlightedPoseIds?: string[]; // Prop to control highlighting from outside
 };
 
 export default function PoseExplorer({ 
   poses,
   allPoses,
   concepts, 
+  highlightedPoseIds: externalHighlightedPoseIds,
 }: PoseExplorerProps) {
   
   const [selectedPose, setSelectedPose] = useState<PoseWithImage | null>(null);
@@ -33,11 +35,11 @@ export default function PoseExplorer({
   const [prereqMode, setPrereqMode] = useState(false);
 
   const posesById = useMemo(() => {
-    return poses.reduce((acc, pose) => {
+    return allPoses.reduce((acc, pose) => {
       acc[pose.id] = pose;
       return acc;
     }, {} as Record<string, Pose>);
-  }, [poses]);
+  }, [allPoses]);
 
   const posesByLevel = useMemo(() => {
     return poses.reduce((acc, pose) => {
@@ -89,15 +91,10 @@ export default function PoseExplorer({
     return Array.from(prereqs);
   };
 
-  const highlightedPrereqs = useMemo(() => {
-    if ((exploreMode || prereqMode) && pinnedPoseIds.length > 0) {
-        const lastPinnedId = pinnedPoseIds[pinnedPoseIds.length - 1];
-        return getAllPrerequisites(lastPinnedId, posesById);
+  const highlightedPoseIds = useMemo(() => {
+    if (externalHighlightedPoseIds) {
+      return externalHighlightedPoseIds;
     }
-    return [];
-  }, [exploreMode, prereqMode, pinnedPoseIds, posesById]);
-
-  const getHighlightedPoseIds = () => {
     if (exploreMode) {
       if (hoveredPoseId) {
         return [hoveredPoseId, ...getAllPrerequisites(hoveredPoseId, posesById)];
@@ -110,15 +107,13 @@ export default function PoseExplorer({
       return [lastPinnedId, ...getAllPrerequisites(lastPinnedId, posesById)];
     }
     
-    // For single pin mode (neither explore, route, nor prereq)
     if (!exploreMode && !routeMode && !prereqMode && pinnedPoseIds.length === 1) {
        return [pinnedPoseIds[0], ...getAllPrerequisites(pinnedPoseIds[0], posesById)];
     }
 
     return [];
-  };
+  }, [externalHighlightedPoseIds, exploreMode, prereqMode, routeMode, hoveredPoseId, pinnedPoseIds, posesById]);
 
-  const highlightedPoseIds = getHighlightedPoseIds();
 
   const handleModeChange = (mode: 'explore' | 'route' | 'prereq', checked: boolean) => {
     setPinnedPoseIds([]);
@@ -187,7 +182,7 @@ export default function PoseExplorer({
               elementId={cardId} 
               title="Mi Ruta de Aprendizaje" 
               posesToExport={pinnedPoseIds}
-              allPoses={poses}
+              allPoses={allPoses}
               buttonText="Imprimir Ruta"
             />
           )}
@@ -197,7 +192,7 @@ export default function PoseExplorer({
               elementId={cardId} 
               title="Análisis de Prerrequisitos" 
               posesToExport={pinnedPoseIds}
-              allPoses={poses}
+              allPoses={allPoses}
               separateTrees={true}
               buttonText="Imprimir Prerrequisitos"
             />
