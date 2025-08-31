@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import ContentExporter from './ContentExporter';
 import RouteExporter from './RouteExporter';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type PoseExplorerProps = {
   poses: Pose[];
@@ -33,6 +34,9 @@ export default function PoseExplorer({
   const [exploreMode, setExploreMode] = useState(true);
   const [routeMode, setRouteMode] = useState(false);
   const [prereqMode, setPrereqMode] = useState(false);
+
+  type NameDisplay = 'en' | 'es' | 'both';
+  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
 
   const posesById = useMemo(() => {
     return allPoses.reduce((acc, pose) => {
@@ -58,8 +62,7 @@ export default function PoseExplorer({
 
 
   const handleSelectPoseForDialog = (pose: Pose) => {
-    const existingData = selectedPose?.id === pose.id ? selectedPose : { ...pose, url_imagen: `https://picsum.photos/seed/${pose.id}/600/400` };
-    setSelectedPose(existingData as PoseWithImage);
+    setSelectedPose(pose as PoseWithImage);
   };
 
   const handleNodeClick = (pose: Pose) => {
@@ -146,12 +149,42 @@ export default function PoseExplorer({
     }
   }
 
+  const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+    const parts = pose.nombre.split('\n');
+    const esName = parts[0];
+    const enName = parts[1] || '';
+
+    switch (displayMode) {
+      case 'en':
+        return enName.replace(/[()]/g, '');
+      case 'es':
+        return esName;
+      case 'both':
+      default:
+        return pose.nombre;
+    }
+  };
+
 
   return (
     <Card id={cardId}>
       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <CardTitle>Árbol de Aprendizaje</CardTitle>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+           <div className="flex items-center space-x-2">
+            <Label htmlFor="name-display-select" className="text-sm">Mostrar Nombres:</Label>
+            <Select value={nameDisplay} onValueChange={(value: NameDisplay) => setNameDisplay(value)}>
+              <SelectTrigger id="name-display-select" className="w-[180px] h-9 text-sm">
+                <SelectValue placeholder="Seleccionar formato" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">Solo en Inglés</SelectItem>
+                <SelectItem value="es">Solo en Español</SelectItem>
+                <SelectItem value="both">Ambos Idiomas</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="flex items-center space-x-2">
             <Switch 
               id="explore-mode" 
@@ -184,6 +217,7 @@ export default function PoseExplorer({
               posesToExport={pinnedPoseIds}
               allPoses={allPoses}
               buttonText="Imprimir Ruta"
+              nameDisplay={nameDisplay}
             />
           )}
 
@@ -195,6 +229,7 @@ export default function PoseExplorer({
               allPoses={allPoses}
               separateTrees={true}
               buttonText="Imprimir Prerrequisitos"
+              nameDisplay={nameDisplay}
             />
           )}
 
@@ -228,6 +263,7 @@ export default function PoseExplorer({
                       <PoseNode
                         key={pose.id}
                         pose={pose}
+                        displayName={getDisplayName(pose, nameDisplay)}
                         onClick={() => handleNodeClick(pose)}
                         onDoubleClick={() => handleSelectPoseForDialog(pose)}
                         isHighlighted={highlightedPoseIds.includes(pose.id)}

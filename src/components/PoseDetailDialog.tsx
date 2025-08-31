@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Pose, PoseWithImage, Concept } from '@/types';
 import {
   Dialog,
@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from './ui/skeleton';
-import { Binary } from 'lucide-react';
+import { Binary, Video, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Tooltip,
@@ -28,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Button } from './ui/button';
 
 type PoseDetailDialogProps = {
   pose: PoseWithImage | null;
@@ -124,9 +125,47 @@ export function PoseDetailDialog({
   onOpenChange,
   concepts,
 }: PoseDetailDialogProps) {
+  const [viewMode, setViewMode] = useState<'video' | 'image'>('video');
+
+  useEffect(() => {
+    if (pose) {
+      if (pose.url_video) {
+        setViewMode('video');
+      } else {
+        setViewMode('image');
+      }
+    }
+  }, [pose]);
+  
   if (!pose) return null;
 
   const isAcroPose = pose.type !== 'Thai-Massage';
+  
+  const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return '';
+    try {
+        const urlObj = new URL(url);
+        let videoId;
+        if (urlObj.hostname === 'youtu.be') {
+            videoId = urlObj.pathname.slice(1);
+        } else if (urlObj.hostname.includes('youtube.com')) {
+            videoId = urlObj.searchParams.get('v');
+        }
+        
+        if (videoId) {
+            const params = new URLSearchParams(urlObj.search);
+            params.delete('v');
+            return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        }
+    } catch (e) {
+        console.error("Invalid video URL", e);
+    }
+    return '';
+  };
+  
+  const videoEmbedUrl = pose.url_video ? getYouTubeEmbedUrl(pose.url_video) : '';
+  const hasVideo = !!videoEmbedUrl;
+  const hasImage = !!pose.url_imagen;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -144,9 +183,17 @@ export function PoseDetailDialog({
         <div className="flex-1 overflow-y-auto pr-4 -mr-6">
            <div className="space-y-6">
               <section className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
-                 {pose.url_imagen ? (
+                 {viewMode === 'video' && hasVideo ? (
+                    <iframe 
+                        className="w-full h-full"
+                        src={videoEmbedUrl}
+                        title={`Video de ${pose.nombre}`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen>
+                    </iframe>
+                 ) : hasImage ? (
                      <Image
-                      src={pose.url_imagen}
+                      src={pose.url_imagen!}
                       alt={`Postura de Acroyoga: ${pose.nombre}`}
                       fill
                       className="object-cover"
@@ -155,8 +202,34 @@ export function PoseDetailDialog({
                  ) : (
                     <div className="text-center text-muted-foreground p-4">
                         <Binary size={48} className="mx-auto mb-2" />
-                        <p>No hay imagen disponible.</p>
+                        <p>No hay contenido visual disponible.</p>
                     </div>
+                 )}
+                 {hasVideo && hasImage && (
+                  <div className="absolute top-2 right-2 flex gap-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant={viewMode === 'video' ? 'default' : 'secondary'} size="icon" className="h-8 w-8" onClick={() => setViewMode('video')}>
+                            <Video className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Ver Video</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                           <Button variant={viewMode === 'image' ? 'default' : 'secondary'} size="icon" className="h-8 w-8" onClick={() => setViewMode('image')}>
+                            <ImageIcon className="h-4 w-4" />
+                           </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Ver Imagen</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                  )}
               </section>
 

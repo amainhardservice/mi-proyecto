@@ -10,6 +10,8 @@ import { createRoot } from 'react-dom/client';
 import PoseExplorer from './PoseExplorer';
 import { Card, CardContent } from './ui/card';
 
+type NameDisplay = 'en' | 'es' | 'both';
+
 interface RouteExporterProps {
   elementId: string;
   title: string;
@@ -17,9 +19,26 @@ interface RouteExporterProps {
   allPoses: Pose[];
   separateTrees?: boolean;
   buttonText?: string;
+  nameDisplay: NameDisplay;
 }
 
-const addPoseContentToPdf = (doc: jsPDF, pose: Pose, allPoses: Record<string, Pose>) => {
+const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+    const parts = pose.nombre.split('\n');
+    const esName = parts[0];
+    const enName = parts[1] || '';
+
+    switch (displayMode) {
+      case 'en':
+        return enName.replace(/[()]/g, '');
+      case 'es':
+        return esName;
+      case 'both':
+      default:
+        return pose.nombre;
+    }
+};
+
+const addPoseContentToPdf = (doc: jsPDF, pose: Pose, allPoses: Record<string, Pose>, nameDisplay: NameDisplay) => {
     const margin = 40;
     const pageWidth = doc.internal.pageSize.getWidth();
     const maxLineWidth = pageWidth - margin * 2;
@@ -44,7 +63,7 @@ const addPoseContentToPdf = (doc: jsPDF, pose: Pose, allPoses: Record<string, Po
     };
     
     doc.addPage();
-    addText(pose.nombre.replace('\n', ' '), 20, 'bold', 0, 10);
+    addText(getDisplayName(pose, nameDisplay), 20, 'bold', 0, 10);
     addText(pose.descripcion, 12, 'italic', 0, 15);
 
     if (pose.narrativa_detallada) {
@@ -85,7 +104,8 @@ const RouteExporter: React.FC<RouteExporterProps> = ({
     posesToExport,
     allPoses,
     separateTrees = false,
-    buttonText = "Imprimir Selección" 
+    buttonText = "Imprimir Selección",
+    nameDisplay,
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const allPosesById = allPoses.reduce((acc, pose) => {
@@ -185,7 +205,7 @@ const RouteExporter: React.FC<RouteExporterProps> = ({
                     setTimeout(async () => {
                        const canvas = await html2canvas(tempContainer, { scale: 2, useCORS: true, backgroundColor: null });
                        addImageToPdf(canvas);
-                       addPoseContentToPdf(pdf, currentPose, allPosesById);
+                       addPoseContentToPdf(pdf, currentPose, allPosesById, nameDisplay);
                        resolve();
                     }, 500);
                 });

@@ -23,6 +23,7 @@ export interface Pose {
   };
   prerequisites: string[];
   url_imagen?: string;
+  url_video?: string;
 }
 
 export interface PoseWithImage extends Pose, PoseDetails {

@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 type PoseNodeProps = {
   pose: Pose;
+  displayName: string;
   onClick: () => void;
   onDoubleClick: () => void;
   isHighlighted: boolean;
@@ -29,6 +30,7 @@ const getIconForPose = (poseName: string) => {
 
 export function PoseNode({ 
   pose, 
+  displayName,
   onClick, 
   onDoubleClick,
   isHighlighted, 
@@ -67,7 +69,7 @@ export function PoseNode({
                 "font-semibold transition-colors",
                 isHighlighted || isSelected ? "text-primary/90 group-hover:text-accent-foreground" : "text-primary/90"
               )}>
-                {pose.nombre.split('\n').map((line, index) => (
+                {displayName.split('\n').map((line, index) => (
                   <span key={index} className="block">{line}</span>
                 ))}
               </span>

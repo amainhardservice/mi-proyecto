@@ -16,6 +16,8 @@ const allPosesData: Pose[] = [
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
+    url_video: 'https://www.youtube.com/watch?v=NTFFY2wm77o',
+    url_imagen: 'https://c8.alamy.com/comp/2AGWPJP/fit-young-couple-doing-acro-yoga-at-spa-retreat-on-sea-beach-active-woman-balancing-on-partner-feet-stretching-at-acroyoga-pose-healthy-lifestyle-2AGWPJP.jpg',
     descripcion: 'Una postura terapéutica relajante donde el volador se sienta cómodamente en la plataforma de las piernas de la base.',
     narrativa_detallada: `
 **Inicio:**
@@ -37,10 +39,12 @@ const allPosesData: Pose[] = [
   },
   {
     id: '15',
-    nombre: 'Plancha Frontal\nsobre Espinillas',
+    nombre: 'Plancha Frontal sobre Espinillas\n(Front Plank on Shins)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['25'],
+    url_video: 'https://www.youtube.com/watch?v=O2Fsx4aDX1s',
+    url_imagen: 'https://cdn.yogajournal.com/wp-content/uploads/2014/09/acro-yoga-plank-on-plank-pose-1.jpg',
     descripcion: 'El volador se equilibra en plancha sobre las espinillas de la base. Enseña la línea corporal y la activación del core.',
     narrativa_detallada: `
 **Inicio:**
@@ -70,10 +74,12 @@ const allPosesData: Pose[] = [
   },
   {
     id: 'fish-on-shins',
-    nombre: 'Pez en Espinillas\n(Fish on Shins)',
+    nombre: 'Pez sobre Espinillas\n(Fish on Shins)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['15'],
+    url_video: 'https://www.youtube.com/watch?v=6F9sRYTD0xU',
+    url_imagen: 'https://www.blueosa.com/wp-content/uploads/2021/07/Seated-Forward-Fold-Fish-Pose-partner-yoga-pose.jpg',
     descripcion: 'Una apertura de pecho terapéutica que sirve como excelente preparación para posturas como Pájaro Inverso y Ballena.',
     narrativa_detallada: `
 **Inicio:**
@@ -102,10 +108,12 @@ const allPosesData: Pose[] = [
   },
   {
     id: 'shoulderstand-on-shins',
-    nombre: 'Parada de Hombros\nsobre Espinillas',
+    nombre: 'Parada de Hombros sobre Espinillas\n(Shoulderstand on Shins)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['15'],
+    url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg',
     descripcion: 'Una inversión segura sobre las espinillas de la base. Enseña la alineación de caderas sobre hombros en una plataforma estable.',
     narrativa_detallada: `
 **Inicio:**
@@ -138,6 +146,8 @@ const allPosesData: Pose[] = [
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
+    url_video: 'https://www.youtube.com/watch?v=eWu3BxMF1Bg',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/bird-4-500x498.jpg',
     descripcion: 'Postura fundamental. El volador se equilibra sobre los pies de la base, construyendo confianza y comunicación.',
     narrativa_detallada: `
 **Inicio:**
@@ -168,6 +178,8 @@ const allPosesData: Pose[] = [
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
+    url_video: 'https://www.youtube.com/watch?v=Mz_P0UzoBbk',
+    url_imagen: 'https://as1.ftcdn.net/jpg/03/11/95/34/1000_F_311953402_6BL5VWn0JzKsxf5Ojp1BtDFB8aa8sZAp.jpg',
     descripcion: 'La base crea un asiento para el volador. Postura estable y cómoda para conectar.',
     narrativa_detallada: `
 **Inicio:**
@@ -197,6 +209,8 @@ const allPosesData: Pose[] = [
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['1', '2'],
+    url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
+    url_imagen: 'https://theyogatique.com/wp-content/uploads/2023/05/front-bird-acro-yoga-pose-1024x769.jpg',
     descripcion: 'Una postura de equilibrio juguetona donde el volador se equilibra en las rodillas de la base, fomentando la conexión y el juego.',
     narrativa_detallada: `
 **Inicio:**
@@ -224,10 +238,12 @@ const allPosesData: Pose[] = [
   },
   {
     id: '3',
-    nombre: 'Plegaria Invertida\nTerapéutica',
+    nombre: 'Plegaria Invertida\nTerapéutica (Folded Leaf)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
+    url_video: 'https://www.youtube.com/watch?v=Zc-D_1htX6I',
+    url_imagen: 'https://www.fitsri.com/wp-content/uploads/2021/11/Folded-Leaf-Pose-Acro-Yoga--1024x683.jpg',
     descripcion: 'Postura terapéutica. La base sostiene al volador por las caderas para una inversión suave y relajante.',
      narrativa_detallada: `
 **Inicio:**
@@ -255,10 +271,12 @@ const allPosesData: Pose[] = [
   },
   {
     id: '5',
-    nombre: 'Pájaro Inverso\nTerapéutico',
+    nombre: 'Pájaro Inverso\nTerapéutico (Therapeutic Back Bird)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['1', '3', 'fish-on-shins'],
+    url_video: 'https://www.youtube.com/watch?v=qa5iG6k3W0s',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/backbird-44.jpg',
     descripcion: 'Estiramiento terapéutico de espalda. El volador se arquea sobre los pies de la base, abriendo pecho y hombros.',
      narrativa_detallada: `
 **Inicio:**
@@ -290,6 +308,8 @@ const allPosesData: Pose[] = [
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['5'],
+    url_video: 'https://www.youtube.com/watch?v=4WMAZ67brUc',
+    url_imagen: 'https://cdn.yogajournal.com/wp-content/uploads/2015/03/acro-high-flying-whale.jpg',
     descripcion: 'Una versión más avanzada y profunda del pájaro inverso terapéutico, donde la base extiende completamente las piernas, elevando más al volador para un estiramiento máximo.',
      narrativa_detallada: `
 **Inicio:**
@@ -321,10 +341,12 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
   // L-BASING: NIVEL 2
   {
     id: 'shoulderstand',
-    nombre: 'Parada de Hombros\nsobre Pies',
+    nombre: 'Parada de Hombros sobre Pies\n(Shoulderstand on Feet)',
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['1', 'shoulderstand-on-shins'],
+    url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-5-500x498.jpg',
     descripcion: 'Una inversión fundamental donde el volador se apoya en los pies de la base, desarrollando equilibrio y alineación.',
     narrativa_detallada: `
 **Inicio:**
@@ -358,6 +380,8 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['1'],
+    url_video: 'https://www.youtube.com/watch?v=bmktYLuksek',
+    url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
     descripcion: 'Una variación asimétrica del Pájaro Frontal. El volador se equilibra de lado sobre los pies de la base, preparando el cuerpo para Estrella Lateral.',
     narrativa_detallada: `
 **Inicio:**
@@ -389,6 +413,8 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['5', '17'],
+    url_video: 'https://www.youtube.com/watch?v=ks-4IzTcNSk',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/backbird-3-500x498.jpg',
     descripcion: 'La versión acrobática del Pájaro Inverso. El volador mantiene una línea corporal activa y arqueada, sin agarre de manos.',
     narrativa_detallada: `
 **Inicio:**
@@ -414,34 +440,13 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     },
   },
   {
-    id: 'monkey',
-    nombre: 'Mono\n(Monkey)',
-    nivel: 2,
-    type: 'Standing',
-    prerequisites: ['standing-high-bird'],
-    descripcion: 'Una transición clásica de standing acro donde el volador se mueve entre los hombros y los pies de la base.',
-    narrativa_detallada: `
-**Inicio:**
-1.  **Base:** De pie, con el volador sentado en sus hombros.
-2.  **Transición:** El volador se inclina hacia adelante, la base lo atrapa en **High Bird**.
-3.  **Movimiento:** Desde High Bird, la base puede guiar al volador a una posición de **Foot-to-Foot** (de pie sobre los pies de la base).
-4.  **Regreso:** Se puede revertir la secuencia para volver a los hombros.`,
-    musculos: {
-      base: ["Fuerza y equilibrio de piernas", "Core"],
-      volador: ["Control del core", "Agilidad"],
-    },
-    calibracion: {
-      base: ["Mantén una base sólida y estable.", "Guía las transiciones con claridad."],
-      volador: ["Mantente compacto y ligero.", "Sigue la guía de la base en todo momento."],
-      observador: ["Permanece cerca y atento durante las transiciones de peso."],
-    },
-  },
-  {
     id: '7',
     nombre: 'Trono a Horcajadas\n(Straddle Throne)',
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['2'],
+    url_video: 'https://www.youtube.com/watch?v=BqUpzbc2uxM',
+    url_imagen: 'https://media.gettyimages.com/id/636545410/photo/acroyoga-straddle-throne-pose.jpg?s=1024x1024&w=gi&k=20&c=UJ6kNCAV7waoiyQcSY56plEWtTOF60BA-iyxtaret4A=',
     descripcion: 'Variación del Trono donde el volador se sienta a horcajadas. Es una transición común a otras posturas.',
      narrativa_detallada: `
 **Inicio:**
@@ -475,6 +480,8 @@ Puede iniciarse desde el suelo o como una transición desde **Trono (Throne)**.
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['7'],
+    url_video: 'https://www.youtube.com/watch?v=PZ0oq-SHHnE&t=5s',
+    url_imagen: 'https://media.istockphoto.com/id/636653962/photo/acroyoga-straddle-bat-pose.jpg?s=612x612&w=0&k=20&c=LrM6So0Emv9PiWKIMoy-otGjoLB40vQr51GNTx01tBA=',
     descripcion: 'Postura de inversión donde el volador cuelga de las piernas de la base, sostenido por la cadera.',
      narrativa_detallada: `
 **Inicio:**
@@ -511,6 +518,8 @@ Se puede entrar desde **Trono a Horcajadas (Straddle Throne)**.
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['7', '16'],
+    url_video: 'https://www.youtube.com/watch?v=PZ0oq-SHHnE',
+    url_imagen: 'https://media.gettyimages.com/id/638748394/photo/acroyoga-straddle-bat-pose.jpg?s=1024x1024&w=gi&k=20&c=fLN0ma6PYMoQk01ES4skjyaOeephBWvXEuZvz2nAqXk=',
     descripcion: 'Una variación de Murciélago donde el volador mantiene las piernas abiertas en straddle, colgando de los pies de la base.',
     narrativa_detallada: `
 **Inicio:**
@@ -545,6 +554,8 @@ Se entra desde **Trono a Horcajadas (Straddle Throne)**.
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['2', '7', '16'],
+    url_video: 'https://www.youtube.com/watch?v=HHw8B129doU',
+    url_imagen: 'https://as2.ftcdn.net/jpg/02/09/95/21/1000_F_209952154_Z70YdOc791roBDUpRbE2iRCvQv73mWMB.jpg',
     descripcion: 'Una variante del Trono donde el volador invierte su orientación. Es un puente hacia transiciones y lavadoras más complejas.',
     narrativa_detallada: `
 **Inicio:**
@@ -575,6 +586,8 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['15', 'shoulderstand'],
+    url_video: 'https://www.youtube.com/watch?v=WjMLoXNkQyE',
+    url_imagen: 'https://i.ytimg.com/vi/T81646R4btk/maxresdefault.jpg',
     descripcion: 'Una inversión fundamental donde el volador se equilibra sobre la cabeza y las manos, usando los pies de la base como apoyo.',
     narrativa_detallada: `
 **Inicio:**
@@ -609,6 +622,8 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     nivel: 2,
     type: 'L-Basing',
     prerequisites: [],
+    url_video: 'https://www.youtube.com/watch?v=1EAMunmlcWE',
+    url_imagen: 'https://www.thehealthjournals.com/wp-content/uploads/2017/02/2017_Feb_Fitness-1024x768.jpg',
     descripcion: 'Una postura de apertura de pecho donde la base sostiene al volador por los hombros, creando una forma de arco elevado.',
     narrativa_detallada: `
 **Inicio:**
@@ -643,6 +658,8 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['shoulderstand', '21'],
+    url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
+    url_imagen: 'https://i.ytimg.com/vi/ALaWGbiCIZA/maxresdefault.jpg',
     descripcion: 'Técnica de seguridad fundamental para desmontar de inversiones. Enseña control y conciencia corporal para caídas seguras.',
     narrativa_detallada: `
 **Esto no es una postura, sino una habilidad de seguridad crucial.**
@@ -666,6 +683,8 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['shoulderstand', '7', 'side-bird'],
+    url_video: 'https://www.youtube.com/watch?v=ydOM4EbhJz0',
+    url_imagen: 'https://i.ytimg.com/vi/6HngmitsKuQ/hqdefault.jpg',
     descripcion: 'Postura avanzada de equilibrio sobre un pie y una mano de la base. Requiere alineación y fuerza de ambos.',
      narrativa_detallada: `
 **Inicio:**
@@ -697,6 +716,8 @@ Se entra desde un **Trono a Horcajadas (Straddle Throne)** modificado.
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['9'],
+    url_video: 'https://www.youtube.com/watch?v=PwoWLI9XlG8',
+    url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
     descripcion: 'Una variación de la Estrella donde el volador está de lado a la base, creando un plano de equilibrio diferente.',
      narrativa_detallada: `
 **Inicio:**
@@ -726,6 +747,8 @@ Se entra desde un **Trono a Horcajadas (Straddle Throne)** modificado.
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['12'],
+    url_video: 'https://www.youtube.com/watch?v=vccFNDI6y74',
+    url_imagen: 'https://i.ytimg.com/vi/yS3NANY2CpI/maxresdefault.jpg',
     descripcion: 'Variación avanzada de la Estrella donde el volador mira en dirección opuesta a la base. Exige un contrapeso y confianza inmensos.',
      narrativa_detallada: `
 **Inicio:**
@@ -756,10 +779,12 @@ Similar a la **Estrella (Star)**, pero la conexión es espalda con espalda.
   },
   {
     id: '10',
-    nombre: 'Inversión: Plancha\nsobre Manos',
+    nombre: 'Inversión: Plancha sobre Manos\n(Free Bird)',
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['1', '15'],
+    url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
+    url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog1-1030x687_large.jpg',
     descripcion: 'Equilibrio sobre las manos de la base, también conocido como "Free Bird". Exige gran fuerza de la base y control del core del volador.',
      narrativa_detallada: `
 Esta postura es también conocida como **Free Bird**.
@@ -789,10 +814,12 @@ Esta postura es también conocida como **Free Bird**.
   },
   {
     id: '11',
-    nombre: 'Inversión: Parada de Manos\nsobre Pies',
+    nombre: 'Inversión: Parada de Manos sobre Pies\n(Handstand on Feet)',
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['shoulderstand', '21', 'cartwheel-exit'],
+    url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',
+    url_imagen: 'https://as1.ftcdn.net/jpg/03/11/30/08/1000_F_311300878_uUrWjkC20Y6WxlPIs6cr1kbGoLRKgPXR.jpg',
     descripcion: 'Postura icónica. El volador realiza una parada de manos sobre los pies de la base.',
      narrativa_detallada: `
 **Inicio:**
@@ -824,6 +851,8 @@ Esta postura es también conocida como **Free Bird**.
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['10', '11'],
+    url_video: 'https://www.youtube.com/watch?v=IKFZ6KMWZNo',
+    url_imagen: 'https://i.pinimg.com/736x/53/c2/f4/53c2f4533fc8fb7456bc510cc3de59cb.jpg',
     descripcion: 'Un ejercicio clave para desarrollar la fuerza y alineación de la parada de manos. El volador sostiene una plancha baja sobre las manos de la base.',
     narrativa_detallada: `
 **Inicio:**
@@ -851,6 +880,8 @@ Esta postura es también conocida como **Free Bird**.
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['11'],
+    url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
+    url_imagen: 'https://media.istockphoto.com/id/638748450/photo/acroyoga-foot-to-hand-pose.jpg?s=1024x1024&w=is&k=20&c=_u-Oms3cNs5i3wzJz-9IUo8xNwRIS4ssv-EYFORa18Y=',
     descripcion: 'El volador se equilibra en una mano, con los pies en las manos de la base. Requiere un equilibrio y confianza excepcionales.',
      narrativa_detallada: `
 **Inicio:**
@@ -880,10 +911,12 @@ Esta postura es también conocida como **Free Bird**.
   },
   {
     id: 'h2h',
-    nombre: 'Inversión: Parada de Manos\nsobre Manos (H2H)',
+    nombre: 'Inversión: Parada de Manos sobre Manos\n(H2H)',
     nivel: 3,
     type: 'L-Basing',
     prerequisites: ['14', 'croc'],
+    url_video: 'https://www.youtube.com/watch?v=uqryFIDRwSA',
+    url_imagen: 'https://i.ytimg.com/vi/x4IYQUewUoQ/maxresdefault.jpg',
     descripcion: 'El pináculo del equilibrio L-Basing. El volador hace una parada de manos sobre las manos de la base.',
      narrativa_detallada: `
 **Inicio:**
@@ -919,16 +952,18 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
   // L-BASING: NIVEL 4 (LAVADORAS)
   {
     id: 'around-the-world',
-    nombre: 'Lavadora: Alrededor\ndel Mundo',
+    nombre: 'Lavadora: Alrededor del Mundo\n(Around the World)',
     nivel: 4,
     type: 'L-Basing',
     prerequisites: ['1', '2', '3', '5'],
+    url_video: 'https://www.youtube.com/watch?v=IUZeQcMRupk',
+    url_imagen: 'https://www.fitsri.com/wp-content/uploads/2021/11/acro-yoga-class-1024x683.jpg',
     descripcion: 'Una de las primeras lavadoras que se aprenden, conectando Pájaro Frontal, Plegaria Invertida y Pájaro Invertido en un flujo circular.',
     narrativa_detallada: `
 **Secuencia:**
 1.  **Inicio:** Empieza en **Pájaro Frontal (Front Bird)**, con manos conectadas.
 2.  **Transición a Plegaria Invertida:** La base dobla las rodillas, el volador se pliega hacia adelante hasta que sus manos tocan el suelo y la base mueve los pies a las caderas para **Plegaria Invertida (Folded Leaf)**.
-3.  **Transición a Pájaro Invertido:** Desde Plegaria Invertida, el volador se endereza, la base mueve los pies a la espalda alta para **Pájaro Invertido (Back Bird)**.
+3.  **Transición a Pájaro Invertido:** Desde Plegaria Invertida, el volador se endereza, la base mueve los pies a la espalda alta para **Pájaro Inverso (Back Bird)**.
 4.  **Regreso a Pájaro Frontal:** Desde Pájaro Invertido, se baja al suelo para reiniciar en Pájaro Frontal, o para practicantes avanzados, se puede intentar una transición directa.`,
     musculos: {
       base: ["Control de piernas", "Transiciones suaves"],
@@ -946,6 +981,8 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     nivel: 4,
     type: 'L-Basing',
     prerequisites: ['7', 'back-bird-acro'],
+    url_video: 'https://www.youtube.com/watch?v=Hi4xS9E-rck',
+    url_imagen: 'https://i.ytimg.com/vi/W9oA6iLEeMs/maxresdefault.jpg',
     descripcion: 'Un flujo clásico que conecta Pájaro Frontal, Pájaro Invertido y Trono a Horcajadas, pasando por el suelo.',
     narrativa_detallada: `
 **Secuencia:**
@@ -968,21 +1005,27 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     nombre: 'Lavadora: Sacacorchos\n(Corkscrew)',
     nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['7', '16', 'reverse-throne', 'back-bird-acro'],
+    prerequisites: ['2', '5', '7', '12'],
+    url_video: 'https://www.youtube.com/watch?v=76m0AXh_Q5Y',
+    url_imagen: 'http://basaho.com/cdn/shop/articles/Acro_yoga_1.1_1200x1200.jpg?v=1708350035',
     descripcion: 'Una lavadora clásica que implica una rotación completa del volador alrededor de las piernas de la base.',
     narrativa_detallada: `
-**Esta es una **Lavadora (Washing Machine)**, una secuencia fluida.**
-
 **Inicio:**
-1.  Comienza en un **Trono a Horcajadas (Straddle Throne)** estable, con las manos conectadas.
+Trono a Horcajadas (Straddle Throne): El volador se estabiliza sentado sobre los pies de la base, piernas abiertas, manos conectadas para mantener control y comunicación.
 
 **Desarrollo (La Lavadora):**
-2.  **Giro a Pájaro Invertido:** El volador se inclina hacia un lado, la base baja la pierna de ese lado y sube la otra, guiando al volador a través de una transición de cadera hasta que queda en un **Pájaro Invertido Terapéutico (Back Bird)**.
-3.  **Transición a Trono:** Desde Pájaro Invertido, la base dobla las rodillas, el volador se recoge (**Tuck**) y pasa a **Trono (Throne)**.
-4.  **Regreso:** Desde Trono, se puede transicionar de nuevo a **Trono a Horcajadas (Straddle Throne)** para completar el ciclo. El movimiento es como un tornillo o sacacorchos.
+Entrada al giro: El volador se inclina hacia un lado. La base baja la pierna de ese lado y sube la otra, guiando la cadera del volador hacia la rotación.
+Transición a Pájaro Invertido Terapéutico (Back Bird): El volador se extiende hacia atrás, apoyado en las piernas de la base. Aquí se abre el pecho y se alinea la cadera con las piernas de la base.
+Paso por Estrella Lateral (Side Star): Con control de manos y empuje de la pierna activa, la base rota al volador lateralmente. El volador mantiene tensión en el core y brazos para controlar la torsión. Este momento crea el efecto de “sacacorchos”.
+Transición a Trono (Throne): Desde Side Star, el volador se recoge (tuck) y se coloca nuevamente sentado en los pies de la base.
 
-**Culminación:**
-*   La secuencia se puede detener en cualquier postura estática y desmontar de forma segura. La clave es la fluidez y la comunicación constante.
+**Regreso:**
+Vuelta a Trono a Horcajadas (Straddle Throne): Desde Trono, el volador abre piernas para volver al inicio y reiniciar la lavadora. El ciclo puede repetirse en fluidez.
+
+**Notas de calibración:**
+Volador: mantener core activo, mirada acompañando la rotación y brazos conectados con la base.
+Base: trabajar con extensión controlada de piernas, sostener con firmeza desde los pies y marcar tiempos con respiración.
+Clave: el paso por Side Star asegura la continuidad circular del movimiento, evitando que se vuelva solo un vaivén de Trono ↔ Back Bird.
 `,
     musculos: {
       base: ["Coordinación", "Control de piernas", "Core"],
@@ -996,30 +1039,35 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
   },
   {
     id: 'high-barrel-roll',
-    nombre: 'Lavadora:High Barrel Roll',
+    nombre: 'Lavadora: High Barrel Roll\n(High Barrel Roll)',
     nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['1', 'back-bird-acro'],
+    prerequisites: ['1', 'back-bird-acro', 'side-bird'],
+    url_video: 'https://www.youtube.com/watch?v=cepXBQyMbQI',
+    url_imagen: 'https://daman.co.id/_next/image?url=https%3A%2F%2Fbackend.daman.co.id%2Fwp-content%2Fuploads%2F2018%2F07%2FFitness-0607.jpg&w=1920&q=75',
     descripcion: 'Una lavadora rotacional donde el volador "rueda" sobre el torso de la base, pasando por Pájaro Frontal y Pájaro Invertido.',
     narrativa_detallada: `
+**Esta lavadora enseña un control de equilibrio lateral exquisito.**
+
 **Inicio:**
 1.  Comienza en **Pájaro Frontal (Front Bird)**, manos conectadas.
 
 **Desarrollo (La Lavadora):**
-2.  **Giro a Pájaro Invertido:** El volador se inclina hacia un lado. La base baja esa pierna y sube la otra, ayudando al volador a rodar sobre su torso para aterrizar en **Pájaro Invertido (Back Bird)** del otro lado de las piernas de la base.
-3.  **Giro de vuelta:** Se revierte el movimiento para volver a Pájaro Frontal, completando el "barrel roll".
+2.  **El Rollo:** El volador se inclina hacia un lado, por ejemplo, el izquierdo. La base baja su pierna izquierda y sube su pierna derecha, creando una "rampa".
+3.  **Transición:** El volador, manteniendo su cuerpo como una unidad sólida, rueda sobre el torso de la base, pasando por una posición similar a **Pájaro Lateral (Side Bird)**.
+4.  **Recepción:** El volador completa el giro y aterriza suavemente en **Pájaro Invertido (Back Bird)**, con los pies de la base ahora en su espalda.
+5.  **Regreso:** El movimiento se puede revertir para volver a **Pájaro Frontal**, completando el "barrel roll".
 
 **Culminación:**
-*   Se detiene en Pájaro Frontal o Pájaro Invertido y se desmonta de forma segura.
-`,
+*   Se detiene en Pájaro Frontal o Pájaro Invertido y se desmonta de forma segura. La clave es la fluidez y una conexión de manos constante.`,
     musculos: {
       base: ["Core", "Control de piernas", "Fuerza de brazos"],
-      volador: ["Core", "Conciencia espacial"],
+      volador: ["Core", "Oblicuos", "Conciencia espacial"],
     },
     calibracion: {
-      base: ["Guía la rotación con las piernas y los brazos.", "Mantén un movimiento fluido."],
-      volador: ["Mantén el cuerpo como un bloque sólido.", "Permite que la base te guíe a través del giro."],
-      observador: ["Muévete con la rotación.", "Asegura que el volador no se deslice del torso de la base."],
+      base: ["Guía la rotación con las piernas y los brazos.", "Mantén un movimiento fluido y constante.", "Sé una plataforma estable para el rollo."],
+      volador: ["Mantén el cuerpo como un bloque sólido y recto.", "No intentes 'ayudar' en el giro, déjate guiar por la base.", "Mantén la conexión de manos."],
+      observador: ["Muévete con la rotación.", "Asegura que el volador no se deslice del torso de la base y vigila la cabeza."],
     },
   },
   {
@@ -1027,10 +1075,12 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     nombre: "Lavadora: Rueda de Catalina\n(Catherine's Wheel)",
     nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['corkscrew'],
+    prerequisites: ['corkscrew', '16'],
+    url_video: 'https://www.youtube.com/watch?v=UyqkvT_5Z8c',
+    url_imagen: 'https://i.ytimg.com/vi/8h2ZYO5_sYw/maxresdefault.jpg',
     descripcion: 'Una lavadora (washing machine) o transición fluida donde el volador gira alrededor de la base como una rueda.',
      narrativa_detallada: `
-Esta es una secuencia dinámica (**Lavadora (Washing Machine)**), no una postura estática. Comienza en **Trono a Horcajadas (Straddle Throne)** y transita por **Murciélago (Bat)** y **Trono Invertido (Reverse Throne)**.
+**Esta es una secuencia dinámica (**Lavadora (Washing Machine)**), no una postura estática. Comienza en **Trono a Horcajadas (Straddle Throne)** y transita por **Murciélago (Bat)** y **Trono Invertido (Reverse Throne)**.
 
 **Inicio:**
 1.  Empieza en un **Trono a Horcajadas (Straddle Throne)** estable.
@@ -1053,10 +1103,12 @@ Esta es una secuencia dinámica (**Lavadora (Washing Machine)**), no una postura
   },
   {
     id: 'tick-tock',
-    nombre: 'Lavadora: Tick-Tock',
+    nombre: 'Lavadora: Tick-Tock\n(Tick-Tock)',
     nivel: 4,
     type: 'L-Basing',
     prerequisites: ['9', '18'],
+    url_video: 'https://www.youtube.com/watch?v=zen2HDxr3-Y',
+    url_imagen: 'https://skillwell-upload-production.s3.amazonaws.com/videos/247/catherines-wheel-machine.png',
     descripcion: 'Un flujo dinámico que transita entre Estrella y Estrella Invertida, enseñando el control del contrapeso y el equilibrio lateral.',
     narrativa_detallada: `
 **Secuencia:**
@@ -1075,10 +1127,12 @@ Esta es una secuencia dinámica (**Lavadora (Washing Machine)**), no una postura
   },
   {
     id: '22',
-    nombre: 'Lavadora: Ninja Star',
+    nombre: 'Lavadora: Ninja Star\n(Ninja Star)',
     nivel: 4,
     type: 'L-Basing',
     prerequisites: ['tick-tock', 'cartwheel-exit'],
+    url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
+    url_imagen: 'https://i.ytimg.com/vi/koJAiJX30_w/maxresdefault.jpg',
     descripcion: 'Una lavadora icónica y dinámica que fluye a través de diferentes posturas de estrella, requiriendo una comunicación y fluidez impecables.',
      narrativa_detallada: `
 **Esta es una **Lavadora (Washing Machine)**, una secuencia fluida, no una postura estática.**
@@ -1107,10 +1161,12 @@ La lavadora generalmente comienza desde una **Estrella Invertida (Reverse Star)*
   },
   {
     id: 'ninja-star-reverse',
-    nombre: 'Lavadora: Ninja Star Inversa',
+    nombre: 'Lavadora: Ninja Star Inversa\n(Ninja Star Reverse)',
     nivel: 4,
     type: 'L-Basing',
     prerequisites: ['22'],
+    url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
+    url_imagen: 'https://i.ytimg.com/vi/6cuD9azJ3DI/sddefault.jpg',
     descripcion: 'La versión inversa de la Ninja Star. Enseña a controlar la rotación en la dirección opuesta.',
     narrativa_detallada: `
 **Secuencia:**
@@ -1133,7 +1189,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   // Icarian Games: NIVEL 1
   {
     id: '27',
-    nombre: 'Pop: Trono a Trono',
+    nombre: 'Pop: Trono a Trono\n(Throne-to-Throne Pop)',
     nivel: 1,
     type: 'Icarian',
     prerequisites: ['2'],
@@ -1166,7 +1222,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '28',
-    nombre: 'Pop: Trono a Pájaro Frontal',
+    nombre: 'Pop: Trono a Pájaro Frontal\n(Throne-to-Front-Bird Pop)',
     nivel: 1,
     type: 'Icarian',
     prerequisites: ['27'],
@@ -1184,7 +1240,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
 *   **Recepción:** La base recibe los huesos de la cadera del volador en las plantas de sus pies, extendiendo las piernas a 90 grados para estabilizar la postura de **Pájaro Frontal**.
 
 **Culminación:**
-*   Una vez estable en **Pájaro Frontal**, se puede desmontar como un Pájaro Frontal normal, o la base puede flexionar las rodillas para recibir al volador de nuevo en **Trono** para la siguiente repetición.
+*   Once estable en **Pájaro Frontal**, se puede desmontar como un Pájaro Frontal normal, o la base puede flexionar las rodillas para recibir al volador de nuevo en **Trono** para la siguiente repetición.
 `,
     musculos: {
       base: ['Igual que Trono a Trono, más precisión en la recepción.'],
@@ -1198,7 +1254,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '29',
-    nombre: 'Pop: Pájaro a Horcajadas',
+    nombre: 'Pop: Pájaro a Horcajadas\n(Bird-to-Straddle Pop)',
     nivel: 1,
     type: 'Icarian',
     prerequisites: ['28'],
@@ -1232,7 +1288,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   // Icarian Games: NIVEL 2
   {
     id: '31',
-    nombre: 'Pop: Pájaro a Pájaro Invertido',
+    nombre: 'Pop: Pájaro a Pájaro Invertido\n(Bird-to-Reverse-Bird Pop)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['28'],
@@ -1259,12 +1315,12 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
     calibracion: {
       base: ['Un buen lanzamiento vertical es clave para dar tiempo al giro.', 'Visualiza la recepción antes de lanzar.'],
       volador: ['El giro debe ser rápido y completado en el punto más alto.', 'Apunta a aterrizar con tus caderas en los pies de la base.'],
-      observador: ['Observa la rotación y prepárate para guiar las caderas si el giro es incompleto.', 'La seguridad en la recepción es clave.'],
+      observador: ['Observa la rotación y prepárate para guiar las caderas del volador si el giro es incompleto.', 'La seguridad en la recepción es clave.'],
     },
   },
   {
     id: 'throne-shoulderstand-pop',
-    nombre: 'Pop: Trono <> Parada de Hombros',
+    nombre: 'Pop: Trono a Parada de Hombros\n(Throne-to-Shoulderstand Pop)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['27', 'shoulderstand'],
@@ -1294,7 +1350,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '32',
-    nombre: 'Voltereta: Hacia Atrás a Trono',
+    nombre: 'Voltereta: Hacia Atrás a Trono\n(Backflip to Throne)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['31'],
@@ -1326,7 +1382,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '35',
-    nombre: 'Voltereta: Hacia Adelante a Trono',
+    nombre: 'Voltereta: Hacia Adelante a Trono\n(Frontflip to Throne)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['32'],
@@ -1358,7 +1414,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '36',
-    nombre: 'Pop: Trípode a Trono',
+    nombre: 'Pop: Trípode a Trono\n(Tripod-to-Throne Pop)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['21', 'throne-shoulderstand-pop'],
@@ -1391,7 +1447,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'corkscrew-pop',
-    nombre: 'Lavadora Pop: Sacacorchos',
+    nombre: 'Lavadora Pop: Sacacorchos\n(Corkscrew Pop)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['31', '32'],
@@ -1423,7 +1479,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: '34',
-    nombre: 'Lavadora Pop: Rueda de Catalina',
+    nombre: "Lavadora Pop: Rueda de Catalina\n(Catherine's Wheel Pop)",
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['29', '31'],
@@ -1455,7 +1511,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
    {
     id: 'ninja-star-pop',
-    nombre: 'Lavadora Pop: Ninja Star',
+    nombre: 'Lavadora Pop: Ninja Star\n(Ninja Star Pop)',
     nivel: 2,
     type: 'Icarian',
     prerequisites: ['corkscrew-pop'],
@@ -1531,7 +1587,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-06',
-    nombre: 'Apertura de Cadera\ncon una Pierna',
+    nombre: 'Apertura de Cadera\ncon una Pierna (Figure Four)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-02'],
@@ -1559,7 +1615,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-07',
-    nombre: 'Presión Palmar en Brazos\ny Manos',
+    nombre: 'Presión Palmar en Brazos\ny Manos (Arm & Hand Palming)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-01'],
@@ -1573,7 +1629,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-05',
-    nombre: 'Apertura de Pecho\ncon Brazos en Cruz',
+    nombre: 'Apertura de Pecho\ncon Brazos en Cruz (Chest Opener)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-07'],
@@ -1587,7 +1643,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-08',
-    nombre: 'Torsión Espinal Supina\n(Jathara Parivartanasana)',
+    nombre: 'Torsión Espinal Supina\n(Supine Spinal Twist)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-02'],
@@ -1601,7 +1657,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-09',
-    nombre: 'Estiramiento del Psoas\nAsistido',
+    nombre: 'Estiramiento del Psoas\nAsistido (Assisted Psoas Stretch)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-02'],
@@ -1615,7 +1671,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-supine-10',
-    nombre: 'Masaje de Cuello\ny Liberación Occipital',
+    nombre: 'Masaje de Cuello\ny Liberación Occipital (Neck Massage)',
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: [],
@@ -1631,7 +1687,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   // Masaje Tailandés: NIVEL 2 - Secuencia Lateral y Sentada
   {
     id: 'thai-side-01',
-    nombre: 'Estiramiento Lateral\nde Cadera',
+    nombre: 'Estiramiento Lateral\nde Cadera (Side Hip Stretch)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-06', 'thai-supine-08'],
@@ -1645,7 +1701,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-side-02',
-    nombre: 'Llave de Hombro\nen Posición Lateral',
+    nombre: 'Llave de Hombro\nen Posición Lateral (Side Shoulder Key)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-05'],
@@ -1659,7 +1715,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-side-03',
-    nombre: 'Estiramiento del Cuádriceps\nen Posición Lateral',
+    nombre: 'Estiramiento del Cuádriceps\nen Posición Lateral (Side Quad Stretch)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-09'],
@@ -1673,7 +1729,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-side-04',
-    nombre: 'Trabajo en la Banda\nIliotibial Lateral',
+    nombre: 'Trabajo en la Banda\nIliotibial Lateral (IT Band Work)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-side-01'],
@@ -1686,7 +1742,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-seated-01',
-    nombre: 'Masaje de Cuello y Hombros\n(Sentado)',
+    nombre: 'Masaje de Cuello y Hombros\n(Seated Neck & Shoulder Massage)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-10'],
@@ -1714,7 +1770,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
    {
     id: 'thai-seated-03',
-    nombre: 'Apertura de Pecho\nSentado',
+    nombre: 'Apertura de Pecho\nSentado (Seated Chest Opener)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-seated-01'],
@@ -1728,7 +1784,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-seated-04',
-    nombre: 'Masaje de Espalda\ncon Codo (Sentado)',
+    nombre: 'Masaje de Espalda\ncon Codo (Seated Elbow on Back)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-seated-01'],
@@ -1742,7 +1798,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-seated-05',
-    nombre: 'Estiramiento de Hombro\nSentado con Entrelazado',
+    nombre: 'Estiramiento de Hombro\nSentado con Entrelazado (Seated Shoulder Stretch)',
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['thai-seated-03'],
@@ -1771,7 +1827,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-prone-06',
-    nombre: 'Estiramiento de Isquiotibiales\nen Posición Prona (Medio Arco)',
+    nombre: 'Estiramiento de Isquiotibiales\nen Prono (Prone Hamstring Stretch)',
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-02'],
@@ -1785,7 +1841,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-prone-07',
-    nombre: 'Presión en Glúteos\ncon Talón o Rodilla',
+    nombre: 'Presión en Glúteos\ncon Talón o Rodilla (Glute Press)',
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['thai-side-01'],
@@ -1813,7 +1869,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-prone-08',
-    nombre: 'Liberación de Omóplatos\nen Posición Prona',
+    nombre: 'Liberación de Omóplatos\nen Prono (Prone Scapula Release)',
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['thai-side-02'],
@@ -1827,7 +1883,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-prone-09',
-    nombre: 'Tracción de Brazo\nen Posición Prona',
+    nombre: 'Tracción de Brazo\nen Prono (Prone Arm Traction)',
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['thai-prone-08'],
@@ -1869,7 +1925,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   {
     id: 'thai-prone-05',
-    nombre: 'Trabajo de Hara\n(Abdomen)',
+    nombre: 'Trabajo de Hara\n(Abdomen Work)',
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['thai-supine-09'],
@@ -1888,7 +1944,7 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
     nombre: 'Standing: Pájaro Alto\n(High Bird)',
     nivel: 1,
     type: 'Standing',
-    prerequisites: ['1', 'h2h'],
+    prerequisites: ['1'],
     descripcion: 'Una postura de Acro de Pie (Standing Acro) fundamental. Es una transición desde L-Basing hacia acrobacias de pie.',
     narrativa_detallada: `
 **Esta postura es el puente principal hacia el Standing Acro.**
@@ -1918,6 +1974,29 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
   },
   
   // Standing Acro: NIVEL 2
+  {
+    id: 'monkey',
+    nombre: 'Standing: Mono\n(Monkey)',
+    nivel: 2,
+    type: 'Standing',
+    prerequisites: ['standing-high-bird'],
+    descripcion: 'Una transición clásica de standing acro donde el volador se mueve entre los hombros y los pies de la base.',
+    narrativa_detallada: `
+**Inicio:**
+1.  **Base:** De pie, con el volador sentado en sus hombros.
+2.  **Transición:** El volador se inclina hacia adelante, la base lo atrapa en **High Bird**.
+3.  **Movimiento:** Desde High Bird, la base puede guiar al volador a una posición de **Foot-to-Foot** (de pie sobre los pies de la base).
+4.  **Regreso:** Se puede revertir la secuencia para volver a los hombros.`,
+    musculos: {
+      base: ["Fuerza y equilibrio de piernas", "Core"],
+      volador: ["Control del core", "Agilidad"],
+    },
+    calibracion: {
+      base: ["Mantén una base sólida y estable.", "Guía las transiciones con claridad."],
+      volador: ["Mantente compacto y ligero.", "Sigue la guía de la base en todo momento."],
+      observador: ["Permanece cerca y atento durante las transiciones de peso."],
+    },
+  },
   {
     id: 'standing-f2h',
     nombre: 'Standing: Pie a Mano\n(Foot-to-Hand)',
@@ -1950,29 +2029,6 @@ Se puede entrar desde el suelo o desde **High Bird**.
       observador: ["Observador extremadamente experimentado y fuerte.", "Debe saber cómo guiar una caída desde esta altura y peso."],
     },
   },
-  {
-    id: 'monkey-standing',
-    nombre: 'Standing: Mono\n(Monkey)',
-    nivel: 2,
-    type: 'Standing',
-    prerequisites: ['standing-high-bird'],
-    descripcion: 'Una transición clásica de standing acro donde el volador se mueve entre los hombros y los pies de la base.',
-    narrativa_detallada: `
-**Inicio:**
-1.  **Base:** De pie, con el volador sentado en sus hombros.
-2.  **Transición:** El volador se inclina hacia adelante, la base lo atrapa en **High Bird**.
-3.  **Movimiento:** Desde High Bird, la base puede guiar al volador a una posición de **Foot-to-Foot** (de pie sobre los pies de la base).
-4.  **Regreso:** Se puede revertir la secuencia para volver a los hombros.`,
-    musculos: {
-      base: ["Fuerza y equilibrio de piernas", "Core"],
-      volador: ["Control del core", "Agilidad"],
-    },
-    calibracion: {
-      base: ["Mantén una base sólida y estable.", "Guía las transiciones con claridad."],
-      volador: ["Mantente compacto y ligero.", "Sigue la guía de la base en todo momento."],
-      observador: ["Permanece cerca y atento durante las transiciones de peso."],
-    },
-  },
 
   // Standing Acro: NIVEL 3
   {
@@ -1980,7 +2036,7 @@ Se puede entrar desde el suelo o desde **High Bird**.
     nombre: 'Standing: Mano a Mano\n(H2H)',
     nivel: 3,
     type: 'Standing',
-    prerequisites: ['standing-f2h', 'h2h', 'monkey-standing'],
+    prerequisites: ['standing-f2h', 'h2h', 'monkey'],
     descripcion: 'El pináculo del Standing Acro. La base sostiene al volador en una parada de manos, mano con mano.',
     narrativa_detallada: `
 **El pináculo de la confianza y el equilibrio en pareja.**
@@ -1989,7 +2045,7 @@ Se puede entrar desde el suelo o desde **High Bird**.
 La entrada más común es desde **High Bird**.
 1. **Base y Volador:** En una posición estable de **High Bird**, el volador baja la cabeza hacia la base.
 2. **Conexión:** Base y volador conectan su agarre **Hand-to-Hand grip**.
-3. **Transición:** El volador lleva las caderas hacia arriba, entrando en una parada de manos mientras la base ajusta su equilibrio para sostener la postura.
+3.  **Transición:** El volador lleva las caderas hacia arriba, entrando en una parada de manos mientras la base ajusta su equilibrio para sostener la postura.
 
 **Desarrollo:**
 * **Base:** El **Apilamiento (Stacking)** es perfecto: manos sobre codos, hombros, caderas y pies. La base debe estar inmóvil.
@@ -4019,81 +4075,6 @@ const allConceptsData: Concept[] = [
       category: 'Yoga',
       subCategory: 'Técnicas y Enfoques'
     },
-    {
-      id: 'yoga-112',
-      titulo: 'Parivrtta Trikonasana (Postura del Triángulo Invertido)',
-      descripcion: 'Una torsión de pie intensa que mejora el equilibrio, fortalece las piernas y estira la columna y las caderas.'
-    },
-    {
-      id: 'yoga-113',
-      titulo: 'Parivrtta Parsvakonasana (Postura del Ángulo Lateral Invertido)',
-      descripcion: 'Una torsión profunda que desintoxica los órganos, fortalece las piernas y mejora la digestión.'
-    },
-    {
-      id: 'yoga-114',
-      titulo: 'Utthita Hasta Padangusthasana (Postura de la Mano al Dedo Gordo del Pie)',
-      descripcion: 'Una postura de equilibrio que estira intensamente los isquiotibiales y fortalece las piernas y los tobillos.'
-    },
-    {
-      id: 'yoga-115',
-      titulo: 'Astavakrasana (Postura de los Ocho Ángulos)',
-      descripcion: 'Un equilibrio sobre los brazos avanzado que requiere fuerza, flexibilidad y concentración.'
-    },
-    {
-      id: 'yoga-116',
-      titulo: 'Eka Pada Koundinyasana I (Postura del Sabio Koundinya I)',
-      descripcion: 'Un equilibrio sobre brazos con torsión que fortalece la parte superior del cuerpo y el core.'
-    },
-    {
-      id: 'yoga-117',
-      titulo: 'Eka Pada Koundinyasana II (Postura del Sabio Koundinya II)',
-      descripcion: 'Una variación del equilibrio sobre brazos que se asemeja a una "split" voladora. Requiere una gran apertura de cadera.'
-    },
-    {
-      id: 'yoga-118',
-      titulo: 'Tittibhasana (Postura de la Luciérnaga)',
-      descripcion: 'Un equilibrio sobre brazos que requiere una compresión profunda y fuerza en los isquiotibiales y el core.'
-    },
-    {
-      id: 'yoga-119',
-      titulo: 'Krounchasana (Postura de la Garza)',
-      descripcion: 'Un estiramiento sentado intenso para el isquiotibial.'
-    },
-    {
-      id: 'yoga-120',
-      titulo: 'Marichyasana I (Postura dedicada al Sabio Marichi I)',
-      descripcion: 'Una flexión hacia adelante con un enlace que abre los hombros y estira la espalda.'
-    },
-    {
-      id: 'yoga-121',
-      titulo: 'Marichyasana III (Postura dedicada al Sabio Marichi III)',
-      descripcion: 'Una torsión profunda que flexibiliza la columna y masajea los órganos abdominales.'
-    },
-    {
-      id: 'yoga-122',
-      titulo: 'Salabhasana (Postura del Saltamontes)',
-      descripcion: 'Fortalece toda la parte posterior del cuerpo, incluyendo la espalda, los glúteos y los isquiotibiales.'
-    },
-    {
-      id: 'yoga-123',
-      titulo: 'Purvottanasana (Postura de la Plancha Invertida)',
-      descripcion: 'Fortalece los brazos, muñecas y piernas, y estira la parte frontal del cuerpo. Es una contrapostura para las flexiones hacia adelante.'
-    },
-    {
-      id: 'yoga-124',
-      titulo: 'Anjaneyasana (Postura de la Luna Creciente)',
-      descripcion: 'Una zancada baja que abre profundamente los flexores de la cadera y el psoas.'
-    },
-    {
-      id: 'yoga-125',
-      titulo: 'Skandasana (Postura del Dios de la Guerra)',
-      descripcion: 'Una zancada lateral profunda que abre las caderas y la ingle y estira los isquiotibiales.'
-    },
-    {
-      id: 'yoga-126',
-      titulo: 'Padmasana (Postura del Loto)',
-      descripcion: 'La postura de meditación arquetípica. Requiere una gran apertura de caderas y rodillas. Fomenta la calma y la concentración.'
-    }
 ];
 
 export async function getConcepts(): Promise<Concept[]> {
@@ -4103,25 +4084,69 @@ export async function getConcepts(): Promise<Concept[]> {
 const allAsanasData: Asana[] = [
     { id: 'tadasana', nombre_sans: 'Tadasana', nombre_es: 'Postura de la Montaña', descripcion: 'Postura fundamental de pie que mejora la postura y fortalece muslos, rodillas y tobillos.' },
     { id: 'adho_mukha_svanasana', nombre_sans: 'Adho Mukha Svanasana', nombre_es: 'Perro Boca Abajo', descripcion: 'Estira todo el cuerpo, especialmente los isquiotibiales, las pantorrillas, los hombros y la columna. Calma la mente y energiza el cuerpo.' },
+    { id: 'balasana', nombre_sans: 'Balasana', nombre_es: 'Postura del Niño', descripcion: 'Postura de descanso que estira suavemente las caderas, muslos y tobillos. Calma la mente y alivia el estrés y la fatiga.' },
     { id: 'virabhadrasana_i', nombre_sans: 'Virabhadrasana I', nombre_es: 'Guerrero I', descripcion: 'Fortalece los hombros, brazos, piernas, tobillos y espalda. Abre el pecho y las caderas.' },
     { id: 'virabhadrasana_ii', nombre_sans: 'Virabhadrasana II', nombre_es: 'Guerrero II', descripcion: 'Fortalece y estira las piernas y los tobillos. Estira la ingle, el pecho y los hombros.' },
     { id: 'trikonasana', nombre_sans: 'Trikonasana', nombre_es: 'Postura del Triángulo', descripcion: 'Estira y fortalece los muslos, rodillas y tobillos. Estira las caderas, ingle, isquiotibiales, pantorrillas, hombros, pecho y columna.' },
     { id: 'vrksasana', nombre_sans: 'Vrksasana', nombre_es: 'Postura del Árbol', descripcion: 'Mejora el equilibrio y la concentración. Fortalece los tobillos, las pantorrillas, los muslos y la columna vertebral.' },
-    { id: 'balasana', nombre_sans: 'Balasana', nombre_es: 'Postura del Niño', descripcion: 'Postura de descanso que estira suavemente las caderas, muslos y tobillos. Calma la mente y alivia el estrés y la fatiga.' },
     { id: 'setu_bandhasana', nombre_sans: 'Setu Bandhasana', nombre_es: 'Postura del Puente', descripcion: 'Estira el pecho, el cuello y la columna. Calma el cerebro y ayuda a aliviar el estrés y la depresión leve.' },
     { id: 'bhujangasana', nombre_sans: 'Bhujangasana', nombre_es: 'Postura de la Cobra', descripcion: 'Aumenta la flexibilidad de la columna, fortalece los músculos de la espalda y estira el pecho, los hombros y el abdomen.' },
-    { id: 'savasana', nombre_sans: 'Savasana', nombre_es: 'Postura del Cadáver', descripcion: 'Postura de relajación final. Calma la mente, reduce el estrés y la presión arterial, y ayuda a relajar el cuerpo.' }
+    { id: 'marjaryasana_bitilasana', nombre_sans: 'Marjaryasana-Bitilasana', nombre_es: 'Postura del Gato-Vaca', descripcion: 'Calienta la columna vertebral y alivia la tensión de la espalda, mientras estira suavemente el cuello y el torso.' },
+    { id: 'uttanasana', nombre_sans: 'Uttanasana', nombre_es: 'Flexión hacia adelante de pie', descripcion: 'Estira los isquiotibiales y la espalda. Calma la mente y ayuda a aliviar el estrés.' },
+    { id: 'paschimottanasana', nombre_sans: 'Paschimottanasana', nombre_es: 'Flexión hacia adelante sentado', descripcion: 'Estira la columna vertebral, los hombros y los isquiotibiales. Calma el cerebro y estimula los órganos internos.' },
+    { id: 'savasana', nombre_sans: 'Savasana', nombre_es: 'Postura del Cadáver', descripcion: 'Postura de relajación final. Calma la mente, reduce el estrés y la presión arterial, y ayuda a relajar el cuerpo.' },
+    { id: 'urdhva_mukha_svanasana', nombre_sans: 'Urdhva Mukha Svanasana', nombre_es: 'Perro Boca Arriba', descripcion: 'Fortalece la columna, los brazos y las muñecas. Estira el pecho, los hombros y el abdomen.' },
+    { id: 'virabhadrasana_iii', nombre_sans: 'Virabhadrasana III', nombre_es: 'Guerrero III', descripcion: 'Mejora el equilibrio y la concentración. Fortalece los tobillos, las piernas, los hombros y los músculos de la espalda.' },
+    { id: 'ardha_chandrasana', nombre_sans: 'Ardha Chandrasana', nombre_es: 'Postura de la Media Luna', descripcion: 'Fortalece el abdomen, los tobillos, los muslos, las nalgas y la columna vertebral. Estira las ingles, los isquiotibiales, las pantorrillas, los hombros y el pecho.' },
+    { id: 'bakasana', nombre_sans: 'Bakasana', nombre_es: 'Postura del Cuervo', descripcion: 'Fortalece los brazos y las muñecas. Estira la parte superior de la espalda y las ingles. Mejora el equilibrio y la concentración.' },
+    { id: 'sirsasana', nombre_sans: 'Sirsasana', nombre_es: 'Parada de cabeza', descripcion: 'Considerada la "reina de las asanas". Calma la mente, fortalece todo el cuerpo y mejora la circulación.' },
+    { id: 'salamba_sarvangasana', nombre_sans: 'Salamba Sarvangasana', nombre_es: 'Parada de hombros con Soporte', descripcion: 'Calma el sistema nervioso, mejora la digestión, y estimula la tiroides. Fortalece piernas y glúteos.' },
+    { id: 'halasana', nombre_sans: 'Halasana', nombre_es: 'Postura del Arado', descripcion: 'Estira los hombros y la columna vertebral. Calma el cerebro y estimula los órganos abdominales y la tiroides.' },
+    { id: 'matsyasana', nombre_sans: 'Matsyasana', nombre_es: 'Postura del Pez', descripcion: 'Estira la parte delantera del cuello, la garganta y el pecho. Es una contrapostura para la parada de hombros.' },
+    { id: 'navasana', nombre_sans: 'Navasana', nombre_es: 'Postura del Bote', descripcion: 'Fortalece los músculos abdominales, los flexores de la cadera y la columna vertebral.' },
+    { id: 'ustrasana', nombre_sans: 'Ustrasana', nombre_es: 'Postura del Camello', descripcion: 'Abre todo el frente del cuerpo: tobillos, muslos, ingle, abdomen, pecho y garganta. Fortalece los músculos de la espalda.' },
+    { id: 'dhanurasana', nombre_sans: 'Dhanurasana', nombre_es: 'Postura del Arco', descripcion: 'Fortalece la espalda y los músculos abdominales. Estimula los órganos reproductivos.' },
+    { id: 'garudasana', nombre_sans: 'Garudasana', nombre_es: 'Postura del Águila', descripcion: 'Fortalece y estira los tobillos y las pantorrillas. Mejora la concentración y el equilibrio.' },
+    { id: 'gomukhasana', nombre_sans: 'Gomukhasana', nombre_es: 'Postura de la Cara de Vaca', descripcion: 'Estira profundamente las caderas, los tobillos, los muslos, los hombros, las axilas y los tríceps.' },
+    { id: 'ardha_matsyendrasana', nombre_sans: 'Ardha Matsyendrasana', nombre_es: 'Media Torsión Espinal', descripcion: 'Estimula el hígado y los riñones. Energiza la columna vertebral, estira los hombros, caderas y cuello.' },
+    { id: 'malasana', nombre_sans: 'Malasana', nombre_es: 'Postura de la Guirnalda (Cuclillas)', descripcion: 'Estira los tobillos, las ingles y la espalda. Tonifica el abdomen y mejora la digestión.' },
+    { id: 'eka_pada_rajakapotasana', nombre_sans: 'Eka Pada Rajakapotasana', nombre_es: 'Postura de la Paloma Real con una Pierna', descripcion: 'Abre profundamente las caderas, estira los muslos, el psoas, la ingle, el pecho, los hombros y el cuello.' },
+    { id: 'hanumanasana', nombre_sans: 'Hanumanasana', nombre_es: 'Postura del Mono (Split)', descripcion: 'Estira profundamente los isquiotibiales y los flexores de la cadera (psoas). Representa el salto de fe del dios mono Hanuman.' },
+    { id: 'vasisthasana', nombre_sans: 'Vasisthasana', nombre_es: 'Plancha Lateral', descripcion: 'Fortalece los brazos, las piernas y los músculos abdominales, especialmente los oblicuos. Mejora el equilibrio.' },
+    { id: 'utkatasana', nombre_sans: 'Utkatasana', nombre_es: 'Postura de la Silla', descripcion: 'Fortalece los tobillos, los muslos, las pantorrillas y la columna vertebral. Estimula los órganos abdominales y el corazón.' },
+    { id: 'parsvakonasana', nombre_sans: 'Parsvakonasana', nombre_es: 'Postura del Ángulo Lateral Extendido', descripcion: 'Fortalece y estira las piernas, las rodillas y los tobillos. Abre el pecho y los hombros.' },
+    { id: 'prasarita_padottanasana', nombre_sans: 'Prasarita Padottanasana', nombre_es: 'Flexión hacia adelante con las piernas abiertas', descripcion: 'Estira la parte interna y posterior de las piernas. Fortalece los pies y tonifica los órganos abdominales.' },
+    { id: 'upavistha_konasana', nombre_sans: 'Upavistha Konasana', nombre_es: 'Flexión sentada con las piernas abiertas', descripcion: 'Estira la parte interna y posterior de las piernas. Calma la mente.' },
+    { id: 'baddha_konasana', nombre_sans: 'Baddha Konasana', nombre_es: 'Postura del Zapatero', descripcion: 'Estimula los órganos abdominales, los ovarios y la próstata. Estira las ingles y los muslos internos.' },
+    { id: 'janu_sirsasana', nombre_sans: 'Janu Sirsasana', nombre_es: 'Postura de la Cabeza a la Rodilla', descripcion: 'Estira la columna, los hombros, los isquiotibiales y las ingles. Calma la mente y puede aliviar la ansiedad.' },
+    { id: 'natarajasana', nombre_sans: 'Natarajasana', nombre_es: 'Postura del Señor de la Danza', descripcion: 'Mejora el equilibrio y la concentración. Estira los hombros, el pecho, los muslos, las ingles y el abdomen.' },
+    { id: 'pincha_mayurasana', nombre_sans: 'Pincha Mayurasana', nombre_es: 'Parada sobre los antebrazos', descripcion: 'Fortalece los hombros, los brazos y la espalda. Mejora el sentido del equilibrio.' },
+    { id: 'adho_mukha_vrksasana', nombre_sans: 'Adho Mukha Vrksasana', nombre_es: 'Parada de Manos', descripcion: 'Fortalece los hombros, los brazos y las muñecas. Mejora el equilibrio.' },
+    { id: 'kapotasana', nombre_sans: 'Kapotasana', nombre_es: 'Postura de la Paloma', descripcion: 'Una apertura de espalda y pecho muy profunda que también estira toda la parte frontal del cuerpo.' },
+    { id: 'ananda_balasana', nombre_sans: 'Ananda Balasana', nombre_es: 'Postura del Bebé Feliz', descripcion: 'Estira suavemente las ingles internas y la espalda baja. Calma la mente y alivia el estrés.' },
+    { id: 'supta_baddha_konasana', nombre_sans: 'Supta Baddha Konasana', nombre_es: 'Postura del Zapatero Tumbado', descripcion: 'Una postura restaurativa que abre las caderas y la ingle mientras calma el sistema nervioso.' },
+    { id: 'viparita_karani', nombre_sans: 'Viparita Karani', nombre_es: 'Postura de las Piernas en la Pared', descripcion: 'Alivia las piernas y los pies cansados. Estira suavemente la parte posterior de las piernas, el torso frontal y la parte posterior del cuello.' },
+    { id: 'parivrtta_trikonasana', nombre_sans: 'Parivrtta Trikonasana', nombre_es: 'Postura del Triángulo Invertido', descripcion: 'Una torsión de pie intensa que mejora el equilibrio, fortalece las piernas y estira la columna y las caderas.' },
+    { id: 'parivrtta_parsvakonasana', nombre_sans: 'Parivrtta Parsvakonasana', nombre_es: 'Postura del Ángulo Lateral Invertido', descripcion: 'Una torsión profunda que desintoxica los órganos, fortalece las piernas y mejora la digestión.' },
+    { id: 'utthita_hasta_padangusthasana', nombre_sans: 'Utthita Hasta Padangusthasana', nombre_es: 'Postura de la Mano al Dedo Gordo del Pie', descripcion: 'Una postura de equilibrio que estira intensamente los isquiotibiales y fortalece las piernas y los tobillos.' },
+    { id: 'astavakrasana', nombre_sans: 'Astavakrasana', nombre_es: 'Postura de los Ocho Ángulos', descripcion: 'Un equilibrio sobre los brazos avanzado que requiere fuerza, flexibilidad y concentración.' },
+    { id: 'eka_pada_koundinyasana_i', nombre_sans: 'Eka Pada Koundinyasana I', nombre_es: 'Postura del Sabio Koundinya I', descripcion: 'Un equilibrio sobre brazos con torsión que fortalece la parte superior del cuerpo y el core.' },
+    { id: 'eka_pada_koundinyasana_ii', nombre_sans: 'Eka Pada Koundinyasana II', nombre_es: 'Postura del Sabio Koundinya II', descripcion: 'Una variación del equilibrio sobre brazos que se asemeja a una "split" voladora. Requiere una gran apertura de cadera.' },
+    { id: 'tittibhasana', nombre_sans: 'Tittibhasana', nombre_es: 'Postura de la Luciérnaga', descripcion: 'Un equilibrio sobre brazos que requiere una compresión profunda y fuerza en los isquiotibiales y el core.' },
+    { id: 'krounchasana', nombre_sans: 'Krounchasana', nombre_es: 'Postura de la Garza', descripcion: 'Un estiramiento sentado intenso para el isquiotibial.' },
+    { id: 'marichyasana_i', nombre_sans: 'Marichyasana I', nombre_es: 'Postura dedicada al Sabio Marichi I', descripcion: 'Una flexión hacia adelante con un enlace que abre los hombros y estira la espalda.' },
+    { id: 'marichyasana_iii', nombre_sans: 'Marichyasana III', nombre_es: 'Postura dedicada al Sabio Marichi III', descripcion: 'Una torsión profunda que flexibiliza la columna y masajea los órganos abdominales.' },
+    { id: 'salabhasana', nombre_sans: 'Salabhasana', nombre_es: 'Postura del Saltamontes', descripcion: 'Fortalece toda la parte posterior del cuerpo, incluyendo la espalda, los glúteos y los isquiotibiales.' },
+    { id: 'purvottanasana', nombre_sans: 'Purvottanasana', nombre_es: 'Postura de la Plancha Invertida', descripcion: 'Fortalece los brazos, muñecas y piernas, y estira la parte frontal del cuerpo. Es una contrapostura para las flexiones hacia adelante.' },
+    { id: 'anjaneyasana', nombre_sans: 'Anjaneyasana', nombre_es: 'Postura de la Luna Creciente', descripcion: 'Una zancada baja que abre profundamente los flexores de la cadera y el psoas.' },
+    { id: 'skandasana', nombre_sans: 'Skandasana', nombre_es: 'Postura del Dios de la Guerra', descripcion: 'Una zancada lateral profunda que abre las caderas y la ingle y estira los isquiotibiales.' },
+    { id: 'padmasana', nombre_sans: 'Padmasana', nombre_es: 'Postura del Loto', descripcion: 'La postura de meditación arquetípica. Requiere una gran apertura de caderas y rodillas. Fomenta la calma y la concentración.' }
 ];
 
 export async function getAsanas(): Promise<Asana[]> {
   return Promise.resolve(allAsanasData);
 }
 
-
-
-
-
     
 
-
-
+    
