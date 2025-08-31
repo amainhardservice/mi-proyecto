@@ -238,7 +238,7 @@ const allPosesData: Pose[] = [
   },
   {
     id: '3',
-    nombre: 'Plegaria Invertida\nTerapéutica (Folded Leaf)',
+    nombre: 'Plegaria Invertida Terapéutica\n(Folded Leaf)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
@@ -271,7 +271,7 @@ const allPosesData: Pose[] = [
   },
   {
     id: '5',
-    nombre: 'Pájaro Inverso\nTerapéutico (Therapeutic Back Bird)',
+    nombre: 'Pájaro Inverso Terapéutico\n(Therapeutic Back Bird)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: ['1', '3', 'fish-on-shins'],
@@ -4150,3 +4150,4 @@ export async function getAsanas(): Promise<Asana[]> {
     
 
     
+
