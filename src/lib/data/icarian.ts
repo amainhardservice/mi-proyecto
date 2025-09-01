@@ -1,13 +1,13 @@
 import type { Pose } from '@/types';
 
 export const icarianPoses: Pose[] = [
-  // Icarian Games: NIVEL 1
+  // Icarian Games: NIVEL 6 (antes 5)
   {
-    id: '27',
+    id: 'ic-27',
     nombre: 'Pop: Trono a Trono\n(Throne-to-Throne Pop)',
-    nivel: 1,
+    nivel: 6,
     type: 'Icarian',
-    prerequisites: ['2'],
+    prerequisites: ['lb-2'],
     url_video: 'https://www.youtube.com/watch?v=NTFFY2wm77o',
     descripcion: 'El ejercicio fundamental de Icarian. La base usa solo los pies para lanzar y recibir al volador en la misma posición de Trono, sin usar las manos.',
     narrativa_detallada: `
@@ -37,11 +37,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '28',
+    id: 'ic-28',
     nombre: 'Pop: Trono a Pájaro Frontal\n(Throne-to-Front-Bird Pop)',
-    nivel: 1,
+    nivel: 6,
     type: 'Icarian',
-    prerequisites: ['27'],
+    prerequisites: ['ic-27'],
     url_video: 'https://www.youtube.com/watch?v=O2Fsx4aDX1s',
     descripcion: 'El volador es lanzado desde Trono y cambia de forma en el aire para ser recibido en Pájaro Frontal.',
     narrativa_detallada: `
@@ -70,11 +70,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '29',
+    id: 'ic-29',
     nombre: 'Pop: Pájaro a Horcajadas\n(Bird-to-Straddle Pop)',
-    nivel: 1,
+    nivel: 6,
     type: 'Icarian',
-    prerequisites: ['28'],
+    prerequisites: ['ic-28'],
     url_video: 'https://www.youtube.com/watch?v=BqUpzbc2uxM',
     descripcion: 'Pop que enseña el control de las caderas y la apertura de piernas en el aire.',
     narrativa_detallada: `
@@ -103,13 +103,13 @@ export const icarianPoses: Pose[] = [
     },
   },
   
-  // Icarian Games: NIVEL 2
+  // Icarian Games: NIVEL 7 (antes 6)
   {
-    id: '31',
+    id: 'ic-31',
     nombre: 'Pop: Pájaro a Pájaro Invertido\n(Bird-to-Reverse-Bird Pop)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['28'],
+    prerequisites: ['ic-28'],
     url_video: 'https://www.youtube.com/watch?v=qa5iG6k3W0s',
     descripcion: 'El volador es lanzado desde Pájaro Frontal y ejecuta un giro de 180° en el aire para ser recibido en Pájaro Invertido.',
     narrativa_detallada: `
@@ -138,11 +138,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: 'throne-shoulderstand-pop',
+    id: 'ic-throne-shoulderstand-pop',
     nombre: 'Pop: Trono a Parada de Hombros\n(Throne-to-Shoulderstand Pop)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['27', 'shoulderstand'],
+    prerequisites: ['ic-27', 'lb-shoulderstand'],
     url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
     descripcion: 'Una transición fundamental para controlar el eje vertical. Se lanza de Trono a Parada de Hombros y viceversa.',
     narrativa_detallada: `
@@ -169,11 +169,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '32',
+    id: 'ic-32',
     nombre: 'Voltereta: Hacia Atrás a Trono\n(Backflip to Throne)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['31'],
+    prerequisites: ['ic-31'],
     url_video: 'https://www.youtube.com/watch?v=UyqkvT_5Z8c',
     descripcion: 'Un movimiento icónico. El volador es lanzado desde Pájaro Invertido y realiza una voltereta hacia atrás para ser recibido en Trono.',
     narrativa_detallada: `
@@ -202,11 +202,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '35',
+    id: 'ic-35',
     nombre: 'Voltereta: Hacia Adelante a Trono\n(Frontflip to Throne)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['32'],
+    prerequisites: ['ic-32'],
     url_video: 'https://www.youtube.com/watch?v=Hi4xS9E-rck',
     descripcion: 'El volador es lanzado desde Trono y realiza una voltereta hacia adelante para ser recibido de nuevo en Trono.',
     narrativa_detallada: `
@@ -235,11 +235,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '36',
+    id: 'ic-36',
     nombre: 'Pop: Trípode a Trono\n(Tripod-to-Throne Pop)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['21', 'throne-shoulderstand-pop'],
+    prerequisites: ['lb-21', 'ic-throne-shoulderstand-pop'],
     url_video: 'https://www.youtube.com/watch?v=WjMLoXNkQyE',
     descripcion: 'Una transición desde un equilibrio sobre la cabeza del volador. Añade un elemento de parada de cabeza a los pops de Icarian.',
     narrativa_detallada: `
@@ -269,11 +269,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: 'corkscrew-pop',
+    id: 'ic-corkscrew-pop',
     nombre: 'Lavadora Pop: Sacacorchos\n(Corkscrew Pop)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['31', '32'],
+    prerequisites: ['ic-31', 'ic-32'],
     url_video: 'https://www.youtube.com/watch?v=76m0AXh_Q5Y',
     descripcion: 'Una secuencia de Icarian que fluye de Pájaro Invertido a Trono (usando una voltereta hacia atrás) y de vuelta a Pájaro.',
     narrativa_detallada: `
@@ -302,11 +302,11 @@ export const icarianPoses: Pose[] = [
     },
   },
   {
-    id: '34',
+    id: 'ic-34',
     nombre: "Lavadora Pop: Rueda de Catalina\n(Catherine's Wheel Pop)",
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['29', '31'],
+    prerequisites: ['ic-29', 'ic-31'],
     url_video: 'https://www.youtube.com/watch?v=8h2ZYO5_sYw',
     descripcion: 'La versión icariana y dinámica de la lavadora clásica. El volador es lanzado de Pájaro a Straddle y de vuelta.',
     narrativa_detallada: `
@@ -335,11 +335,11 @@ export const icarianPoses: Pose[] = [
     },
   },
    {
-    id: 'ninja-star-pop',
+    id: 'ic-ninja-star-pop',
     nombre: 'Lavadora Pop: Ninja Star\n(Ninja Star Pop)',
-    nivel: 2,
+    nivel: 7,
     type: 'Icarian',
-    prerequisites: ['corkscrew-pop'],
+    prerequisites: ['ic-corkscrew-pop'],
     url_video: 'https://www.youtube.com/watch?v=bvkHU4raLfI',
     descripcion: 'Una lavadora Icariana muy fluida y rotacional que conecta Pájaro Invertido, Estrella Lateral y Trono.',
     narrativa_detallada: `

@@ -6,12 +6,16 @@ import { icarianPoses } from '@/lib/data/icarian';
 import { standingPoses } from '@/lib/data/standing';
 import { thaiMassagePoses } from '@/lib/data/thai-massage';
 import { allConceptsData, allAsanasData, allModifiersData } from '@/lib/data/glossary';
+import { therapeuticPoses } from './data/therapeutic';
+import { transitionPoses } from './data/transitions';
 
 const allPosesData: Pose[] = [
   ...lBasingPoses,
   ...icarianPoses,
   ...standingPoses,
   ...thaiMassagePoses,
+  ...therapeuticPoses,
+  ...transitionPoses,
 ];
 
 export async function getPoses(): Promise<Pose[]> {

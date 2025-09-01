@@ -5,8 +5,6 @@ import type { Pose, PoseWithImage, Concept } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PoseNode } from './PoseNode';
 import { PoseDetailDialog } from './PoseDetailDialog';
-import { Skeleton } from './ui/skeleton';
-import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import ContentExporter from './ContentExporter';
@@ -35,7 +33,7 @@ export default function PoseExplorer({
   const [routeMode, setRouteMode] = useState(false);
   const [prereqMode, setPrereqMode] = useState(false);
 
-  type NameDisplay = 'en' | 'es' | 'both';
+  type NameDisplay = 'es' | 'en' | 'both';
   const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
 
   const posesById = useMemo(() => {
@@ -46,7 +44,7 @@ export default function PoseExplorer({
   }, [allPoses]);
 
   const posesByLevel = useMemo(() => {
-    return poses.reduce((acc, pose) => {
+    const grouped = poses.reduce((acc, pose) => {
       const level = pose.nivel;
       if (!acc[level]) {
         acc[level] = [];
@@ -54,10 +52,12 @@ export default function PoseExplorer({
       acc[level].push(pose);
       return acc;
     }, {} as Record<number, Pose[]>);
+    return Object.keys(grouped).sort((a,b) => Number(a) - Number(b)).reduce((acc, key) => {
+        acc[Number(key)] = grouped[Number(key)];
+        return acc;
+    }, {} as Record<number, Pose[]>);
   }, [poses]);
   
-  const levelKeys = Object.keys(posesByLevel).map(Number).sort((a, b) => a - b);
-  const levelCount = levelKeys.length;
   const cardId = useMemo(() => `learning-tree-card-${Math.random().toString(36).substring(2, 9)}`, []);
 
 
@@ -165,22 +165,38 @@ export default function PoseExplorer({
     }
   };
 
+  const getAcroLevelTitle = (level: number) => {
+    switch (level) {
+        case 1: return "Nivel 1: Introducción";
+        case 2: return "Nivel 2: Básico";
+        case 3: return "Nivel 3: Transiciones";
+        case 4: return "Nivel 4: Intermedio";
+        case 5: return "Nivel 5: Washing Machines";
+        case 6: return "Nivel 6: Icarian Básico";
+        case 7: return "Nivel 7: Icarian Intermedio";
+        case 8: return "Nivel 8: Standing Básico";
+        case 9: return "Nivel 9: Standing Intermedio";
+        case 10: return "Nivel 10: Standing Avanzado";
+        case 11: return "Posturas Terapéuticas";
+        default: return `Nivel ${level}`;
+    }
+  }
 
   return (
     <Card id={cardId}>
       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <CardTitle>Árbol de Aprendizaje</CardTitle>
+        <CardTitle>Explorador de Posturas</CardTitle>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
            <div className="flex items-center space-x-2">
-            <Label htmlFor="name-display-select" className="text-sm">Mostrar Nombres:</Label>
+            <Label htmlFor="name-display-select" className="text-sm font-medium">Nombres:</Label>
             <Select value={nameDisplay} onValueChange={(value: NameDisplay) => setNameDisplay(value)}>
-              <SelectTrigger id="name-display-select" className="w-[180px] h-9 text-sm">
-                <SelectValue placeholder="Seleccionar formato" />
+              <SelectTrigger id="name-display-select" className="w-[150px] h-9 text-sm">
+                <SelectValue placeholder="Seleccionar" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">Solo en Inglés</SelectItem>
-                <SelectItem value="es">Solo en Español</SelectItem>
-                <SelectItem value="both">Ambos Idiomas</SelectItem>
+                <SelectItem value="es">En Español</SelectItem>
+                <SelectItem value="en">En Inglés</SelectItem>
+                <SelectItem value="both">Ambos</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -191,7 +207,7 @@ export default function PoseExplorer({
               checked={exploreMode}
               onCheckedChange={(checked) => handleModeChange('explore', checked)}
             />
-            <Label htmlFor="explore-mode" className="text-sm">Modo Explorar</Label>
+            <Label htmlFor="explore-mode" className="text-sm font-medium">Modo Explorar</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Switch 
@@ -199,7 +215,7 @@ export default function PoseExplorer({
               checked={routeMode}
               onCheckedChange={(checked) => handleModeChange('route', checked)}
             />
-            <Label htmlFor="route-mode" className="text-sm">Modo Ruta</Label>
+            <Label htmlFor="route-mode" className="text-sm font-medium">Modo Ruta</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Switch 
@@ -207,7 +223,7 @@ export default function PoseExplorer({
               checked={prereqMode}
               onCheckedChange={(checked) => handleModeChange('prereq', checked)}
             />
-            <Label htmlFor="prereq-mode" className="text-sm">Modo Prerrequisitos</Label>
+            <Label htmlFor="prereq-mode" className="text-sm font-medium">Modo Prerreq.</Label>
           </div>
           
           {routeMode && pinnedPoseIds.length > 0 && (
@@ -216,7 +232,7 @@ export default function PoseExplorer({
               title="Mi Ruta de Aprendizaje" 
               posesToExport={pinnedPoseIds}
               allPoses={allPoses}
-              buttonText="Imprimir Ruta"
+              buttonText="Exportar Ruta"
               nameDisplay={nameDisplay}
             />
           )}
@@ -228,7 +244,7 @@ export default function PoseExplorer({
               posesToExport={pinnedPoseIds}
               allPoses={allPoses}
               separateTrees={true}
-              buttonText="Imprimir Prerrequisitos"
+              buttonText="Exportar Prerreq."
               nameDisplay={nameDisplay}
             />
           )}
@@ -236,30 +252,19 @@ export default function PoseExplorer({
           {!routeMode && !prereqMode && (
             <ContentExporter 
               elementId={cardId}
-              title="Árbol de Aprendizaje de Acroyoga"
+              title="Mapa de Posturas"
             />
           )}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-auto">
         {poses.length > 0 ? (
-          <div className={cn(
-            "grid grid-cols-1 gap-x-8 gap-y-4",
-            levelCount <= 2 && "md:grid-cols-2",
-            levelCount === 3 && "md:grid-cols-3",
-            levelCount === 4 && "md:grid-cols-4",
-            levelCount === 5 && "md:grid-cols-5",
-            levelCount >= 6 && "md:grid-cols-6",
-          )}>
-            {levelKeys.map(level => (
-              <div key={level}>
-                <h3 className="text-2xl font-bold text-center mb-6 text-primary border-b-2 border-primary/30 pb-2">
-                  Nivel {level}
-                </h3>
-                <div className="relative flex flex-col items-center">
-                   <div className="absolute top-0 left-1/2 w-0.5 h-full bg-border -z-10"></div>
-                   
-                   {posesByLevel[level].map((pose) => (
+          <div className="flex space-x-8 pb-4">
+            {Object.entries(posesByLevel).map(([level, posesInLevel]) => (
+              <div key={level} className="w-64 flex-shrink-0">
+                <h3 className="text-lg font-semibold mb-4 text-center text-primary">{getAcroLevelTitle(Number(level))}</h3>
+                <div className="space-y-3">
+                   {posesInLevel.map((pose) => (
                       <PoseNode
                         key={pose.id}
                         pose={pose}
@@ -271,21 +276,14 @@ export default function PoseExplorer({
                         onMouseEnter={() => exploreMode && setHoveredPoseId(pose.id)}
                         onMouseLeave={() => exploreMode && setHoveredPoseId(null)}
                       />
-                   ))}
+                    ))}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {[1,2,3,4].map(level => (
-              <div key={level} className="space-y-4">
-                <Skeleton className="h-8 w-1/2 mx-auto" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-              </div>
-            ))}
+           <div className="text-center text-muted-foreground py-10">
+             Selecciona uno o más niveles de Acroyoga en el menú lateral para comenzar a explorar.
            </div>
         )}
       </CardContent>

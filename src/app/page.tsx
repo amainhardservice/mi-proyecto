@@ -2,18 +2,28 @@
 
 import { useState, useEffect } from 'react';
 import { getPoses, getConcepts, getPoseModifiers, getAsanas } from '@/lib/firestore';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { Pose, Concept, Asana, PoseModifier } from '@/types';
+import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton, SidebarInset } from '@/components/ui/sidebar';
 import PoseExplorer from '@/components/PoseExplorer';
 import ConceptGlossary from '@/components/ConceptGlossary';
 import PoseModifiers from '@/components/PoseModifiers';
 import WhatIsAcroYoga from '@/components/WhatIsAcroYoga';
 import WhatIsThaiMassage from '@/components/WhatIsThaiMassage';
-import { AcroYogaIcon } from '@/components/icons';
-import type { Pose, Concept, Asana, PoseModifier } from '@/types';
 import AsanaGlossary from '@/components/AsanaGlossary';
 import GlossaryExporter from '@/components/GlossaryExporter';
-import { FileDown, Loader2 } from 'lucide-react';
-import ContentExporter from '@/components/ContentExporter';
+import { AcroYogaIcon } from '@/components/icons';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+type View = 
+  | { type: 'acro', levels: number[] }
+  | { type: 'thai', level: number }
+  | { type: 'therapeutic', level: number }
+  | { type: 'acro-glossary' }
+  | { type: 'thai-glossary' }
+  | { type: 'yoga-glossary' }
+  | { type: 'what-is-acro' }
+  | { type: 'what-is-thai' };
+
 
 export default function Home() {
   const [poses, setPoses] = useState<Pose[]>([]);
@@ -21,6 +31,7 @@ export default function Home() {
   const [modifiers, setModifiers] = useState<PoseModifier[]>([]);
   const [asanas, setAsanas] = useState<Asana[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeView, setActiveView] = useState<View>({ type: 'acro', levels: [1, 2, 4, 5] });
 
   useEffect(() => {
     async function fetchData() {
@@ -38,7 +49,32 @@ export default function Home() {
     }
     fetchData();
   }, []);
+  
+  const handleAcroLevelClick = (level: number) => {
+    setActiveView(prevView => {
+      if (prevView.type === 'acro') {
+        const newLevels = prevView.levels.includes(level)
+          ? prevView.levels.filter(l => l !== level)
+          : [...prevView.levels, level].sort((a, b) => a - b);
+        
+        if (newLevels.length === 0) {
+           return { type: 'acro', levels: [] };
+        }
+        return { ...prevView, levels: newLevels };
+      }
+      return { type: 'acro', levels: [level] };
+    });
+  };
 
+  const handleThaiLevelClick = (level: number) => {
+    setActiveView({ type: 'thai', level });
+  };
+
+  const handleTherapeuticClick = (level: number) => {
+    setActiveView({ type: 'therapeutic', level });
+  };
+  
+  // --- Data processing for Glossaries ---
   const acroConcepts = concepts.filter(c => c.category === 'Principios Fundamentales' || c.category === 'Dinámicas y Transiciones' || c.category === 'Roles y Estilos de Práctica' || c.category === 'Comunicación y Seguridad');
   const thaiConcepts = concepts.filter(c => c.category === 'Masaje Tailandés');
   const yogaConcepts = concepts.filter(c => c.category === 'Yoga');
@@ -104,21 +140,12 @@ export default function Home() {
     'Técnicas y Enfoques',
   ];
 
-  const lBasingPoses = poses.filter(p => p.type === 'L-Basing');
-  const icarianPoses = poses.filter(p => p.type === 'Icarian');
-  const standingAcroPoses = poses.filter(p => p.type === 'Standing');
-  const thaiMassagePoses = poses.filter(p => p.type === 'Thai-Massage');
-  
   const getFullAcroGlossaryContent = () => {
     let content = 'Glosario Completo de Acroyoga\n\n';
-    
-    // Pose Modifiers
     content += 'Modificadores de Postura\n\n';
     modifiers.forEach(modifier => {
       content += `**${modifier.titulo}**\n${modifier.descripcion}\n\n`;
     });
-    
-    // Concepts by category
     acroCategoryOrder.forEach(category => {
       if (acroConceptsByCategory[category]) {
         content += `${category}\n\n`;
@@ -159,150 +186,180 @@ export default function Home() {
     });
     return content;
   };
+  
+  const renderContent = () => {
+    if (loading) {
+      return <div className="flex justify-center items-center min-h-screen">Cargando...</div>;
+    }
 
-  if (loading) {
-     return <div className="flex justify-center items-center min-h-screen">Cargando...</div>;
+    switch (activeView.type) {
+      case 'what-is-acro':
+        return <WhatIsAcroYoga />;
+      case 'what-is-thai':
+        return <WhatIsThaiMassage />;
+      case 'acro': {
+        const selectedPoses = poses.filter(p => 
+          (p.type === 'L-Basing' || p.type === 'Icarian' || p.type === 'Standing' || p.type === 'Transition') &&
+          activeView.levels.includes(p.nivel)
+        );
+        return <PoseExplorer poses={selectedPoses} allPoses={poses} concepts={concepts} />;
+      }
+      case 'thai':
+        return <PoseExplorer poses={poses.filter(p => p.type === 'Thai-Massage' && p.nivel === activeView.level)} allPoses={poses} concepts={concepts} />;
+      case 'therapeutic':
+        return <PoseExplorer poses={poses.filter(p => p.type === 'Therapeutic' && p.nivel === activeView.level)} allPoses={poses} concepts={concepts} />;
+      case 'acro-glossary':
+        return (
+          <div className="space-y-8">
+            <div className="mb-4">
+              <GlossaryExporter title="Glosario Completo de Acroyoga" content={getFullAcroGlossaryContent()} isGlobal={true} />
+            </div>
+            <PoseModifiers modifiers={modifiers} />
+            {acroCategoryOrder.map(category => (
+              acroConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={acroConceptsByCategory[category]} />
+            ))}
+          </div>
+        );
+      case 'thai-glossary':
+        return (
+          <div className="space-y-8">
+            <div className="mb-4">
+              <GlossaryExporter title="Glosario Completo de Masaje Tailandés" content={getFullThaiGlossaryContent()} isGlobal={true} />
+            </div>
+            {thaiCategoryOrder.map(category => (
+              thaiConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={thaiConceptsByCategory[category]} />
+            ))}
+          </div>
+        );
+      case 'yoga-glossary':
+        return (
+          <div className="space-y-8">
+            <div className="mb-4">
+              <GlossaryExporter title="Glosario Completo de Yoga" content={getFullYogaGlossaryContent()} isGlobal={true} />
+            </div>
+            {yogaCategoryOrder.map(category => (
+              yogaConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={yogaConceptsByCategory[category]} />
+            ))}
+            <AsanaGlossary asanas={asanas} />
+          </div>
+        );
+      default:
+        return <WhatIsAcroYoga />;
+    }
+  };
+
+  const getAcroLevelTitle = (level: number) => {
+    switch (level) {
+        case 1: return "Nivel 1: Introducción";
+        case 2: return "Nivel 2: Básico";
+        case 3: return "Nivel 3: Transiciones";
+        case 4: return "Nivel 4: Intermedio";
+        case 5: return "Nivel 5: Washing Machines";
+        case 6: return "Nivel 6: Icarian Básico";
+        case 7: return "Nivel 7: Icarian Intermedio";
+        case 8: return "Nivel 8: Standing Básico";
+        case 9: return "Nivel 9: Standing Intermedio";
+        case 10: return "Nivel 10: Standing Avanzado";
+        default: return `Nivel ${level}`;
+    }
   }
 
+  const allAcroPoses = poses.filter(p => p.type !== 'Thai-Massage' && p.type !== 'Therapeutic');
+  const acroLevels = Array.from(new Set(allAcroPoses.map(p => p.nivel))).sort((a,b) => a - b);
+  const thaiLevels = Array.from(new Set(poses.filter(p => p.type === 'Thai-Massage').map(p => p.nivel))).sort((a,b) => a - b);
+  const therapeuticLevels = Array.from(new Set(poses.filter(p => p.type === 'Therapeutic').map(p => p.nivel))).sort((a,b) => a - b);
+
+
   return (
-    <div className="flex flex-col items-center min-h-screen bg-background p-4 sm:p-6 lg:p-8">
-      <header className="w-full max-w-5xl mb-8 text-center">
-        <div className="flex items-center justify-center gap-4 mb-2">
-          <AcroYogaIcon className="h-12 w-12 text-primary" />
-          <h1 className="text-4xl sm:text-5xl font-bold font-headline text-primary tracking-tight">
-            Acro Companion
-          </h1>
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex items-center gap-2">
+            <AcroYogaIcon className="h-8 w-8 text-primary" />
+            <h1 className="text-xl font-semibold">Acro Companion</h1>
+          </div>
+        </SidebarHeader>
+        <ScrollArea className="flex-1">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro', levels: [] })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
+            </SidebarMenuItem>
+            
+            <SidebarMenuItem>
+              <SidebarMenuButton>Niveles de Acroyoga</SidebarMenuButton>
+              <SidebarMenuSub>
+                {acroLevels.map(level => (
+                  <SidebarMenuSubItem key={`acro-${level}`}>
+                    <SidebarMenuSubButton 
+                      onClick={() => handleAcroLevelClick(level)} 
+                      isActive={activeView.type === 'acro' && activeView.levels.includes(level)}
+                    >
+                      {getAcroLevelTitle(level)}
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+
+             <SidebarMenuItem>
+                <SidebarMenuButton onClick={() => handleTherapeuticClick(11)} isActive={activeView.type === 'therapeutic'}>
+                  Vuelo Terapéutico
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+
+             <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-thai', level: 1 })} isActive={activeView.type === 'what-is-thai'}>¿Qué es Masaje Tai?</SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton>Niveles de Masaje Tai</SidebarMenuButton>
+              <SidebarMenuSub>
+                {thaiLevels.map(level => (
+                   <SidebarMenuSubItem key={`thai-${level}`}>
+                      <SidebarMenuSubButton onClick={() => handleThaiLevelClick(level)} isActive={activeView.type === 'thai' && activeView.level === level}>
+                       Nivel {level}
+                      </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+
+             <SidebarMenuItem>
+              <SidebarMenuButton>Glosarios</SidebarMenuButton>
+              <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton onClick={() => setActiveView({ type: 'acro-glossary' })} isActive={activeView.type === 'acro-glossary'}>
+                      Glosario Acroyoga
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton onClick={() => setActiveView({ type: 'thai-glossary' })} isActive={activeView.type === 'thai-glossary'}>
+                      Glosario Masaje Tai
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton onClick={() => setActiveView({ type: 'yoga-glossary' })} isActive={activeView.type === 'yoga-glossary'}>
+                      Glosario Yoga
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </ScrollArea>
+      </Sidebar>
+      <SidebarInset>
+        <div className="p-4 sm:p-6 lg:p-8 flex-1 w-full">
+           <header className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2">
+                 <h1 className="text-2xl font-bold text-primary tracking-tight">Acro Companion</h1>
+              </div>
+              <SidebarTrigger className="md:hidden"/>
+           </header>
+          <main>
+            {renderContent()}
+          </main>
         </div>
-        <p className="text-muted-foreground text-lg">
-          Tu guía interactiva de posturas y conceptos de Acroyoga.
-        </p>
-      </header>
-      <main className="w-full max-w-5xl">
-        <Tabs defaultValue="acroyoga" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-secondary/80">
-            <TabsTrigger value="acroyoga">Acroyoga</TabsTrigger>
-            <TabsTrigger value="thai-massage">Masaje Tailandés</TabsTrigger>
-            <TabsTrigger value="concepts">Conceptos</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="acroyoga" className="mt-6 space-y-8">
-            <div id="acroyoga-content-to-export" className="space-y-8">
-              <div className="flex justify-end">
-                <ContentExporter elementId="acroyoga-content-to-export" title="Guía de Acroyoga" />
-              </div>
-              <WhatIsAcroYoga />
-              <Tabs defaultValue="l-basing" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                      <TabsTrigger value="l-basing">Acroyoga (L-Basing)</TabsTrigger>
-                      <TabsTrigger value="icarian">Juegos Icarianos</TabsTrigger>
-                      <TabsTrigger value="standing-acro">Acro de Pie (Standing)</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="l-basing" className="mt-6">
-                      <PoseExplorer 
-                        poses={lBasingPoses} 
-                        allPoses={poses}
-                        concepts={concepts}
-                      />
-                  </TabsContent>
-                  <TabsContent value="icarian" className="mt-6">
-                      <PoseExplorer 
-                        poses={icarianPoses} 
-                        allPoses={poses}
-                        concepts={concepts}
-                      />
-                  </TabsContent>
-                   <TabsContent value="standing-acro" className="mt-6">
-                      <PoseExplorer 
-                        poses={standingAcroPoses} 
-                        allPoses={poses}
-                        concepts={concepts}
-                      />
-                  </TabsContent>
-              </Tabs>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="thai-massage" className="mt-6 space-y-8">
-            <div id="thai-massage-content-to-export" className="space-y-8">
-              <div className="flex justify-end">
-                  <ContentExporter elementId="thai-massage-content-to-export" title="Guía de Masaje Tailandés" />
-              </div>
-              <WhatIsThaiMassage />
-              <PoseExplorer 
-                poses={thaiMassagePoses}
-                allPoses={poses}
-                concepts={concepts}
-                />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="concepts" className="mt-6">
-             <Tabs defaultValue="acro-concepts" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="acro-concepts">Glosario Acroyoga</TabsTrigger>
-                    <TabsTrigger value="thai-concepts">Glosario Masaje Tailandés</TabsTrigger>
-                    <TabsTrigger value="yoga-concepts">Glosario Yoga</TabsTrigger>
-                </TabsList>
-                <TabsContent value="acro-concepts" className="mt-6 space-y-8">
-                    <div className="mb-4">
-                      <GlossaryExporter 
-                        title="Glosario Completo de Acroyoga" 
-                        content={getFullAcroGlossaryContent()} 
-                        isGlobal={true}
-                      />
-                    </div>
-                    <PoseModifiers modifiers={modifiers} />
-                    {acroCategoryOrder.map(category => (
-                      acroConceptsByCategory[category] && (
-                        <ConceptGlossary 
-                          key={category}
-                          title={category}
-                          concepts={acroConceptsByCategory[category]} 
-                        />
-                      )
-                    ))}
-                </TabsContent>
-                 <TabsContent value="thai-concepts" className="mt-6 space-y-8">
-                    <div className="mb-4">
-                        <GlossaryExporter 
-                            title="Glosario Completo de Masaje Tailandés"
-                            content={getFullThaiGlossaryContent()} 
-                            isGlobal={true}
-                        />
-                    </div>
-                    {thaiCategoryOrder.map(category => (
-                      thaiConceptsByCategory[category] && (
-                        <ConceptGlossary 
-                          key={category}
-                          title={category}
-                          concepts={thaiConceptsByCategory[category]} 
-                        />
-                      )
-                    ))}
-                </TabsContent>
-                 <TabsContent value="yoga-concepts" className="mt-6 space-y-8">
-                    <div className="mb-4">
-                        <GlossaryExporter 
-                            title="Glosario Completo de Yoga"
-                            content={getFullYogaGlossaryContent()} 
-                            isGlobal={true}
-                        />
-                    </div>
-                    {yogaCategoryOrder.map(category => (
-                      yogaConceptsByCategory[category] && (
-                        <ConceptGlossary 
-                          key={category}
-                          title={category}
-                          concepts={yogaConceptsByCategory[category]} 
-                        />
-                      )
-                    ))}
-                    <AsanaGlossary asanas={asanas} />
-                </TabsContent>
-            </Tabs>
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

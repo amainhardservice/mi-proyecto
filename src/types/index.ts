@@ -9,7 +9,7 @@ export interface Pose {
   id: string;
   nombre: string;
   nivel: number;
-  type: 'L-Basing' | 'Icarian' | 'Standing' | 'Thai-Massage';
+  type: 'L-Basing' | 'Icarian' | 'Standing' | 'Thai-Massage' | 'Transition' | 'Therapeutic';
   descripcion: string;
   narrativa_detallada?: string;
   musculos?: {

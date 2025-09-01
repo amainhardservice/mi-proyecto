@@ -1,40 +1,14 @@
+
 import type { Pose } from '@/types';
 
 export const lBasingPoses: Pose[] = [
   // L-BASING: NIVEL 1
   {
-    id: '25',
-    nombre: 'Sofá\n(Couch)',
-    nivel: 1,
-    type: 'L-Basing',
-    prerequisites: [],
-    url_video: 'https://www.youtube.com/watch?v=NTFFY2wm77o',
-    url_imagen: 'https://c8.alamy.com/comp/2AGWPJP/fit-young-couple-doing-acro-yoga-at-spa-retreat-on-sea-beach-active-woman-balancing-on-partner-feet-stretching-at-acroyoga-pose-healthy-lifestyle-2AGWPJP.jpg',
-    descripcion: 'Una postura terapéutica relajante donde el volador se sienta cómodamente en la plataforma de las piernas de la base.',
-    narrativa_detallada: `
-**Inicio:**
-1.  **Base:** Acuéstate boca arriba, levanta las piernas y dobla las rodillas para que tus espinillas estén paralelas al suelo, creando una plataforma.
-2.  **Volador:** Párate de espaldas a la base, entre sus pies.
-3.  **Base:** Guía al volador para que se siente en tus espinillas, como si fuera un sofá. Tus pies pueden cruzarse debajo del volador para mayor comodidad.
-4.  **Volador:** Siéntate cómodamente, con la espalda apoyada en los muslos de la base.
-
-**Desarrollo:**
-*   **Base:** Esta es una postura de descanso para ti. Ajusta la altura de tus piernas para la comodidad del volador. Mantén el **Core** ligeramente activo para la estabilidad.
-*   **Volador:** Es una postura puramente receptiva. Relájate, respira. Puedes dejar que tu cabeza descanse en los hombros o el pecho de la base.
-*   **Puntos de Contacto:** La espalda y los glúteos del volador descansan sobre las espinillas y los muslos de la base.
-*   **Transición a Trono:** Desde esta postura, la base puede bajar sus piernas, el volador se pone de pie brevemente y pueden entrar directamente en **Trono (Throne)**. Esta es una transición fundamental.
-
-**Culminación:**
-1.  **Volador:** Inclínate hacia adelante.
-2.  **Base:** Guía al volador con las manos para que se ponga de pie de forma segura.
-`,
-  },
-  {
-    id: '15',
+    id: 'lb-15',
     nombre: 'Plancha Frontal sobre Espinillas\n(Front Plank on Shins)',
     nivel: 1,
     type: 'L-Basing',
-    prerequisites: ['25'],
+    prerequisites: [],
     url_video: 'https://www.youtube.com/watch?v=O2Fsx4aDX1s',
     url_imagen: 'https://cdn.yogajournal.com/wp-content/uploads/2014/09/acro-yoga-plank-on-plank-pose-1.jpg',
     descripcion: 'El volador se equilibra en plancha sobre las espinillas de la base. Enseña la línea corporal y la activación del core.',
@@ -65,11 +39,11 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: 'fish-on-shins',
+    id: 'lb-fish-on-shins',
     nombre: 'Pez sobre Espinillas\n(Fish on Shins)',
     nivel: 1,
     type: 'L-Basing',
-    prerequisites: ['15'],
+    prerequisites: ['lb-15'],
     url_video: 'https://www.youtube.com/watch?v=6F9sRYTD0xU',
     url_imagen: 'https://www.blueosa.com/wp-content/uploads/2021/07/Seated-Forward-Fold-Fish-Pose-partner-yoga-pose.jpg',
     descripcion: 'Una apertura de pecho terapéutica que sirve como excelente preparación para posturas como Pájaro Inverso y Ballena.',
@@ -99,11 +73,11 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: 'shoulderstand-on-shins',
+    id: 'lb-shoulderstand-on-shins',
     nombre: 'Parada de Hombros sobre Espinillas\n(Shoulderstand on Shins)',
     nivel: 1,
     type: 'L-Basing',
-    prerequisites: ['15'],
+    prerequisites: ['lb-15'],
     url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
     url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg',
     descripcion: 'Una inversión segura sobre las espinillas de la base. Enseña la alineación de caderas sobre hombros en una plataforma estable.',
@@ -133,7 +107,7 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: '1',
+    id: 'lb-1',
     nombre: 'Pájaro Frontal\n(Front Bird)',
     nivel: 1,
     type: 'L-Basing',
@@ -165,7 +139,7 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: '2',
+    id: 'lb-2',
     nombre: 'Trono\n(Throne)',
     nivel: 1,
     type: 'L-Basing',
@@ -196,11 +170,11 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: 'baby-bird',
+    id: 'lb-baby-bird',
     nombre: 'Pajarito\n(Baby Bird)',
     nivel: 1,
     type: 'L-Basing',
-    prerequisites: ['1', '2'],
+    prerequisites: ['lb-1', 'lb-2'],
     url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
     url_imagen: 'https://theyogatique.com/wp-content/uploads/2023/05/front-bird-acro-yoga-pose-1024x769.jpg',
     descripcion: 'Una postura de equilibrio juguetona donde el volador se equilibra en las rodillas de la base, fomentando la conexión y el juego.',
@@ -229,14 +203,14 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: '3',
+    id: 'lb-folded-leaf',
     nombre: 'Plegaria Invertida\n(Folded Leaf)',
     nivel: 1,
     type: 'L-Basing',
     prerequisites: [],
     url_video: 'https://www.youtube.com/watch?v=Zc-D_1htX6I',
     url_imagen: 'https://www.fitsri.com/wp-content/uploads/2021/11/Folded-Leaf-Pose-Acro-Yoga--1024x683.jpg',
-    descripcion: 'Postura terapéutica. La base sostiene al volador por las caderas para una inversión suave y relajante.',
+    descripcion: 'Postura terapéutica y fundamental. La base sostiene al volador por las caderas para una inversión suave y relajante.',
      narrativa_detallada: `
 **Inicio:**
 1.  **Base:** Acuéstate y levanta las piernas, flexionadas.
@@ -261,82 +235,14 @@ export const lBasingPoses: Pose[] = [
       observador: ['Junto a la cabeza del volador', 'Asegura que la cabeza no toque el suelo'],
     },
   },
-  {
-    id: '5',
-    nombre: 'Pájaro Inverso\n(Back Bird)',
-    nivel: 1,
-    type: 'L-Basing',
-    prerequisites: ['1', '3', 'fish-on-shins'],
-    url_video: 'https://www.youtube.com/watch?v=qa5iG6k3W0s',
-    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/backbird-44.jpg',
-    descripcion: 'Estiramiento terapéutico de espalda. El volador se arquea sobre los pies de la base, abriendo pecho y hombros.',
-     narrativa_detallada: `
-**Inicio:**
-1.  **Base:** Acuéstate y levanta las piernas. El volador se para de espaldas a ti.
-2.  **Volador:** Inclínate hacia atrás. La base colocará sus pies en tu espalda alta, justo debajo de los omóplatos. Los dedos de los pies de la base deben apuntar hacia los hombros del volador.
-3.  **Base y Volador:** Tómense de las manos. El volador debe confiar y dejarse caer hacia atrás.
-4.  **Base:** A medida que el volador se inclina, dobla tus rodillas para recibir su peso y luego extiende las piernas para levantarlo, creando un arco en su espalda.
-
-**Desarrollo:**
-*   **Base:** El control está en tus rodillas. Para un arco más profundo, extiende más las piernas. Para menos arco, flexiónalas. Mantén el agarre de manos o puedes colocar tus manos en sus hombros para un estiramiento más profundo.
-*   **Volador:** ¡Comunica! Dile a la base si el estiramiento es demasiado intenso. Relaja la cabeza y el cuello. Respira profundamente para abrir el pecho. Es una postura muy vulnerable y de gran apertura.
-*   **Puntos de Contacto:** Los pies de la base en la espalda torácica del volador.
-
-**Culminación:**
-1.  **Base:** Avisa que vas a bajar. Dobla las rodillas de manera controlada.
-2.  **Volador:** Mantén el contacto visual y la confianza. A medida que la base te baja, busca el suelo con tus pies.
-3.  **Base:** Guía al volador hasta que esté de pie de forma segura.
-`,
-    musculos: { base: ['Isquiotibiales', 'Glúteos', 'Core'], volador: ['Pectorales (estiramiento)', 'Hombros (estiramiento)'] },
-    calibracion: {
-      base: ['Pies en la parte alta de la espalda', 'Controla el arco con las rodillas', 'Ofrece tus manos para seguridad'],
-      volador: ['Comunica tu comodidad', 'Relaja el cuerpo y la cabeza', 'Respira profundo'],
-      observador: ['Cerca de la cabeza del volador', 'Guía la comunicación'],
-    },
-  },
-  {
-    id: '17',
-    nombre: 'Ballena\n(Whale)',
-    nivel: 1,
-    type: 'L-Basing',
-    prerequisites: ['5'],
-    url_video: 'https://www.youtube.com/watch?v=4WMAZ67brUc',
-    url_imagen: 'https://cdn.yogajournal.com/wp-content/uploads/2015/03/acro-high-flying-whale.jpg',
-    descripcion: 'Una versión más avanzada y profunda del pájaro inverso terapéutico, donde la base extiende completamente las piernas, elevando más al volador para un estiramiento máximo.',
-     narrativa_detallada: `
-**Inicio:**
-La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
-1.  **Base y Volador:** Establezcan un **Pájaro Inverso Terapéutico (Back Bird)** estable, con las rodillas de la base flexionadas.
-2.  **Base:** Comunica que vas a extender las piernas. Lentamente y con mucho control, comienza a estirar tus piernas hacia el cielo.
-3.  **Volador:** Mantén la confianza y la comunicación. Sentirás que el arco se profundiza.
-
-**Desarrollo:**
-*   **Base:** Requiere más flexibilidad en los isquiotibiales. Mantén las piernas lo más rectas posible. El agarre de manos es crucial para la estabilidad.
-*   **Volador:** La comunicación es vital. Indica si el estiramiento es demasiado. Mantén el cuerpo relajado pero con una ligera activación para no perder la forma. Disfruta de la sensación de volar más alto.
-*   **Puntos de Contacto:** Idéntico al **Pájaro Inverso Terapéutico**, pero la dinámica de fuerzas cambia con la altura.
-
-**Culminación:**
-1.  **Base:** Para salir, flexiona las rodillas de manera controlada para volver a la altura del **Pájaro Inverso Terapéutico (Back Bird)** normal.
-2.  Desde ahí, sigue el procedimiento de culminación del Pájaro Inverso Terapéutico para llevar al volador al suelo de forma segura.
-`,
-    musculos: {
-      base: ["Isquiotibiales", "Glúteos", "Core"],
-      volador: ["Relajación y confianza", "Apertura de pecho y hombros"],
-    },
-    calibracion: {
-      base: ["Requiere más flexibilidad y fuerza en las piernas.", "Controla la subida y bajada con precisión.", "Mantén un agarre de manos seguro."],
-      volador: ["Comunica la intensidad del estiramiento.", "Mantente relajado pero con el core ligeramente activo para la estabilidad.", "Disfruta de la altura."],
-      observador: ["Especial atención a la cabeza del volador.", "Prepárate para guiar una salida rápida si es necesario."],
-    },
-  },
 
   // L-BASING: NIVEL 2
   {
-    id: 'shoulderstand',
+    id: 'lb-shoulderstand',
     nombre: 'Parada de Hombros sobre Pies\n(Shoulderstand on Feet)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['1', 'shoulderstand-on-shins'],
+    prerequisites: ['lb-1', 'lb-shoulderstand-on-shins'],
     url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
     url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-5-500x498.jpg',
     descripcion: 'Una inversión fundamental donde el volador se apoya en los pies de la base, desarrollando equilibrio y alineación.',
@@ -367,11 +273,11 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     },
   },
   {
-    id: 'side-bird',
+    id: 'lb-side-bird',
     nombre: 'Pájaro Lateral\n(Side Bird)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['1'],
+    prerequisites: ['lb-1'],
     url_video: 'https://www.youtube.com/watch?v=bmktYLuksek',
     url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
     descripcion: 'Una variación asimétrica del Pájaro Frontal. El volador se equilibra de lado sobre los pies de la base, preparando el cuerpo para Estrella Lateral.',
@@ -400,11 +306,11 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     },
   },
   {
-    id: 'back-bird-acro',
+    id: 'lb-back-bird-acro',
     nombre: 'Pájaro Inverso Acrobático\n(Acro Back Bird)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['5', '17'],
+    prerequisites: ['th-back-bird', 'th-whale'],
     url_video: 'https://www.youtube.com/watch?v=ks-4IzTcNSk',
     url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/backbird-3-500x498.jpg',
     descripcion: 'La versión acrobática del Pájaro Inverso. El volador mantiene una línea corporal activa y arqueada, sin agarre de manos.',
@@ -432,11 +338,11 @@ La entrada es idéntica al **Pájaro Inverso Terapéutico (Back Bird)**.
     },
   },
   {
-    id: '7',
+    id: 'lb-7',
     nombre: 'Trono a Horcajadas\n(Straddle Throne)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['2'],
+    prerequisites: ['lb-2'],
     url_video: 'https://www.youtube.com/watch?v=BqUpzbc2uxM',
     url_imagen: 'https://media.gettyimages.com/id/636545410/photo/acroyoga-straddle-throne-pose.jpg?s=1024x1024&w=gi&k=20&c=UJ6kNCAV7waoiyQcSY56plEWtTOF60BA-iyxtaret4A=',
     descripcion: 'Variación del Trono donde el volador se sienta a horcajadas. Es una transición común a otras posturas.',
@@ -467,11 +373,43 @@ Puede iniciarse desde el suelo o como una transición desde **Trono (Throne)**.
     },
   },
   {
-    id: '16',
+    id: 'lb-reverse-throne',
+    nombre: 'Trono Invertido\n(Reverse Throne)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-7'],
+    url_video: 'https://www.youtube.com/watch?v=HHw8B129doU',
+    url_imagen: 'https://as2.ftcdn.net/jpg/02/09/95/21/1000_F_209952154_Z70YdOc791roBDUpRbE2iRCvQv73mWMB.jpg',
+    descripcion: 'Una variante del Trono donde el volador invierte su orientación. Es un puente hacia transiciones y lavadoras más complejas.',
+    narrativa_detallada: `
+**Inicio:**
+Generalmente se llega a esta postura a través de una transición, como en la **Lavadora: Rueda de Catalina (Catherine's Wheel)**. Una entrada directa es más avanzada.
+1.  **Base:** Acuéstate y levanta las piernas, con las rodillas flexionadas.
+2.  **Volador:** De espaldas a la base, colócate sobre ella.
+3.  **Base y Volador:** Con la ayuda del **Observador**, el volador se sienta a horcajadas en los pies de la base. La base debe tomar los tobillos o las pantorrillas del volador para estabilizarlo.
+
+**Desarrollo:**
+*   **Base:** Mantén los pies flexionados y activos para crear una plataforma sólida. Tus manos en los tobillos del volador son clave para la estabilidad.
+*   **Volador:** Mantén la espalda recta, el **Core** activo y las piernas abiertas. El peso debe estar centrado para no caer hacia adelante o hacia atrás. Puedes soltar las manos de la base y extender los brazos.
+*   **Puntos de Contacto:** Las plantas de los pies de la base en la parte interna de los muslos del volador. Las manos de la base en los tobillos/pantorrillas del volador.
+
+**Culminación:**
+1.  **Volador:** Vuelve a tomar las manos de la base.
+2.  **Base:** Con un movimiento controlado, guía al volador para que se deslice hacia adelante y aterrice de pie.
+`,
+    musculos: { base: ['Cuádriceps', 'Core', 'Fuerza de brazos'], volador: ['Core', 'Glúteos', 'Espalda'] },
+    calibracion: {
+      base: ['Pies activos y flexionados.', 'Agarre firme en los tobillos del volador.', 'Usa la comunicación verbal.'],
+      volador: ['Mantén el torso erguido.', 'Activa el core y las piernas.', 'Confía en el agarre de la base.'],
+      observador: ['Esencial para la entrada y salida.', 'Ayuda a estabilizar las caderas del volador.'],
+    },
+  },
+  {
+    id: 'lb-16',
     nombre: 'Murciélago\n(Bat)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['7'],
+    prerequisites: ['lb-7'],
     url_video: 'https://www.youtube.com/watch?v=PZ0oq-SHHnE&t=5s',
     url_imagen: 'https://media.istockphoto.com/id/636653962/photo/acroyoga-straddle-bat-pose.jpg?s=612x612&w=0&k=20&c=LrM6So0Emv9PiWKIMoy-otGjoLB40vQr51GNTx01tBA=',
     descripcion: 'Postura de inversión donde el volador cuelga de las piernas de la base, sostenido por la cadera.',
@@ -505,11 +443,11 @@ Se puede entrar desde **Trono a Horcajadas (Straddle Throne)**.
     },
   },
   {
-    id: '24',
+    id: 'lb-24',
     nombre: 'Murciélago a Horcajadas\n(Straddle Bat)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['7', '16'],
+    prerequisites: ['lb-7', 'lb-16'],
     url_video: 'https://www.youtube.com/watch?v=PZ0oq-SHHnE',
     url_imagen: 'https://media.gettyimages.com/id/638748394/photo/acroyoga-straddle-bat-pose.jpg?s=1024x1024&w=gi&k=20&c=fLN0ma6PYMoQk01ES4skjyaOeephBWvXEuZvz2nAqXk=',
     descripcion: 'Una variación de Murciélago donde el volador mantiene las piernas abiertas en straddle, colgando de los pies de la base.',
@@ -541,43 +479,11 @@ Se entra desde **Trono a Horcajadas (Straddle Throne)**.
     },
   },
   {
-    id: 'reverse-throne',
-    nombre: 'Trono Invertido\n(Reverse Throne)',
-    nivel: 2,
-    type: 'L-Basing',
-    prerequisites: ['2', '7', '16'],
-    url_video: 'https://www.youtube.com/watch?v=HHw8B129doU',
-    url_imagen: 'https://as2.ftcdn.net/jpg/02/09/95/21/1000_F_209952154_Z70YdOc791roBDUpRbE2iRCvQv73mWMB.jpg',
-    descripcion: 'Una variante del Trono donde el volador invierte su orientación. Es un puente hacia transiciones y lavadoras más complejas.',
-    narrativa_detallada: `
-**Inicio:**
-Generalmente se llega a esta postura a través de una transición, como en la **Lavadora: Rueda de Catalina (Catherine's Wheel)**. Una entrada directa es más avanzada.
-1.  **Base:** Acuéstate y levanta las piernas, con las rodillas flexionadas.
-2.  **Volador:** De espaldas a la base, colócate sobre ella.
-3.  **Base y Volador:** Con la ayuda del **Observador**, el volador se sienta a horcajadas en los pies de la base. La base debe tomar los tobillos o las pantorrillas del volador para estabilizarlo.
-
-**Desarrollo:**
-*   **Base:** Mantén los pies flexionados y activos para crear una plataforma sólida. Tus manos en los tobillos del volador son clave para la estabilidad.
-*   **Volador:** Mantén la espalda recta, el **Core** activo y las piernas abiertas. El peso debe estar centrado para no caer hacia adelante o hacia atrás. Puedes soltar las manos de la base y extender los brazos.
-*   **Puntos de Contacto:** Las plantas de los pies de la base en la parte interna de los muslos del volador. Las manos de la base en los tobillos/pantorrillas del volador.
-
-**Culminación:**
-1.  **Volador:** Vuelve a tomar las manos de la base.
-2.  **Base:** Con un movimiento controlado, guía al volador para que se deslice hacia adelante y aterrice de pie.
-`,
-    musculos: { base: ['Cuádriceps', 'Core', 'Fuerza de brazos'], volador: ['Core', 'Glúteos', 'Espalda'] },
-    calibracion: {
-      base: ['Pies activos y flexionados.', 'Agarre firme en los tobillos del volador.', 'Usa la comunicación verbal.'],
-      volador: ['Mantén el torso erguido.', 'Activa el core y las piernas.', 'Confía en el agarre de la base.'],
-      observador: ['Esencial para la entrada y salida.', 'Ayuda a estabilizar las caderas del volador.'],
-    },
-  },
-  {
-    id: '21',
+    id: 'lb-21',
     nombre: 'Inversión: Trípode\n(Tripod)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['15', 'shoulderstand'],
+    prerequisites: ['lb-15', 'lb-shoulderstand'],
     url_video: 'https://www.youtube.com/watch?v=WjMLoXNkQyE',
     url_imagen: 'https://i.ytimg.com/vi/T81646R4btk/maxresdefault.jpg',
     descripcion: 'Una inversión fundamental donde el volador se equilibra sobre la cabeza y las manos, usando los pies de la base como apoyo.',
@@ -609,7 +515,7 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     },
   },
   {
-    id: 'cathedral',
+    id: 'lb-cathedral',
     nombre: 'Catedral\n(Cathedral)',
     nivel: 2,
     type: 'L-Basing',
@@ -643,13 +549,13 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     },
   },
 
-  // L-BASING: NIVEL 3
+  // L-BASING: NIVEL 4 (antes 3)
   {
-    id: 'cartwheel-exit',
+    id: 'lb-cartwheel-exit',
     nombre: 'Transición: Rueda Lateral\n(Cartwheel)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['shoulderstand', '21'],
+    prerequisites: ['lb-shoulderstand', 'lb-21'],
     url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
     url_imagen: 'https://i.ytimg.com/vi/ALaWGbiCIZA/maxresdefault.jpg',
     descripcion: 'Técnica de seguridad fundamental para desmontar de inversiones. Enseña control y conciencia corporal para caídas seguras.',
@@ -670,11 +576,11 @@ Generalmente se llega a esta postura a través de una transición, como en la **
 `,
   },
   {
-    id: '9',
+    id: 'lb-9',
     nombre: 'Equilibrio: Estrella\n(Star)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['shoulderstand', '7', 'side-bird'],
+    prerequisites: ['lb-shoulderstand', 'lb-7', 'lb-side-bird'],
     url_video: 'https://www.youtube.com/watch?v=ydOM4EbhJz0',
     url_imagen: 'https://i.ytimg.com/vi/6HngmitsKuQ/hqdefault.jpg',
     descripcion: 'Postura avanzada de equilibrio sobre un pie y una mano de la base. Requiere alineación y fuerza de ambos.',
@@ -703,11 +609,11 @@ Se entra desde un **Trono a Horcajadas (Straddle Throne)** modificado.
     },
   },
   {
-    id: '12',
+    id: 'lb-12',
     nombre: 'Equilibrio: Estrella Lateral\n(Side Star)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['9'],
+    prerequisites: ['lb-9'],
     url_video: 'https://www.youtube.com/watch?v=PwoWLI9XlG8',
     url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
     descripcion: 'Una variación de la Estrella donde el volador está de lado a la base, creando un plano de equilibrio diferente.',
@@ -734,11 +640,11 @@ Se entra desde un **Trono a Horcajadas (Straddle Throne)** modificado.
     },
   },
   {
-    id: '18',
+    id: 'lb-18',
     nombre: 'Equilibrio: Estrella Invertida\n(Reverse Star)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['12'],
+    prerequisites: ['lb-12'],
     url_video: 'https://www.youtube.com/watch?v=vccFNDI6y74',
     url_imagen: 'https://i.ytimg.com/vi/yS3NANY2CpI/maxresdefault.jpg',
     descripcion: 'Variación avanzada de la Estrella donde el volador mira en dirección opuesta a la base. Exige un contrapeso y confianza inmensos.',
@@ -770,11 +676,11 @@ Similar a la **Estrella (Star)**, pero la conexión es espalda con espalda.
     },
   },
   {
-    id: '10',
+    id: 'lb-10',
     nombre: 'Inversión: Plancha sobre Manos\n(Free Bird)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['1', '15'],
+    prerequisites: ['lb-1', 'lb-15'],
     url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
     url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog1-1030x687_large.jpg',
     descripcion: 'Equilibrio sobre las manos de la base, también conocido como "Free Bird". Exige gran fuerza de la base y control del core del volador.',
@@ -805,11 +711,11 @@ Esta postura es también conocida como **Free Bird**.
     },
   },
   {
-    id: '11',
+    id: 'lb-11',
     nombre: 'Inversión: Parada de Manos sobre Pies\n(Handstand on Feet)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['shoulderstand', '21', 'cartwheel-exit'],
+    prerequisites: ['lb-shoulderstand', 'lb-21', 'lb-cartwheel-exit'],
     url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',
     url_imagen: 'https://as1.ftcdn.net/jpg/03/11/30/08/1000_F_311300878_uUrWjkC20Y6WxlPIs6cr1kbGoLRKgPXR.jpg',
     descripcion: 'Postura icónica. El volador realiza una parada de manos sobre los pies de la base.',
@@ -838,11 +744,11 @@ Esta postura es también conocida como **Free Bird**.
     },
   },
   {
-    id: 'croc',
+    id: 'lb-croc',
     nombre: 'Inversión: Cocodrilo\n(Croc)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['10', '11'],
+    prerequisites: ['lb-10', 'lb-11'],
     url_video: 'https://www.youtube.com/watch?v=IKFZ6KMWZNo',
     url_imagen: 'https://i.pinimg.com/736x/53/c2/f4/53c2f4533fc8fb7456bc510cc3de59cb.jpg',
     descripcion: 'Un ejercicio clave para desarrollar la fuerza y alineación de la parada de manos. El volador sostiene una plancha baja sobre las manos de la base.',
@@ -867,17 +773,17 @@ Esta postura es también conocida como **Free Bird**.
     },
   },
   {
-    id: '14',
+    id: 'lb-14',
     nombre: 'Inversión: Pies a Mano\n(Foot-to-Hand)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['11'],
+    prerequisites: ['lb-11'],
     url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
     url_imagen: 'https://media.istockphoto.com/id/638748450/photo/acroyoga-foot-to-hand-pose.jpg?s=1024x1024&w=is&k=20&c=_u-Oms3cNs5i3wzJz-9IUo8xNwRIS4ssv-EYFORa18Y=',
     descripcion: 'El volador se equilibra en una mano, con los pies en las manos de la base. Requiere un equilibrio y confianza excepcionales.',
      narrativa_detallada: `
 **Inicio:**
-1.  **Base:** Acuéstate y extiende los brazos hacia el cielo, con las palmas hacia arriba, listos para recibir los pies del volador.
+1.  **Base:** Acuéstate y extiende los brazos rectos hacia el cielo, con las palmas hacia arriba, listos para recibir los pies del volador.
 2.  **Volador:** Párate cerca de la cabeza de la base. Colócate para una parada de manos, pero en lugar de poner las manos en el suelo, las pones en las rodillas de la base para un montaje inicial.
 3.  **Base y Volador:** El volador levanta un pie y la base lo agarra firmemente con su mano del mismo lado (pie derecho del volador a mano derecha de la base). Luego, repiten con el otro lado.
 4.  **Volador:** Una vez que la base tiene un agarre seguro de ambos pies, el volador transfiere el peso y se levanta en una parada de manos, soportado por las manos de la base.
@@ -902,11 +808,11 @@ Esta postura es también conocida como **Free Bird**.
     },
   },
   {
-    id: 'h2h',
+    id: 'lb-h2h',
     nombre: 'Inversión: Parada de Manos sobre Manos\n(H2H)',
-    nivel: 3,
+    nivel: 4,
     type: 'L-Basing',
-    prerequisites: ['14', 'croc'],
+    prerequisites: ['lb-14', 'lb-croc'],
     url_video: 'https://www.youtube.com/watch?v=uqryFIDRwSA',
     url_imagen: 'https://i.ytimg.com/vi/x4IYQUewUoQ/maxresdefault.jpg',
     descripcion: 'El pináculo del equilibrio L-Basing. El volador hace una parada de manos sobre las manos de la base.',
@@ -941,13 +847,13 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     },
   },
   
-  // L-BASING: NIVEL 4 (LAVADORAS)
+  // L-BASING: NIVEL 5 (antes 4) (LAVADORAS)
   {
-    id: 'around-the-world',
-    nombre: 'Lavadora: Alrededor del Mundo\n(Around the World)',
-    nivel: 4,
+    id: 'lb-around-the-world',
+    nombre: 'Alrededor del Mundo\n(Around the World)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['1', '2', '3', '5'],
+    prerequisites: ['lb-1', 'lb-folded-leaf', 'lb-back-bird-acro'],
     url_video: 'https://www.youtube.com/watch?v=IUZeQcMRupk',
     url_imagen: 'https://www.fitsri.com/wp-content/uploads/2021/11/acro-yoga-class-1024x683.jpg',
     descripcion: 'Una de las primeras lavadoras que se aprenden, conectando Pájaro Frontal, Plegaria Invertida y Pájaro Invertido en un flujo circular.',
@@ -968,11 +874,11 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     },
   },
   {
-    id: 'four-step',
-    nombre: 'Lavadora: Cuatro Pasos\n(Four-Step)',
-    nivel: 4,
+    id: 'lb-four-step',
+    nombre: 'Cuatro Pasos\n(Four-Step)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['7', 'back-bird-acro'],
+    prerequisites: ['lb-7', 'lb-back-bird-acro'],
     url_video: 'https://www.youtube.com/watch?v=Hi4xS9E-rck',
     url_imagen: 'https://i.ytimg.com/vi/W9oA6iLEeMs/maxresdefault.jpg',
     descripcion: 'Un flujo clásico que conecta Pájaro Frontal, Pájaro Invertido y Trono a Horcajadas, pasando por el suelo.',
@@ -993,11 +899,11 @@ Se puede entrar desde **Plancha sobre Manos (Free Bird)** extendida.
     },
   },
   {
-    id: 'corkscrew',
-    nombre: 'Lavadora: Sacacorchos\n(Corkscrew)',
-    nivel: 4,
+    id: 'lb-corkscrew',
+    nombre: 'Sacacorchos\n(Corkscrew)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['2', '5', '7', '12'],
+    prerequisites: ['lb-2', 'lb-back-bird-acro', 'lb-7', 'lb-12'],
     url_video: 'https://www.youtube.com/watch?v=76m0AXh_Q5Y',
     url_imagen: 'http://basaho.com/cdn/shop/articles/Acro_yoga_1.1_1200x1200.jpg?v=1708350035',
     descripcion: 'Una lavadora clásica que implica una rotación completa del volador alrededor de las piernas de la base.',
@@ -1030,11 +936,11 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     },
   },
   {
-    id: 'high-barrel-roll',
-    nombre: 'Lavadora: High Barrel Roll\n(High Barrel Roll)',
-    nivel: 4,
+    id: 'lb-high-barrel-roll',
+    nombre: 'High Barrel Roll\n(High Barrel Roll)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['1', 'back-bird-acro', 'side-bird'],
+    prerequisites: ['lb-1', 'lb-back-bird-acro', 'lb-side-bird'],
     url_video: 'https://www.youtube.com/watch?v=cepXBQyMbQI',
     url_imagen: 'https://daman.co.id/_next/image?url=https%3A%2F%2Fbackend.daman.co.id%2Fwp-content%2Fuploads%2F2018%2F07%2FFitness-0607.jpg&w=1920&q=75',
     descripcion: 'Una lavadora rotacional donde el volador "rueda" sobre el torso de la base, pasando por Pájaro Frontal y Pájaro Invertido.',
@@ -1063,11 +969,11 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     },
   },
   {
-    id: '13',
-    nombre: "Lavadora: Rueda de Catalina\n(Catherine's Wheel)",
-    nivel: 4,
+    id: 'lb-13',
+    nombre: "Rueda de Catalina\n(Catherine's Wheel)",
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['corkscrew', '16'],
+    prerequisites: ['lb-7', 'lb-16', 'lb-reverse-throne'],
     url_video: 'https://www.youtube.com/watch?v=UyqkvT_5Z8c',
     url_imagen: 'https://i.ytimg.com/vi/8h2ZYO5_sYw/maxresdefault.jpg',
     descripcion: 'Una lavadora (washing machine) o transición fluida donde el volador gira alrededor de la base como una rueda.',
@@ -1094,11 +1000,11 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     },
   },
   {
-    id: 'tick-tock',
-    nombre: 'Lavadora: Tick-Tock\n(Tick-Tock)',
-    nivel: 4,
+    id: 'lb-tick-tock',
+    nombre: 'Tick-Tock\n(Tick-Tock)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['9', '18'],
+    prerequisites: ['lb-9', 'lb-18'],
     url_video: 'https://www.youtube.com/watch?v=zen2HDxr3-Y',
     url_imagen: 'https://skillwell-upload-production.s3.amazonaws.com/videos/247/catherines-wheel-machine.png',
     descripcion: 'Un flujo dinámico que transita entre Estrella y Estrella Invertida, enseñando el control del contrapeso y el equilibrio lateral.',
@@ -1118,11 +1024,11 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     },
   },
   {
-    id: '22',
-    nombre: 'Lavadora: Ninja Star\n(Ninja Star)',
-    nivel: 4,
+    id: 'lb-22',
+    nombre: 'Ninja Star\n(Ninja Star)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['tick-tock', 'cartwheel-exit'],
+    prerequisites: ['lb-tick-tock', 'lb-cartwheel-exit'],
     url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
     url_imagen: 'https://i.ytimg.com/vi/koJAiJX30_w/maxresdefault.jpg',
     descripcion: 'Una lavadora icónica y dinámica que fluye a través de diferentes posturas de estrella, requiriendo una comunicación y fluidez impecables.',
@@ -1152,11 +1058,11 @@ La lavadora generalmente comienza desde una **Estrella Invertida (Reverse Star)*
     },
   },
   {
-    id: 'ninja-star-reverse',
-    nombre: 'Lavadora: Ninja Star Inversa\n(Ninja Star Reverse)',
-    nivel: 4,
+    id: 'lb-ninja-star-reverse',
+    nombre: 'Ninja Star Inversa\n(Ninja Star Reverse)',
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['22'],
+    prerequisites: ['lb-22'],
     url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
     url_imagen: 'https://i.ytimg.com/vi/6cuD9azJ3DI/sddefault.jpg',
     descripcion: 'La versión inversa de la Ninja Star. Enseña a controlar la rotación en la dirección opuesta.',

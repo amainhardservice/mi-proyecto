@@ -10,7 +10,7 @@ import { createRoot } from 'react-dom/client';
 import PoseExplorer from './PoseExplorer';
 import { Card, CardContent } from './ui/card';
 
-type NameDisplay = 'en' | 'es' | 'both';
+type NameDisplay = 'es' | 'en' | 'both';
 
 interface RouteExporterProps {
   elementId: string;

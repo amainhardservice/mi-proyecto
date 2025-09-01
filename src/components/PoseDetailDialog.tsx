@@ -19,7 +19,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from './ui/skeleton';
 import { Binary, Video, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -81,7 +80,7 @@ function DetailedDescription({ content, concepts, poses }: { content?: string, c
     const parts = content.trim().split(/(\*\*.*?\*\*)/g).filter(Boolean);
   
     return (
-      <p className="whitespace-pre-wrap">
+      <p className="whitespace-pre-wrap leading-relaxed">
         <TooltipProvider>
           {parts.map((part, index) => {
             if (part.startsWith('**') && part.endsWith('**')) {
@@ -96,15 +95,15 @@ function DetailedDescription({ content, concepts, poses }: { content?: string, c
                         {term}
                       </strong>
                     </TooltipTrigger>
-                    <TooltipContent className="max-w-xs">
-                      <p className="font-bold mb-2">{item.name}</p>
-                      <p>{item.description}</p>
+                    <TooltipContent className="max-w-xs p-3 bg-card border-border shadow-lg rounded-md">
+                      <p className="font-bold text-primary mb-2">{item.name}</p>
+                      <p className="text-sm text-foreground/80">{item.description}</p>
                     </TooltipContent>
                   </Tooltip>
                 );
               } else {
                  return (
-                  <strong key={index} className="font-bold">
+                  <strong key={index} className="font-bold text-foreground">
                     {term}
                   </strong>
                 );
@@ -173,7 +172,7 @@ export function PoseDetailDialog({
         <DialogHeader>
           <div className="flex justify-between items-start">
             <DialogTitle className="text-3xl font-headline text-primary">
-              {pose.nombre}
+              {pose.nombre.split('\n').join(' / ')}
             </DialogTitle>
             <Badge variant="secondary" className="bg-accent text-accent-foreground text-sm shrink-0">
               Nivel {pose.nivel}
@@ -182,7 +181,7 @@ export function PoseDetailDialog({
         </DialogHeader>
         <div className="flex-1 overflow-y-auto pr-4 -mr-6">
            <div className="space-y-6">
-              <section className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+              <section className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted/50 flex items-center justify-center">
                  {viewMode === 'video' && hasVideo ? (
                     <iframe 
                         className="w-full h-full"
@@ -206,11 +205,11 @@ export function PoseDetailDialog({
                     </div>
                  )}
                  {hasVideo && hasImage && (
-                  <div className="absolute top-2 right-2 flex gap-2">
+                  <div className="absolute top-2 right-2 flex gap-1">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant={viewMode === 'video' ? 'default' : 'secondary'} size="icon" className="h-8 w-8" onClick={() => setViewMode('video')}>
+                          <Button variant={viewMode === 'video' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 bg-black/30 hover:bg-black/50 text-white" onClick={() => setViewMode('video')}>
                             <Video className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -220,7 +219,7 @@ export function PoseDetailDialog({
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                           <Button variant={viewMode === 'image' ? 'default' : 'secondary'} size="icon" className="h-8 w-8" onClick={() => setViewMode('image')}>
+                           <Button variant={viewMode === 'image' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 bg-black/30 hover:bg-black/50 text-white" onClick={() => setViewMode('image')}>
                             <ImageIcon className="h-4 w-4" />
                            </Button>
                         </TooltipTrigger>
@@ -239,7 +238,7 @@ export function PoseDetailDialog({
                   {isAcroPose && <TabsTrigger value="muscles">Músculos</TabsTrigger>}
                   {isAcroPose && <TabsTrigger value="calibration">Calibración</TabsTrigger>}
                 </TabsList>
-                <TabsContent value="description" className="mt-4 text-base text-foreground">
+                <TabsContent value="description" className="mt-4 text-base text-foreground/90">
                    <p className="italic text-muted-foreground mb-4">{pose.descripcion}</p>
                    <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
                 </TabsContent>

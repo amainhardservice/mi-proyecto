@@ -46,38 +46,40 @@ export function PoseNode({
         <TooltipTrigger asChild>
           <div 
             data-pose-id={pose.id}
-            className="w-full max-w-xs mx-auto mb-8 z-10 group"
+            className="w-full max-w-xs mx-auto z-10 group"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={onClick}
             onDoubleClick={onDoubleClick}
           >
             <Button
-              variant="ghost"
+              variant="outline"
               className={cn(
-                  "w-full h-auto py-4 px-4 flex flex-col items-center justify-center text-center rounded-xl border-2 transition-all duration-300",
-                  isSelected ? "border-primary bg-primary/20" : "border-primary/50 bg-secondary/30",
-                  isHighlighted && !isSelected && "bg-accent/50 border-accent",
-                  "hover:bg-accent/50 hover:border-accent"
+                  "w-full h-auto py-3 px-3 flex flex-col items-center justify-center text-center rounded-lg border-2 transition-all duration-200 shadow-sm hover:shadow-md",
+                  isSelected 
+                    ? "border-primary bg-primary/10" 
+                    : "border-border bg-card",
+                  isHighlighted && !isSelected && "bg-accent/20 border-accent",
+                  "hover:bg-accent/10 hover:border-accent"
               )}
             >
               <Icon className={cn(
-                "h-8 w-8 mb-2 transition-colors",
-                 isHighlighted || isSelected ? "text-primary group-hover:text-accent-foreground" : "text-primary"
+                "h-6 w-6 mb-2 transition-colors text-muted-foreground",
+                 (isHighlighted || isSelected) ? "text-accent" : ""
               )} />
-              <span className={cn(
-                "font-semibold transition-colors",
-                isHighlighted || isSelected ? "text-primary/90 group-hover:text-accent-foreground" : "text-primary/90"
+              <div className={cn(
+                "font-semibold text-sm transition-colors text-foreground/80",
+                (isHighlighted || isSelected) ? "text-foreground" : ""
               )}>
                 {displayName.split('\n').map((line, index) => (
-                  <span key={index} className="block">{line}</span>
+                  <span key={index} className={cn("block", index === 1 && "text-xs opacity-70")}>{line}</span>
                 ))}
-              </span>
+              </div>
             </Button>
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Click para seleccionar, doble-click para abrir detalles.</p>
+          <p>Click para seleccionar, doble-click para detalles.</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

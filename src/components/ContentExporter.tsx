@@ -100,7 +100,7 @@ const ContentExporter: React.FC<ContentExporterProps> = ({ elementId, title }) =
       aria-label="Export to PDF"
     >
       {isExporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
-      Exportar a PDF
+      Exportar PDF
     </Button>
   );
 };
