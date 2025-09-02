@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import { Button } from '@/components/ui/button';
 import { FileDown, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 
 interface GlossaryExporterProps {
   title: string;
@@ -15,64 +16,84 @@ interface GlossaryExporterProps {
 const GlossaryExporter: React.FC<GlossaryExporterProps> = ({ title, content, isGlobal = false }) => {
   const [isExporting, setIsExporting] = useState(false);
 
-  const exportToPdf = () => {
+  const exportToPdf = async () => {
     setIsExporting(true);
+    try {
+      const doc = new jsPDF({
+          orientation: 'p',
+          unit: 'pt',
+          format: 'a4'
+      });
 
-    const doc = new jsPDF({
-        orientation: 'p',
-        unit: 'pt',
-        format: 'a4'
-    });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internalpageSize.getHeight();
+      const margin = 40;
+      const maxLineWidth = pageWidth - margin * 2;
+      let y = margin;
 
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 40;
-    const maxLineWidth = pageWidth - margin * 2;
+      const checkPageEnd = (neededHeight: number) => {
+        if (y + neededHeight > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+        }
+      };
 
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.text(title, margin, margin);
-    
-    let y = margin + 40; // Increased space after main title
+      // Main Title
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      const titleLines = doc.splitTextToSize(title, maxLineWidth);
+      checkPageEnd(titleLines.length * 20 + 20);
+      doc.text(titleLines, margin, y);
+      y += (titleLines.length * 20) + 20;
 
-    const lines = content.split('\n');
+      const sections = content.split('\n\n');
 
-    lines.forEach(line => {
-      if (y > doc.internal.pageSize.getHeight() - margin) {
-        doc.addPage();
-        y = margin;
-      }
+      sections.forEach(section => {
+        if (!section.trim()) return;
+
+        const lines = section.split('\n');
+        const firstLine = lines[0];
+
+        if (firstLine.startsWith('**') && firstLine.endsWith('**')) { // Concept/Modifier
+          const conceptTitle = firstLine.substring(2, firstLine.length - 2);
+          const conceptDesc = lines.slice(1).join('\n');
+          
+          checkPageEnd(15);
+          y += 5; // Space before concept
+          doc.setFontSize(12);
+          doc.setFont('helvetica', 'bold');
+          const conceptTitleLines = doc.splitTextToSize(conceptTitle, maxLineWidth);
+          checkPageEnd(conceptTitleLines.length * 12 + 12);
+          doc.text(conceptTitleLines, margin, y);
+          y += (conceptTitleLines.length * 12) + 6;
+
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          const conceptDescLines = doc.splitTextToSize(conceptDesc, maxLineWidth);
+          checkPageEnd(conceptDescLines.length * 10 + 10);
+          doc.text(conceptDescLines, margin, y);
+          y += (conceptDescLines.length * 10) + 10;
+
+        } else { // Category title
+          checkPageEnd(20);
+          y += 10; // Space before category
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'bold');
+          const categoryLines = doc.splitTextToSize(firstLine, maxLineWidth);
+          checkPageEnd(categoryLines.length * 14 + 14);
+          doc.text(categoryLines, margin, y);
+          y += (categoryLines.length * 14) + 8;
+        }
+      });
       
-      const isCategoryTitle = !line.startsWith('**') && !line.startsWith('  ') && line.trim().length > 0;
-      const isConceptTitle = line.startsWith('**') && line.endsWith('**');
-      
-      if (isCategoryTitle) {
-        y += 10; // Add space before a new category
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        const splitTitle = doc.splitTextToSize(line, maxLineWidth);
-        doc.text(splitTitle, margin, y);
-        y += (splitTitle.length * 14) + 8;
-      } else if (isConceptTitle) {
-        y += 5; // Add a bit of space before a concept
-        const titleText = line.substring(2, line.length - 2);
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        const splitTitle = doc.splitTextToSize(titleText, maxLineWidth);
-        doc.text(splitTitle, margin, y);
-        y += (splitTitle.length * 12) + 6;
-      } else {
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        const splitText = doc.splitTextToSize(line, maxLineWidth);
-        doc.text(splitText, margin, y);
-        y += (splitText.length * 10) + 4;
-      }
-    });
-
-    const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    doc.save(`${safeFilename}_glossary.pdf`);
-    
-    setIsExporting(false);
+      const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      doc.save(`${safeFilename}_glossary.pdf`);
+    } catch (error) {
+      console.error("Error exporting glossary to PDF:", error);
+      toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF del glosario.', variant: 'destructive' });
+    } finally {
+      setIsExporting(false);
+    }
   };
   
   if (isGlobal) {

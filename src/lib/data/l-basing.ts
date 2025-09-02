@@ -615,7 +615,7 @@ Se entra desde un **Trono a Horcajadas (Straddle Throne)** modificado.
     type: 'L-Basing',
     prerequisites: ['lb-9'],
     url_video: 'https://www.youtube.com/watch?v=PwoWLI9XlG8',
-    url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
+    url_imagen: 'https://i.ytimg.com/vi/PwoWLI9XlG8/maxresdefault.jpg',
     descripcion: 'Una variación de la Estrella donde el volador está de lado a la base, creando un plano de equilibrio diferente.',
      narrativa_detallada: `
 **Inicio:**
@@ -1028,7 +1028,7 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     nombre: 'Ninja Star\n(Ninja Star)',
     nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['lb-tick-tock', 'lb-cartwheel-exit'],
+    prerequisites: ['lb-18', 'lb-12', 'lb-cartwheel-exit'],
     url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
     url_imagen: 'https://i.ytimg.com/vi/koJAiJX30_w/maxresdefault.jpg',
     descripcion: 'Una lavadora icónica y dinámica que fluye a través de diferentes posturas de estrella, requiriendo una comunicación y fluidez impecables.',
@@ -1084,3 +1084,5 @@ Esta lavadora sigue la misma trayectoria que la Ninja Star, pero en la direcció
     },
   },
 ];
+
+    

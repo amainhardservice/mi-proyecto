@@ -16,7 +16,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 type View = 
   | { type: 'acro', levels: number[] }
-  | { type: 'thai', level: number }
+  | { type: 'thai', levels: number[] }
   | { type: 'therapeutic', level: number }
   | { type: 'acro-glossary' }
   | { type: 'thai-glossary' }
@@ -67,7 +67,8 @@ export default function Home() {
   };
 
   const handleThaiLevelClick = (level: number) => {
-    setActiveView({ type: 'thai', level });
+    const allLevels = Array.from({ length: level }, (_, i) => i + 1);
+    setActiveView({ type: 'thai', levels: allLevels });
   };
 
   const handleTherapeuticClick = (level: number) => {
@@ -204,8 +205,10 @@ export default function Home() {
         );
         return <PoseExplorer poses={selectedPoses} allPoses={poses} concepts={concepts} />;
       }
-      case 'thai':
-        return <PoseExplorer poses={poses.filter(p => p.type === 'Thai-Massage' && p.nivel === activeView.level)} allPoses={poses} concepts={concepts} />;
+      case 'thai':{
+        const selectedPoses = poses.filter(p => p.type === 'Thai-Massage' && activeView.levels.includes(p.nivel));
+        return <PoseExplorer poses={selectedPoses} allPoses={poses} concepts={concepts} />;
+      }
       case 'therapeutic':
         return <PoseExplorer poses={poses.filter(p => p.type === 'Therapeutic' && p.nivel === activeView.level)} allPoses={poses} concepts={concepts} />;
       case 'acro-glossary':
@@ -252,6 +255,7 @@ export default function Home() {
     switch (level) {
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
+        case 2.5: return "Transiciones";
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Intermedio";
         case 5: return "Nivel 5: Washing Machines";
@@ -263,9 +267,18 @@ export default function Home() {
         default: return `Nivel ${level}`;
     }
   }
+  
+  const acroLevelsWithTransitions = Array.from(new Set(poses.filter(p => p.type !== 'Thai-Massage' && p.type !== 'Therapeutic').map(p => p.nivel)))
+  .sort((a,b) => a - b);
+  
+  const transitionLevel = 2.5;
+  const acroLevels = [
+    ...acroLevelsWithTransitions.filter(l => l < 3 && l !== transitionLevel),
+    transitionLevel,
+    ...acroLevelsWithTransitions.filter(l => l >= 3)
+  ].filter(l => acroLevelsWithTransitions.includes(l));
 
-  const allAcroPoses = poses.filter(p => p.type !== 'Thai-Massage' && p.type !== 'Therapeutic');
-  const acroLevels = Array.from(new Set(allAcroPoses.map(p => p.nivel))).sort((a,b) => a - b);
+
   const thaiLevels = Array.from(new Set(poses.filter(p => p.type === 'Thai-Massage').map(p => p.nivel))).sort((a,b) => a - b);
   const therapeuticLevels = Array.from(new Set(poses.filter(p => p.type === 'Therapeutic').map(p => p.nivel))).sort((a,b) => a - b);
 
@@ -282,7 +295,7 @@ export default function Home() {
         <ScrollArea className="flex-1">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro', levels: [] })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
+              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro' })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
             </SidebarMenuItem>
             
             <SidebarMenuItem>
@@ -308,7 +321,7 @@ export default function Home() {
             </SidebarMenuItem>
 
              <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-thai', level: 1 })} isActive={activeView.type === 'what-is-thai'}>¿Qué es Masaje Tai?</SidebarMenuButton>
+              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-thai' })} isActive={activeView.type === 'what-is-thai'}>¿Qué es Masaje Tai?</SidebarMenuButton>
             </SidebarMenuItem>
 
             <SidebarMenuItem>
@@ -316,7 +329,7 @@ export default function Home() {
               <SidebarMenuSub>
                 {thaiLevels.map(level => (
                    <SidebarMenuSubItem key={`thai-${level}`}>
-                      <SidebarMenuSubButton onClick={() => handleThaiLevelClick(level)} isActive={activeView.type === 'thai' && activeView.level === level}>
+                      <SidebarMenuSubButton onClick={() => handleThaiLevelClick(level)} isActive={activeView.type === 'thai' && activeView.levels.includes(level)}>
                        Nivel {level}
                       </SidebarMenuSubButton>
                   </SidebarMenuSubItem>

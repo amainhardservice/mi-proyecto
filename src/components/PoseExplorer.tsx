@@ -1,47 +1,87 @@
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import type { Pose, PoseWithImage, Concept } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PoseNode } from './PoseNode';
 import { PoseDetailDialog } from './PoseDetailDialog';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import ContentExporter from './ContentExporter';
 import RouteExporter from './RouteExporter';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Accordion } from '@/components/ui/accordion';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { HelpCircle, Rows3, Video, Image as ImageIcon } from 'lucide-react';
+
+
+type NameDisplay = 'es' | 'en' | 'both';
+type InteractionMode = 'explore' | 'route';
+type ExpandedView = 'video' | 'image';
 
 type PoseExplorerProps = {
   poses: Pose[];
   allPoses: Pose[];
   concepts: Concept[];
-  highlightedPoseIds?: string[]; // Prop to control highlighting from outside
 };
 
 export default function PoseExplorer({ 
   poses,
   allPoses,
   concepts, 
-  highlightedPoseIds: externalHighlightedPoseIds,
 }: PoseExplorerProps) {
   
-  const [selectedPose, setSelectedPose] = useState<PoseWithImage | null>(null);
-  const [hoveredPoseId, setHoveredPoseId] = useState<string | null>(null);
-  const [pinnedPoseIds, setPinnedPoseIds] = useState<string[]>([]);
-  
-  const [exploreMode, setExploreMode] = useState(true);
-  const [routeMode, setRouteMode] = useState(false);
-  const [prereqMode, setPrereqMode] = useState(false);
-
-  type NameDisplay = 'es' | 'en' | 'both';
+  const [selectedPoseForDialog, setSelectedPoseForDialog] = useState<PoseWithImage | null>(null);
   const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
+  const [interactionMode, setInteractionMode] = useState<InteractionMode>('explore');
+  
+  const [hoveredPoseId, setHoveredPoseId] = useState<string | null>(null);
+  const [fixedPoseId, setFixedPoseId] = useState<string | null>(null);
+  const [selectedRoutePoseIds, setSelectedRoutePoseIds] = useState<string[]>([]);
 
-  const posesById = useMemo(() => {
+  const [accordionValue, setAccordionValue] = useState<string[]>([]);
+  const [initialDisplay, setInitialDisplay] = useState<ExpandedView | 'description'>('description');
+  
+  const allPosesById = useMemo(() => {
     return allPoses.reduce((acc, pose) => {
       acc[pose.id] = pose;
       return acc;
     }, {} as Record<string, Pose>);
   }, [allPoses]);
+
+  const getAllPrerequisites = useCallback((poseId: string, allPosesMap: Record<string, Pose>): string[] => {
+    const pose = allPosesMap[poseId];
+    if (!pose || !pose.prerequisites || pose.prerequisites.length === 0) {
+      return [];
+    }
+    const prereqs = new Set<string>(pose.prerequisites);
+    pose.prerequisites.forEach(pId => {
+      if (allPosesMap[pId]) { // Check if prerequisite exists
+          getAllPrerequisites(pId, allPosesMap).forEach(subP => prereqs.add(subP));
+      }
+    });
+    return Array.from(prereqs);
+  }, []);
+  
+  const activeHighlightId = fixedPoseId || hoveredPoseId;
+
+  const highlightedPoseIds = useMemo(() => {
+    if (interactionMode === 'route') {
+      const allHighlighted = new Set<string>();
+       selectedRoutePoseIds.forEach(id => {
+         allHighlighted.add(id);
+         getAllPrerequisites(id, allPosesById).forEach(pId => allHighlighted.add(pId));
+       });
+       return Array.from(allHighlighted);
+    }
+    if (activeHighlightId) {
+      return [activeHighlightId, ...getAllPrerequisites(activeHighlightId, allPosesById)];
+    }
+    return [];
+  }, [interactionMode, activeHighlightId, selectedRoutePoseIds, getAllPrerequisites, allPosesById]);
+
 
   const posesByLevel = useMemo(() => {
     const grouped = poses.reduce((acc, pose) => {
@@ -58,97 +98,10 @@ export default function PoseExplorer({
     }, {} as Record<number, Pose[]>);
   }, [poses]);
   
-  const cardId = useMemo(() => `learning-tree-card-${Math.random().toString(36).substring(2, 9)}`, []);
-
-
   const handleSelectPoseForDialog = (pose: Pose) => {
-    setSelectedPose(pose as PoseWithImage);
-  };
-
-  const handleNodeClick = (pose: Pose) => {
-    if (routeMode || prereqMode) {
-       setPinnedPoseIds(prev => 
-        prev.includes(pose.id) 
-          ? prev.filter(id => id !== pose.id) 
-          : [...prev, pose.id]
-      );
-    } else if (exploreMode) {
-      handleSelectPoseForDialog(pose);
-    } else {
-      // Single pin mode
-      setPinnedPoseIds(prev => (prev.length === 1 && prev[0] === pose.id) ? [] : [pose.id]);
-    }
+    setSelectedPoseForDialog(pose as PoseWithImage);
   };
   
-  const getAllPrerequisites = (poseId: string, allPosesMap: Record<string, Pose>): string[] => {
-    const pose = allPosesMap[poseId];
-    if (!pose || !pose.prerequisites || pose.prerequisites.length === 0) {
-      return [];
-    }
-    
-    const prereqs = new Set<string>(pose.prerequisites);
-    pose.prerequisites.forEach(pId => {
-      getAllPrerequisites(pId, allPosesMap).forEach(subP => prereqs.add(subP));
-    });
-    
-    return Array.from(prereqs);
-  };
-
-  const highlightedPoseIds = useMemo(() => {
-    if (externalHighlightedPoseIds) {
-      return externalHighlightedPoseIds;
-    }
-    if (exploreMode) {
-      if (hoveredPoseId) {
-        return [hoveredPoseId, ...getAllPrerequisites(hoveredPoseId, posesById)];
-      }
-      return [];
-    }
-    
-    if (prereqMode && pinnedPoseIds.length > 0) {
-      const lastPinnedId = pinnedPoseIds[pinnedPoseIds.length - 1];
-      return [lastPinnedId, ...getAllPrerequisites(lastPinnedId, posesById)];
-    }
-    
-    if (!exploreMode && !routeMode && !prereqMode && pinnedPoseIds.length === 1) {
-       return [pinnedPoseIds[0], ...getAllPrerequisites(pinnedPoseIds[0], posesById)];
-    }
-
-    return [];
-  }, [externalHighlightedPoseIds, exploreMode, prereqMode, routeMode, hoveredPoseId, pinnedPoseIds, posesById]);
-
-
-  const handleModeChange = (mode: 'explore' | 'route' | 'prereq', checked: boolean) => {
-    setPinnedPoseIds([]);
-    setHoveredPoseId(null);
-
-    if (mode === 'explore') {
-        setExploreMode(checked);
-        if (checked) {
-            setRouteMode(false);
-            setPrereqMode(false);
-        }
-    }
-    if (mode === 'route') {
-        setRouteMode(checked);
-        if (checked) {
-            setExploreMode(false);
-            setPrereqMode(false);
-        } else if (!prereqMode) {
-            setExploreMode(true);
-        }
-    }
-    if (mode === 'prereq') {
-        setPrereqMode(checked);
-        if (checked) {
-            setExploreMode(false);
-            setRouteMode(false);
-        } else if (!routeMode) {
-            setExploreMode(true);
-        }
-    }
-  }
-
   const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
@@ -169,6 +122,7 @@ export default function PoseExplorer({
     switch (level) {
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
+        case 2.5: return "Transiciones";
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Intermedio";
         case 5: return "Nivel 5: Washing Machines";
@@ -182,11 +136,69 @@ export default function PoseExplorer({
     }
   }
 
+  const handlePoseClick = (poseId: string) => {
+    if (interactionMode === 'explore') {
+      setFixedPoseId(prevId => prevId === poseId ? null : poseId);
+    }
+  };
+  
+  const handleRouteChange = (poseId: string, checked: boolean) => {
+    setSelectedRoutePoseIds(prev => 
+      checked ? [...prev, poseId] : prev.filter(id => id !== poseId)
+    );
+  };
+  
+  const handleExpandAll = (view: ExpandedView) => {
+    setInitialDisplay(view);
+    setAccordionValue(poses.map(p => p.id));
+  };
+  
+  const handleCollapseAll = () => {
+    setAccordionValue([]);
+    setInitialDisplay('description');
+  };
+
   return (
-    <Card id={cardId}>
-      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <Card>
+       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <CardTitle>Explorador de Posturas</CardTitle>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-center space-x-2">
+            <RadioGroup 
+              value={interactionMode} 
+              onValueChange={(value) => {
+                setInteractionMode(value as InteractionMode);
+                setFixedPoseId(null);
+                setHoveredPoseId(null);
+              }} 
+              className="flex items-center space-x-2"
+            >
+                <div className="flex items-center space-x-1">
+                    <RadioGroupItem value="explore" id="explore" />
+                    <Label htmlFor="explore" className="text-sm font-medium">Explorar</Label>
+                </div>
+                <div className="flex items-center space-x-1">
+                    <RadioGroupItem value="route" id="route" />
+                    <Label htmlFor="route" className="text-sm font-medium">Ruta</Label>
+                </div>
+            </RadioGroup>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-6 w-6"><HelpCircle className="h-4 w-4"/></Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 text-sm">
+                <ul className="space-y-2">
+                  <li><strong className="text-primary">Explorar:</strong> Pasa el ratón sobre una postura para ver sus prerrequisitos. Haz clic para fijar la selección.</li>
+                  <li><strong className="text-primary">Ruta:</strong> Selecciona varias posturas para crear y exportar una ruta de aprendizaje personalizada.</li>
+                </ul>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => handleExpandAll('video')}><Video className="mr-2 h-4 w-4" /> Expandir (Video)</Button>
+              <Button variant="outline" size="sm" onClick={() => handleExpandAll('image')}><ImageIcon className="mr-2 h-4 w-4" /> Expandir (Imagen)</Button>
+              <Button variant="outline" size="sm" onClick={handleCollapseAll}><Rows3 className="mr-2 h-4 w-4" /> Colapsar</Button>
+          </div>
            <div className="flex items-center space-x-2">
             <Label htmlFor="name-display-select" className="text-sm font-medium">Nombres:</Label>
             <Select value={nameDisplay} onValueChange={(value: NameDisplay) => setNameDisplay(value)}>
@@ -200,83 +212,63 @@ export default function PoseExplorer({
               </SelectContent>
             </Select>
           </div>
-
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="explore-mode" 
-              checked={exploreMode}
-              onCheckedChange={(checked) => handleModeChange('explore', checked)}
-            />
-            <Label htmlFor="explore-mode" className="text-sm font-medium">Modo Explorar</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="route-mode" 
-              checked={routeMode}
-              onCheckedChange={(checked) => handleModeChange('route', checked)}
-            />
-            <Label htmlFor="route-mode" className="text-sm font-medium">Modo Ruta</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="prereq-mode" 
-              checked={prereqMode}
-              onCheckedChange={(checked) => handleModeChange('prereq', checked)}
-            />
-            <Label htmlFor="prereq-mode" className="text-sm font-medium">Modo Prerreq.</Label>
-          </div>
-          
-          {routeMode && pinnedPoseIds.length > 0 && (
-            <RouteExporter 
-              elementId={cardId} 
-              title="Mi Ruta de Aprendizaje" 
-              posesToExport={pinnedPoseIds}
-              allPoses={allPoses}
-              buttonText="Exportar Ruta"
-              nameDisplay={nameDisplay}
-            />
-          )}
-
-          {prereqMode && pinnedPoseIds.length > 0 && (
-             <RouteExporter 
-              elementId={cardId} 
-              title="Análisis de Prerrequisitos" 
-              posesToExport={pinnedPoseIds}
-              allPoses={allPoses}
-              separateTrees={true}
-              buttonText="Exportar Prerreq."
-              nameDisplay={nameDisplay}
-            />
-          )}
-
-          {!routeMode && !prereqMode && (
-            <ContentExporter 
-              elementId={cardId}
-              title="Mapa de Posturas"
-            />
-          )}
         </div>
       </CardHeader>
       <CardContent className="overflow-x-auto">
+        {interactionMode === 'route' && (
+          <div className="flex items-center justify-end gap-4 p-4 border-b mb-4">
+              <RouteExporter 
+                  title="Ruta de Aprendizaje"
+                  posesToExport={selectedRoutePoseIds}
+                  allPoses={allPoses}
+                  nameDisplay={nameDisplay}
+                  exportMode="visual"
+                  buttonText="Imprimir Ruta Visual"
+                />
+               <RouteExporter 
+                  title="Análisis de Ruta"
+                  posesToExport={selectedRoutePoseIds}
+                  allPoses={allPoses}
+                  nameDisplay={nameDisplay}
+                  exportMode="detailed"
+                  buttonText="Imprimir Contenido Detallado"
+                />
+          </div>
+        )}
         {poses.length > 0 ? (
           <div className="flex space-x-8 pb-4">
             {Object.entries(posesByLevel).map(([level, posesInLevel]) => (
               <div key={level} className="w-64 flex-shrink-0">
                 <h3 className="text-lg font-semibold mb-4 text-center text-primary">{getAcroLevelTitle(Number(level))}</h3>
                 <div className="space-y-3">
-                   {posesInLevel.map((pose) => (
-                      <PoseNode
-                        key={pose.id}
-                        pose={pose}
-                        displayName={getDisplayName(pose, nameDisplay)}
-                        onClick={() => handleNodeClick(pose)}
-                        onDoubleClick={() => handleSelectPoseForDialog(pose)}
-                        isHighlighted={highlightedPoseIds.includes(pose.id)}
-                        isSelected={pinnedPoseIds.includes(pose.id)}
-                        onMouseEnter={() => exploreMode && setHoveredPoseId(pose.id)}
-                        onMouseLeave={() => exploreMode && setHoveredPoseId(null)}
-                      />
-                    ))}
+                   <Accordion 
+                      type="multiple"
+                      className="w-full space-y-3"
+                      value={accordionValue}
+                      onValueChange={setAccordionValue}
+                    >
+                     {posesInLevel.map((pose) => (
+                        <PoseNode
+                          key={pose.id}
+                          pose={pose}
+                          displayName={getDisplayName(pose, nameDisplay)}
+                          nameDisplay={nameDisplay}
+                          onSelect={() => handleSelectPoseForDialog(pose)}
+                          onMouseEnter={() => setHoveredPoseId(pose.id)}
+                          onMouseLeave={() => setHoveredPoseId(null)}
+                          onClick={() => handlePoseClick(pose.id)}
+                          isHighlighted={highlightedPoseIds.includes(pose.id)}
+                          isFixed={fixedPoseId === pose.id}
+                          isSelected={selectedRoutePoseIds.includes(pose.id)}
+                          showCheckbox={interactionMode === 'route'}
+                          onCheckedChange={(checked) => handleRouteChange(pose.id, checked)}
+                          allPosesMap={allPosesById}
+                          initialDisplay={initialDisplay}
+                          accordionValue={accordionValue}
+                          onAccordionChange={setAccordionValue}
+                        />
+                      ))}
+                   </Accordion>
                 </div>
               </div>
             ))}
@@ -288,10 +280,10 @@ export default function PoseExplorer({
         )}
       </CardContent>
       <PoseDetailDialog
-        pose={selectedPose}
+        pose={selectedPoseForDialog}
         allPoses={allPoses}
-        open={!!selectedPose}
-        onOpenChange={(open) => !open && setSelectedPose(null)}
+        open={!!selectedPoseForDialog}
+        onOpenChange={(open) => !open && setSelectedPoseForDialog(null)}
         concepts={concepts}
       />
     </Card>

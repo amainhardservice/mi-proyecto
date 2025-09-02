@@ -1,7 +1,9 @@
+
+
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import type { Pose, PoseWithImage, Concept } from '@/types';
 import {
   Dialog,
@@ -19,7 +21,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
-import { Binary, Video, Image as ImageIcon } from 'lucide-react';
+import { Binary, Video, Image as ImageIcon, FileDown, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Tooltip,
@@ -28,6 +30,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from './ui/button';
+import { exportPoseToPdf } from '@/lib/pdf';
+import { toast } from '@/hooks/use-toast';
+
 
 type PoseDetailDialogProps = {
   pose: PoseWithImage | null;
@@ -124,19 +129,33 @@ export function PoseDetailDialog({
   onOpenChange,
   concepts,
 }: PoseDetailDialogProps) {
-  const [viewMode, setViewMode] = useState<'video' | 'image'>('video');
+  const [viewMode, setViewMode] = useState<'video' | 'image'>('image');
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
-    if (pose) {
+    if (open && pose) {
       if (pose.url_video) {
         setViewMode('video');
       } else {
         setViewMode('image');
       }
     }
-  }, [pose]);
+  }, [pose, open]);
   
   if (!pose) return null;
+
+  const handleExport = async () => {
+    if (!pose) return;
+    setIsExporting(true);
+    try {
+        await exportPoseToPdf(pose);
+    } catch(error) {
+        console.error("Error exporting PDF:", error);
+        toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF. Por favor, inténtalo de nuevo.', variant: 'destructive' });
+    } finally {
+        setIsExporting(false);
+    }
+  };
 
   const isAcroPose = pose.type !== 'Thai-Massage';
   
@@ -171,9 +190,21 @@ export function PoseDetailDialog({
       <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <div className="flex justify-between items-start">
-            <DialogTitle className="text-3xl font-headline text-primary">
-              {pose.nombre.split('\n').join(' / ')}
-            </DialogTitle>
+            <div className="flex items-center gap-4">
+              <DialogTitle className="text-3xl font-headline text-primary">
+                {pose.nombre.split('\n').join(' / ')}
+              </DialogTitle>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleExport} 
+                  disabled={isExporting}
+                  aria-label="Export to PDF"
+                >
+                  {isExporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
+                  Exportar PDF
+                </Button>
+            </div>
             <Badge variant="secondary" className="bg-accent text-accent-foreground text-sm shrink-0">
               Nivel {pose.nivel}
             </Badge>
@@ -181,8 +212,10 @@ export function PoseDetailDialog({
         </DialogHeader>
         <div className="flex-1 overflow-y-auto pr-4 -mr-6">
            <div className="space-y-6">
-              <section className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted/50 flex items-center justify-center">
-                 {viewMode === 'video' && hasVideo ? (
+              <section 
+                className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted/50 flex items-center justify-center"
+              >
+                 {hasVideo && viewMode === 'video' ? (
                     <iframe 
                         className="w-full h-full"
                         src={videoEmbedUrl}
@@ -197,6 +230,7 @@ export function PoseDetailDialog({
                       fill
                       className="object-cover"
                       data-ai-hint="acroyoga pose"
+                      unoptimized // Helps with some export scenarios
                     />
                  ) : (
                     <div className="text-center text-muted-foreground p-4">
