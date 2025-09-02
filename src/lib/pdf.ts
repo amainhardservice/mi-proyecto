@@ -2,7 +2,7 @@
 
 'use client';
 import jsPDF from 'jspdf';
-import type { Pose } from '@/types';
+import type { Pose, SequenceItem } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
 type NameDisplay = 'es' | 'en' | 'both';
@@ -332,4 +332,91 @@ export async function exportVisualTreeToPdf(poses: Pose[], nameDisplay: NameDisp
 
     const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     doc.save(`${safeFilename}_visual.pdf`);
+}
+
+export async function exportSequenceToPdf(sequence: SequenceItem[], title: string) {
+    const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 40;
+    const maxLineWidth = pageWidth - margin * 2;
+    let y = margin;
+
+    const checkPageEnd = (neededHeight = 20) => {
+        if (y + neededHeight > doc.internal.pageSize.getHeight() - margin) {
+            doc.addPage();
+            y = margin;
+        }
+    };
+    
+    // Title Page
+    doc.setFontSize(32);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, pageWidth / 2, doc.internal.pageSize.getHeight() / 2, { align: 'center' });
+
+    doc.addPage();
+    y = margin;
+
+    // Sequence content
+    for (const [index, item] of sequence.entries()) {
+        checkPageEnd(80); // Check if there's enough space for a new item header
+        
+        doc.setDrawColor(200, 200, 200);
+        doc.line(margin, y, pageWidth - margin, y); // Separator line
+        y += 20;
+
+        // Item number, title and type
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        const itemTitle = 'nombre' in item ? item.nombre.split('\n')[0] : ('nombre_sans' in item ? item.nombre_sans : item.titulo);
+        doc.text(`${index + 1}. ${itemTitle}`, margin, y);
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(item.itemType, pageWidth - margin, y, { align: 'right' });
+        y += 25;
+
+        // Image for poses
+        if (item.itemType === 'pose' && 'url_imagen' in item && item.url_imagen) {
+            const imgWidth = 225;
+            const imgHeight = 150;
+            const imgX = (pageWidth - imgWidth) / 2;
+            checkPageEnd(imgHeight + 20);
+            const added = await addImageToPdf(doc, item.url_imagen, imgX, y, imgWidth, imgHeight);
+            if (added) {
+                y += imgHeight + 20;
+            }
+        }
+
+        // Description
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Descripción:', margin, y);
+        y += 15;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        const descriptionLines = doc.splitTextToSize(item.descripcion, maxLineWidth);
+        checkPageEnd(descriptionLines.length * 12);
+        doc.text(descriptionLines, margin, y);
+        y += (descriptionLines.length * 12) + 10;
+        
+        // Notes
+        if (item.notes) {
+            checkPageEnd(30);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Notas Personales:', margin, y);
+            y += 15;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'italic');
+            const notesLines = doc.splitTextToSize(item.notes, maxLineWidth);
+            checkPageEnd(notesLines.length * 12);
+            doc.text(notesLines, margin, y);
+            y += (notesLines.length * 12) + 10;
+        }
+
+        y += 10; // Extra space between items
+    }
+    
+    const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    doc.save(`${safeFilename}_sequence.pdf`);
 }

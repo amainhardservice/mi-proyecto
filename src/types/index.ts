@@ -70,3 +70,10 @@ export interface PoseModifier {
   titulo: string;
   descripcion: string;
 }
+
+// Type for items in the sequence builder
+export type SequenceItem = (Pose | Concept | Asana | PoseModifier) & {
+  uniqueId: string;
+  itemType: 'pose' | 'concept' | 'asana' | 'modifier';
+  notes: string;
+};

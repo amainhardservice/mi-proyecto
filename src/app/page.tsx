@@ -13,6 +13,8 @@ import AsanaGlossary from '@/components/AsanaGlossary';
 import GlossaryExporter from '@/components/GlossaryExporter';
 import { AcroYogaIcon } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Workflow } from 'lucide-react';
+import Link from 'next/link';
 
 type View = 
   | { type: 'acro', levels: number[] }
@@ -294,6 +296,14 @@ export default function Home() {
         </SidebarHeader>
         <ScrollArea className="flex-1">
           <SidebarMenu>
+             <SidebarMenuItem>
+                <Link href="/flow-builder" className="w-full">
+                    <SidebarMenuButton>
+                        <Workflow className="mr-2 h-5 w-5" />
+                        Constructor de Secuencias
+                    </SidebarMenuButton>
+                </Link>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro' })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
             </SidebarMenuItem>
