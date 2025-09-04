@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import type { SequenceItem } from '@/types';
 import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare } from 'lucide-react';
+import { getYouTubeEmbedUrl } from '@/lib/utils';
+
 
 type NameDisplay = 'es' | 'en' | 'both';
 
@@ -47,7 +49,7 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
   
   if (!item) {
     return (
-      <Card className="w-1/3 flex flex-col">
+      <Card className="w-full md:w-1/3 flex-col hidden md:flex">
         <CardHeader>
           <CardTitle>Detalles</CardTitle>
         </CardHeader>
@@ -122,13 +124,26 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
             </>
         )
       case 'asana':
+        const asana = item as import('@/types').Asana & { notes: string };
+        const embedUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
         return (
             <>
                 <div className="flex flex-col">
                   <CardTitle className="text-2xl font-bold text-primary mb-1">{titleParts[0]}</CardTitle>
                   {titleParts.length > 1 && <p className="text-sm text-muted-foreground">{titleParts[1]}</p>}
                 </div>
-                <p className="whitespace-pre-wrap mt-4">{item.descripcion}</p>
+                <p className="whitespace-pre-wrap mt-4">{asana.descripcion}</p>
+                 {embedUrl && (
+                  <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
+                    <iframe
+                        src={embedUrl}
+                        title={`Video de ${asana.nombre_es}`}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                  </div>
+                )}
             </>
         )
        case 'modifier':
@@ -144,7 +159,7 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
   }
 
   return (
-    <Card className="w-1/3 flex flex-col">
+    <Card className="w-full md:w-1/3 flex-col hidden md:flex">
       <CardHeader>
         <CardTitle>Detalles</CardTitle>
       </CardHeader>

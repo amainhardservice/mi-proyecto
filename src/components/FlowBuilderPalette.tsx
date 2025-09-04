@@ -121,7 +121,7 @@ export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas,
   ], [filteredPoses, filteredConcepts, filteredModifiers, filteredAsanas]);
 
   return (
-    <Card className="w-1/3 flex flex-col">
+    <Card className="w-full md:w-1/3 flex flex-col">
       <CardHeader>
         <CardTitle>Elementos</CardTitle>
         <Input 
@@ -133,7 +133,7 @@ export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas,
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
         <Tabs defaultValue="all" className="h-full flex flex-col">
-          <TabsList className="w-full">
+          <TabsList className="w-full justify-start h-auto flex-wrap">
             <TabsTrigger value="all">Todos</TabsTrigger>
             <TabsTrigger value="poses">Posturas</TabsTrigger>
             <TabsTrigger value="modifiers">Modificadores</TabsTrigger>

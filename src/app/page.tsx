@@ -1,8 +1,9 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getPoses, getConcepts, getPoseModifiers, getAsanas } from '@/lib/firestore';
-import type { Pose, Concept, Asana, PoseModifier } from '@/types';
+import type { Pose, Concept, Asana, PoseModifier, SequenceItem } from '@/types';
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton, SidebarInset } from '@/components/ui/sidebar';
 import PoseExplorer from '@/components/PoseExplorer';
 import ConceptGlossary from '@/components/ConceptGlossary';
@@ -14,7 +15,9 @@ import GlossaryExporter from '@/components/GlossaryExporter';
 import { AcroYogaIcon } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Workflow } from 'lucide-react';
-import Link from 'next/link';
+import FlowBuilder from '@/components/FlowBuilder';
+import { exportSequenceToPdf } from '@/lib/pdf';
+import { toast } from '@/hooks/use-toast';
 
 type View = 
   | { type: 'acro', levels: number[] }
@@ -24,7 +27,10 @@ type View =
   | { type: 'thai-glossary' }
   | { type: 'yoga-glossary' }
   | { type: 'what-is-acro' }
-  | { type: 'what-is-thai' };
+  | { type: 'what-is-thai' }
+  | { type: 'flow-builder' };
+
+type NameDisplay = 'es' | 'en' | 'both';
 
 
 export default function Home() {
@@ -34,6 +40,11 @@ export default function Home() {
   const [asanas, setAsanas] = useState<Asana[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<View>({ type: 'acro', levels: [1, 2, 4, 5] });
+
+  // --- State for Flow Builder ---
+  const [sequence, setSequence] = useState<SequenceItem[]>([]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
 
   useEffect(() => {
     async function fetchData() {
@@ -52,6 +63,7 @@ export default function Home() {
     fetchData();
   }, []);
   
+  // --- Handlers for Pose Explorer ---
   const handleAcroLevelClick = (level: number) => {
     setActiveView(prevView => {
       if (prevView.type === 'acro') {
@@ -76,7 +88,72 @@ export default function Home() {
   const handleTherapeuticClick = (level: number) => {
     setActiveView({ type: 'therapeutic', level });
   };
+
+  // --- Handlers for Flow Builder ---
+  const handleDrop = useCallback((item: { id: string; type: string }) => {
+    let newItem: SequenceItem | null = null;
+    const uniqueId = `${item.type}-${item.id}-${Date.now()}`;
+    
+    if (item.type === 'pose') {
+      const pose = poses.find(p => p.id === item.id);
+      if (pose) newItem = { ...pose, uniqueId, itemType: 'pose', notes: '' };
+    } else if (item.type === 'concept') {
+      const concept = concepts.find(c => c.id === item.id);
+      if (concept) newItem = { ...concept, uniqueId, itemType: 'concept', notes: '' };
+    } else if (item.type === 'asana') {
+      const asana = asanas.find(a => a.id === item.id);
+      if (asana) newItem = { ...asana, uniqueId, itemType: 'asana', notes: '' };
+    } else if (item.type === 'modifier') {
+        const modifier = modifiers.find(m => m.id === item.id);
+        if (modifier) newItem = { ...modifier, uniqueId, itemType: 'modifier', notes: '' };
+    }
+    
+    if (newItem) {
+      setSequence(prev => [...prev, newItem!]);
+      setSelectedItemId(uniqueId);
+    }
+  }, [poses, concepts, asanas, modifiers]);
+
+  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
+    setSequence(prev => {
+      const newSequence = [...prev];
+      const [draggedItem] = newSequence.splice(dragIndex, 1);
+      newSequence.splice(hoverIndex, 0, draggedItem);
+      return newSequence;
+    });
+  }, []);
+
+  const handleSelectItem = (uniqueId: string) => {
+    setSelectedItemId(uniqueId);
+  };
   
+  const updateNotes = (uniqueId: string, notes: string) => {
+    setSequence(seq => seq.map(item => item.uniqueId === uniqueId ? { ...item, notes } : item));
+  };
+  
+  const handleExport = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "Añade al menos un elemento para exportar.", variant: "destructive" });
+      return;
+    }
+    exportSequenceToPdf(sequence, "Mi Secuencia de Acroyoga");
+  };
+
+  const handleClearSequence = () => {
+    setSequence([]);
+    setSelectedItemId(null);
+    toast({ title: "Secuencia Limpiada", description: "Se ha vaciado el constructor de secuencias." });
+  };
+
+  const handleDeleteItem = (uniqueId: string) => {
+    setSequence(prev => prev.filter(item => item.uniqueId !== uniqueId));
+    if (selectedItemId === uniqueId) {
+      setSelectedItemId(null);
+    }
+    toast({ title: "Elemento Eliminado", description: "El elemento ha sido eliminado de la secuencia." });
+  };
+
+
   // --- Data processing for Glossaries ---
   const acroConcepts = concepts.filter(c => c.category === 'Principios Fundamentales' || c.category === 'Dinámicas y Transiciones' || c.category === 'Roles y Estilos de Práctica' || c.category === 'Comunicación y Seguridad');
   const thaiConcepts = concepts.filter(c => c.category === 'Masaje Tailandés');
@@ -248,6 +325,26 @@ export default function Home() {
             <AsanaGlossary asanas={asanas} />
           </div>
         );
+      case 'flow-builder':
+        return (
+          <FlowBuilder
+            allPoses={poses}
+            allConcepts={concepts}
+            allModifiers={modifiers}
+            allAsanas={asanas}
+            sequence={sequence}
+            selectedItemId={selectedItemId}
+            nameDisplay={nameDisplay}
+            setNameDisplay={setNameDisplay}
+            handleDrop={handleDrop}
+            moveItem={moveItem}
+            handleSelectItem={handleSelectItem}
+            updateNotes={updateNotes}
+            handleExport={handleExport}
+            handleClearSequence={handleClearSequence}
+            handleDeleteItem={handleDeleteItem}
+          />
+        );
       default:
         return <WhatIsAcroYoga />;
     }
@@ -297,14 +394,6 @@ export default function Home() {
         <ScrollArea className="flex-1">
           <SidebarMenu>
              <SidebarMenuItem>
-                <Link href="/flow-builder" className="w-full">
-                    <SidebarMenuButton>
-                        <Workflow className="mr-2 h-5 w-5" />
-                        Constructor de Secuencias
-                    </SidebarMenuButton>
-                </Link>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
               <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro' })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
             </SidebarMenuItem>
             
@@ -329,6 +418,14 @@ export default function Home() {
                   Vuelo Terapéutico
                 </SidebarMenuButton>
             </SidebarMenuItem>
+            
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={() => setActiveView({ type: 'flow-builder' })} isActive={activeView.type === 'flow-builder'}>
+                <Workflow className="mr-2 h-5 w-5" />
+                Constructor de Secuencias
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
 
              <SidebarMenuItem>
               <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-thai' })} isActive={activeView.type === 'what-is-thai'}>¿Qué es Masaje Tai?</SidebarMenuButton>

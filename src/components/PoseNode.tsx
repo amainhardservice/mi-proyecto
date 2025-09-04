@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import type { Pose } from '@/types';
+import type { Pose, Concept } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Video, Image as ImageIcon } from 'lucide-react';
+import { Video, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   AccordionContent,
@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Image from 'next/image';
+import DetailedDescription from './DetailedDescription';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
@@ -35,9 +36,130 @@ type PoseNodeProps = {
   showCheckbox: boolean;
   onCheckedChange: (checked: boolean) => void;
   allPosesMap: Record<string, Pose>;
+  allPoses: Pose[];
+  concepts: Concept[];
   initialDisplay?: 'description' | 'video' | 'image';
   accordionValue: string | string[];
   onAccordionChange: (value: string[]) => void;
+};
+
+const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return '';
+    try {
+        const urlObj = new URL(url);
+        let videoId;
+        if (urlObj.hostname === 'youtu.be') {
+            videoId = urlObj.pathname.slice(1);
+        } else if (urlObj.hostname.includes('youtube.com')) {
+            videoId = urlObj.searchParams.get('v');
+        }
+        
+        if (videoId) {
+            const params = new URLSearchParams(urlObj.search);
+            params.delete('v');
+            return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        }
+    } catch (e) {
+        console.error("Invalid video URL", e);
+    }
+    return '';
+};
+
+
+const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], alt: string, onImageClick: (e: React.MouseEvent) => void }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const prevImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const nextImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    return (
+        <div className="relative aspect-video rounded-md overflow-hidden group/carousel" onClick={onImageClick}>
+            <Image
+                src={images[currentIndex]}
+                alt={`${alt} ${currentIndex + 1}`}
+                fill
+                className="object-cover"
+                data-ai-hint="acroyoga pose"
+            />
+            {images.length > 1 && (
+                <>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute left-1 top-1/2 -translate-y-1/2 h-7 w-7 bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+                        onClick={prevImage}
+                    >
+                        <ChevronLeft className="h-5 w-5" />
+                    </Button>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+                        onClick={nextImage}
+                    >
+                        <ChevronRight className="h-5 w-5" />
+                    </Button>
+                </>
+            )}
+        </div>
+    );
+};
+
+const VideoCarouselNode = ({ videos, title }: { videos: string[], title: string }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const prevVideo = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(prev => (prev === 0 ? videos.length - 1 : prev - 1));
+    };
+
+    const nextVideo = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex(prev => (prev === videos.length - 1 ? 0 : prev + 1));
+    };
+
+    const embedUrl = getYouTubeEmbedUrl(videos[currentIndex]);
+    
+    if (!embedUrl) return null;
+
+    return (
+        <div className="relative aspect-video rounded-md overflow-hidden group/carousel">
+            <iframe
+                src={`${embedUrl}&autoplay=1`}
+                title={`Video de ${title}`}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+            ></iframe>
+            {videos.length > 1 && (
+                 <>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute left-1 top-1/2 -translate-y-1/2 h-7 w-7 bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+                        onClick={prevVideo}
+                    >
+                        <ChevronLeft className="h-5 w-5" />
+                    </Button>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+                        onClick={nextVideo}
+                    >
+                        <ChevronRight className="h-5 w-5" />
+                    </Button>
+                </>
+            )}
+        </div>
+    );
 };
 
 
@@ -55,13 +177,20 @@ export function PoseNode({
   showCheckbox,
   onCheckedChange,
   allPosesMap,
+  allPoses,
+  concepts,
   initialDisplay = 'description',
   accordionValue,
   onAccordionChange
 }: PoseNodeProps) {
   const [activeView, setActiveView] = useState<ActiveView>('description');
-  const hasVideo = !!pose.url_video;
-  const hasImage = !!pose.url_imagen;
+  
+  const allVideos = [pose.url_video, ...(pose.gallery_videos || [])].filter(Boolean) as string[];
+  const allImages = [pose.url_imagen, ...(pose.gallery_images || [])].filter(Boolean) as string[];
+  
+  const hasVideo = allVideos.length > 0;
+  const hasImage = allImages.length > 0;
+  
   const prerequisites = pose.prerequisites.map(id => allPosesMap[id]).filter(Boolean);
 
   const isExpanded = Array.isArray(accordionValue) && accordionValue.includes(pose.id);
@@ -75,46 +204,24 @@ export function PoseNode({
       setActiveView('description');
     }
   }, [isExpanded, initialDisplay]);
-  
-  const getYouTubeEmbedUrl = (url: string) => {
-    if (!url) return '';
-    try {
-        const urlObj = new URL(url);
-        let videoId;
-        if (urlObj.hostname === 'youtu.be') {
-            videoId = urlObj.pathname.slice(1);
-        } else if (urlObj.hostname.includes('youtube.com')) {
-            videoId = urlObj.searchParams.get('v');
-        }
-        
-        if (videoId) {
-            const params = new URLSearchParams(urlObj.search);
-            params.delete('v');
-            return `https://www.youtube.com/embed/${videoId}?${params.toString()}&autoplay=1`;
-        }
-    } catch (e) {
-        console.error("Invalid video URL", e);
-    }
-    return '';
-  };
-  
-  const videoEmbedUrl = pose.url_video ? getYouTubeEmbedUrl(pose.url_video) : '';
-  
+    
   const handleIconClick = (view: ActiveView, e: React.MouseEvent) => {
     e.stopPropagation();
     
+    if (view === 'description' && !isExpanded) {
+        onAccordionChange([...(accordionValue as string[]), pose.id]);
+        return;
+    }
+
     if (isExpanded) {
       if (activeView === view) {
-        // If it's expanded and showing the content for this icon, collapse it.
-        onAccordionChange(accordionValue.filter(id => id !== pose.id));
+        onAccordionChange((accordionValue as string[]).filter(id => id !== pose.id));
       } else {
-        // If it's expanded but showing different content, just switch the view.
         setActiveView(view);
       }
     } else {
-      // If it's not expanded, set the view and expand it.
       setActiveView(view);
-      onAccordionChange([...accordionValue, pose.id]);
+      onAccordionChange([...(accordionValue as string[]), pose.id]);
     }
   };
 
@@ -181,8 +288,13 @@ export function PoseNode({
           <AccordionTrigger 
              onClick={(e) => {
                 e.stopPropagation();
-                if (isExpanded) {
+                if (isExpanded && activeView !== 'description') {
                     setActiveView('description');
+                } else if(isExpanded) {
+                    onAccordionChange((accordionValue as string[]).filter(id => id !== pose.id));
+                } else {
+                    setActiveView('description');
+                    onAccordionChange([...(accordionValue as string[]), pose.id]);
                 }
              }} 
              className="p-2 hover:no-underline" 
@@ -190,29 +302,13 @@ export function PoseNode({
         </div>
       </div>
       <AccordionContent className="p-0 pt-2">
-          {activeView === 'video' && videoEmbedUrl ? (
+          {activeView === 'video' && hasVideo ? (
             <div className="p-1">
-                <div className="aspect-video rounded-md overflow-hidden">
-                    <iframe
-                        src={videoEmbedUrl}
-                        title={`Video de ${pose.nombre}`}
-                        className="w-full h-full"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    ></iframe>
-                </div>
+                <VideoCarouselNode videos={allVideos} title={pose.nombre} />
             </div>
            ) : activeView === 'image' && hasImage ? (
              <div className="p-1">
-                <div className="relative aspect-video rounded-md overflow-hidden">
-                    <Image
-                        src={pose.url_imagen!}
-                        alt={`Imagen de ${pose.nombre}`}
-                        fill
-                        className="object-cover"
-                        data-ai-hint="acroyoga pose"
-                    />
-                </div>
+                <ImageCarouselNode images={allImages} alt={`Imagen de ${pose.nombre}`} onImageClick={(e) => {e.stopPropagation(); onSelect();}} />
              </div>
            ) : (
              <div className="text-sm text-muted-foreground p-3 space-y-4">
@@ -248,7 +344,7 @@ export function PoseNode({
               {pose.narrativa_detallada && (
                 <div>
                   <h4 className="font-semibold text-foreground mb-1">Narrativa Detallada</h4>
-                  <p className="whitespace-pre-wrap">{pose.narrativa_detallada.replace(/\*\*/g, '')}</p>
+                  <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
                 </div>
               )}
 

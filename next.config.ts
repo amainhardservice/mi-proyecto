@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
       { protocol: 'http', hostname: 'basaho.com' },
       { protocol: 'https', hostname: 'daman.co.id' },
       { protocol: 'https', hostname: 'skillwell-upload-production.s3.amazonaws.com' },
+      { protocol: 'https', hostname: 'www.aloyoga.com' },
+      { protocol: 'https', hostname: 'www.theyoganomads.com' },
+      { protocol: 'https', hostname: 'www.christiangieger.de' },
+      { protocol: 'https', hostname: 'i.ibb.co' },
+      { protocol: 'https', hostname: 'static.wixstatic.com' },
     ],
   },
 };

@@ -6,9 +6,10 @@ import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
 import type { XYCoord } from 'dnd-core';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, Trash2 } from 'lucide-react';
 import type { SequenceItem } from '@/types';
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 type NameDisplay = 'es' | 'en' | 'both';
 
@@ -19,6 +20,7 @@ interface CanvasProps {
   selectedItemId: string | null;
   moveItem: (dragIndex: number, hoverIndex: number) => void;
   nameDisplay: NameDisplay;
+  onDeleteItem: (uniqueId: string) => void;
 }
 
 const ItemTypes = {
@@ -54,7 +56,7 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string => {
 };
 
 
-const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameDisplay }: { item: SequenceItem, index: number, onSelectItem: (id: string) => void, selectedItemId: string | null, moveItem: (dragIndex: number, hoverIndex: number) => void, nameDisplay: NameDisplay }) => {
+const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameDisplay, onDeleteItem }: { item: SequenceItem, index: number, onSelectItem: (id: string) => void, selectedItemId: string | null, moveItem: (dragIndex: number, hoverIndex: number) => void, nameDisplay: NameDisplay, onDeleteItem: (id: string) => void }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ handlerId }, drop] = useDrop({
@@ -109,7 +111,7 @@ const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameD
       style={{ opacity }}
       data-handler-id={handlerId}
       className={cn(
-        "mb-2 p-2 border rounded-lg cursor-pointer flex items-center gap-2",
+        "mb-2 p-2 border rounded-lg cursor-pointer flex items-center gap-2 group",
         item.uniqueId === selectedItemId ? 'border-primary ring-2 ring-primary' : 'border-border bg-card'
       )}
       onClick={() => onSelectItem(item.uniqueId)}
@@ -123,12 +125,23 @@ const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameD
             </div>
           </div>
       </div>
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={(e) => {
+            e.stopPropagation();
+            onDeleteItem(item.uniqueId);
+        }}
+      >
+        <Trash2 className="h-4 w-4 text-destructive" />
+      </Button>
     </div>
   );
 };
 
 
-export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, selectedItemId, moveItem, nameDisplay }: CanvasProps) {
+export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, selectedItemId, moveItem, nameDisplay, onDeleteItem }: CanvasProps) {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: [ItemTypes.POSE, ItemTypes.CONCEPT, ItemTypes.ASANA, ItemTypes.MODIFIER],
     drop: (item: { id: string; type: string }) => onDrop(item),
@@ -141,7 +154,7 @@ export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, sele
   const isActive = canDrop && isOver;
 
   return (
-    <Card ref={drop} className={cn("w-1/3 flex flex-col", isActive ? "bg-accent/20" : "")}>
+    <Card ref={drop} className={cn("w-full md:w-1/3 flex flex-col", isActive ? "bg-accent/20" : "")}>
       <CardHeader>
         <CardTitle>Mi Secuencia</CardTitle>
       </CardHeader>
@@ -161,6 +174,7 @@ export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, sele
                 selectedItemId={selectedItemId}
                 moveItem={moveItem}
                 nameDisplay={nameDisplay}
+                onDeleteItem={onDeleteItem}
               />
             ))
           )}

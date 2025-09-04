@@ -32,6 +32,7 @@ import {
 import { Button } from './ui/button';
 import { exportPoseToPdf } from '@/lib/pdf';
 import { toast } from '@/hooks/use-toast';
+import DetailedDescription from './DetailedDescription';
 
 
 type PoseDetailDialogProps = {
@@ -42,124 +43,7 @@ type PoseDetailDialogProps = {
   concepts: Concept[];
 };
 
-function ImageCarousel({ images, altPrefix }: { images?: string[], altPrefix: string }) {
-  if (!images || images.length === 0) {
-    return null;
-  }
-
-  return (
-    <Carousel className="w-full">
-      <CarouselContent>
-        {images.map((img, index) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-              <Card>
-                <CardContent className="relative aspect-video flex items-center justify-center p-0 overflow-hidden rounded-lg">
-                   <Image
-                      src={img}
-                      alt={`${altPrefix} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      data-ai-hint="acroyoga pose"
-                    />
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
-      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
-    </Carousel>
-  );
-}
-
-function DetailedDescription({ content, concepts, poses }: { content?: string, concepts: Concept[], poses: Pose[] }) {
-    if (!content) return null;
-  
-    const allItems = [
-      ...concepts.map(c => ({ name: c.titulo, description: c.descripcion })),
-      ...poses.map(p => ({ name: p.nombre.split('\n')[0], description: p.descripcion })),
-    ];
-  
-    const parts = content.trim().split(/(\*\*.*?\*\*)/g).filter(Boolean);
-  
-    return (
-      <p className="whitespace-pre-wrap leading-relaxed">
-        <TooltipProvider>
-          {parts.map((part, index) => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-              const term = part.substring(2, part.length - 2);
-              const item = allItems.find(i => i.name.toLowerCase() === term.toLowerCase());
-  
-              if (item) {
-                return (
-                  <Tooltip key={index}>
-                    <TooltipTrigger asChild>
-                      <strong className="text-primary font-bold cursor-pointer underline decoration-dotted">
-                        {term}
-                      </strong>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs p-3 bg-card border-border shadow-lg rounded-md">
-                      <p className="font-bold text-primary mb-2">{item.name}</p>
-                      <p className="text-sm text-foreground/80">{item.description}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              } else {
-                 return (
-                  <strong key={index} className="font-bold text-foreground">
-                    {term}
-                  </strong>
-                );
-              }
-            } else {
-              return <React.Fragment key={index}>{part}</React.Fragment>;
-            }
-          })}
-        </TooltipProvider>
-      </p>
-    );
-}
-
-export function PoseDetailDialog({
-  pose,
-  allPoses,
-  open,
-  onOpenChange,
-  concepts,
-}: PoseDetailDialogProps) {
-  const [viewMode, setViewMode] = useState<'video' | 'image'>('image');
-  const [isExporting, setIsExporting] = useState(false);
-
-  useEffect(() => {
-    if (open && pose) {
-      if (pose.url_video) {
-        setViewMode('video');
-      } else {
-        setViewMode('image');
-      }
-    }
-  }, [pose, open]);
-  
-  if (!pose) return null;
-
-  const handleExport = async () => {
-    if (!pose) return;
-    setIsExporting(true);
-    try {
-        await exportPoseToPdf(pose);
-    } catch(error) {
-        console.error("Error exporting PDF:", error);
-        toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF. Por favor, inténtalo de nuevo.', variant: 'destructive' });
-    } finally {
-        setIsExporting(false);
-    }
-  };
-
-  const isAcroPose = pose.type !== 'Thai-Massage';
-  
-  const getYouTubeEmbedUrl = (url: string) => {
+const getYouTubeEmbedUrl = (url: string) => {
     if (!url) return '';
     try {
         const urlObj = new URL(url);
@@ -179,11 +63,103 @@ export function PoseDetailDialog({
         console.error("Invalid video URL", e);
     }
     return '';
-  };
+};
+
+
+function MediaCarousel({ images, videos, altPrefix }: { images: string[], videos: string[], altPrefix: string }) {
+  if (images.length === 0 && videos.length === 0) {
+    return (
+        <div className="text-center text-muted-foreground p-4">
+            <Binary size={48} className="mx-auto mb-2" />
+            <p>No hay contenido visual disponible.</p>
+        </div>
+    );
+  }
+
+  return (
+    <Carousel className="w-full">
+      <CarouselContent>
+        {videos.map((videoUrl, index) => {
+            const embedUrl = getYouTubeEmbedUrl(videoUrl);
+            if (!embedUrl) return null;
+            return (
+                <CarouselItem key={`video-${index}`}>
+                    <div className="p-1">
+                    <Card>
+                        <CardContent className="relative aspect-video flex items-center justify-center p-0 overflow-hidden rounded-lg">
+                        <iframe 
+                            className="w-full h-full"
+                            src={embedUrl}
+                            title={`${altPrefix} Video ${index + 1}`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowFullScreen>
+                        </iframe>
+                        </CardContent>
+                    </Card>
+                    </div>
+                </CarouselItem>
+            );
+        })}
+        {images.map((img, index) => (
+          <CarouselItem key={`image-${index}`}>
+            <div className="p-1">
+              <Card>
+                <CardContent className="relative aspect-video flex items-center justify-center p-0 overflow-hidden rounded-lg">
+                   <Image
+                      src={img}
+                      alt={`${altPrefix} ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      data-ai-hint="acroyoga pose"
+                    />
+                </CardContent>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      {(images.length + videos.length) > 1 && (
+        <>
+            <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
+            <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
+        </>
+      )}
+    </Carousel>
+  );
+}
+
+
+export function PoseDetailDialog({
+  pose,
+  allPoses,
+  open,
+  onOpenChange,
+  concepts,
+}: PoseDetailDialogProps) {
+  const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+  }, [pose, open]);
   
-  const videoEmbedUrl = pose.url_video ? getYouTubeEmbedUrl(pose.url_video) : '';
-  const hasVideo = !!videoEmbedUrl;
-  const hasImage = !!pose.url_imagen;
+  if (!pose) return null;
+
+  const handleExport = async () => {
+    if (!pose) return;
+    setIsExporting(true);
+    try {
+        await exportPoseToPdf(pose);
+    } catch(error) {
+        console.error("Error exporting PDF:", error);
+        toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF. Por favor, inténtalo de nuevo.', variant: 'destructive' });
+    } finally {
+        setIsExporting(false);
+    }
+  };
+
+  const isAcroPose = pose.type !== 'Thai-Massage';
+    
+  const allImages = [pose.url_imagen, ...(pose.gallery_images || [])].filter(Boolean) as string[];
+  const allVideos = [pose.url_video, ...(pose.gallery_videos || [])].filter(Boolean) as string[];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -215,55 +191,11 @@ export function PoseDetailDialog({
               <section 
                 className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted/50 flex items-center justify-center"
               >
-                 {hasVideo && viewMode === 'video' ? (
-                    <iframe 
-                        className="w-full h-full"
-                        src={videoEmbedUrl}
-                        title={`Video de ${pose.nombre}`}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowFullScreen>
-                    </iframe>
-                 ) : hasImage ? (
-                     <Image
-                      src={pose.url_imagen!}
-                      alt={`Postura de Acroyoga: ${pose.nombre}`}
-                      fill
-                      className="object-cover"
-                      data-ai-hint="acroyoga pose"
-                      unoptimized // Helps with some export scenarios
-                    />
-                 ) : (
-                    <div className="text-center text-muted-foreground p-4">
-                        <Binary size={48} className="mx-auto mb-2" />
-                        <p>No hay contenido visual disponible.</p>
-                    </div>
-                 )}
-                 {hasVideo && hasImage && (
-                  <div className="absolute top-2 right-2 flex gap-1">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant={viewMode === 'video' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 bg-black/30 hover:bg-black/50 text-white" onClick={() => setViewMode('video')}>
-                            <Video className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Ver Video</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                           <Button variant={viewMode === 'image' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 bg-black/30 hover:bg-black/50 text-white" onClick={() => setViewMode('image')}>
-                            <ImageIcon className="h-4 w-4" />
-                           </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Ver Imagen</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                 )}
+                <MediaCarousel 
+                    images={allImages}
+                    videos={allVideos}
+                    altPrefix={`Postura de Acroyoga: ${pose.nombre}`}
+                 />
               </section>
 
               <Tabs defaultValue="description" className="w-full">
@@ -273,7 +205,7 @@ export function PoseDetailDialog({
                   {isAcroPose && <TabsTrigger value="calibration">Calibración</TabsTrigger>}
                 </TabsList>
                 <TabsContent value="description" className="mt-4 text-base text-foreground/90">
-                   <p className="italic text-muted-foreground mb-4">{pose.descripcion}</p>
+                   <div className="italic text-muted-foreground mb-4">{pose.descripcion}</div>
                    <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
                 </TabsContent>
                  {isAcroPose && (

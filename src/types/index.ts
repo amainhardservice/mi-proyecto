@@ -24,10 +24,13 @@ export interface Pose {
   prerequisites: string[];
   url_imagen?: string;
   url_video?: string;
+  gallery_images?: string[];
+  gallery_videos?: string[];
 }
 
-export interface PoseWithImage extends Pose, PoseDetails {
+export interface PoseWithImage extends Pose {
     url_imagen?: string;
+    gallery_images?: string[];
 }
 
 
@@ -63,6 +66,8 @@ export interface Asana {
   nombre_sans: string;
   nombre_es: string;
   descripcion: string;
+  url_imagen?: string;
+  url_video?: string;
 }
 
 export interface PoseModifier {

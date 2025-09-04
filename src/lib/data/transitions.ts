@@ -4,14 +4,14 @@ import type { Pose } from '@/types';
 export const transitionPoses: Pose[] = [
   {
     id: 'tr-fb-th',
-    nombre: 'Pájaro Frontal → Trono\n(Front Bird → Throne)',
+    nombre: 'Plancha Frontal → Trono\n(Front Plank → Throne)',
     nivel: 3,
     type: 'Transition',
     prerequisites: ['lb-1', 'lb-2'],
     url_video: 'https://www.youtube.com/watch?v=ItPTGnBL2tI',
     descripcion: 'Una transición fundamental para pasar de una postura de equilibrio a una sentada.',
     narrativa_detallada: `
-**Inicio:** Comienza en Pájaro Frontal estable.
+**Inicio:** Comienza en Plancha Frontal estable.
 **Desarrollo:**
 * **Base:** Dobla las rodillas para bajar al volador. Mientras baja, el volador se recoge (**Tuck**) y la base mueve sus pies desde las caderas del volador a sus glúteos.
 * **Volador:** Al sentir el descenso, recoge las piernas hacia el pecho y prepárate para sentarte.
@@ -52,7 +52,7 @@ export const transitionPoses: Pose[] = [
   },
   {
     id: 'tr-th-fb',
-    nombre: 'Trono → Pájaro Frontal\n(Throne → Front Bird)',
+    nombre: 'Trono → Plancha Frontal\n(Throne → Front Plank)',
     nivel: 3,
     type: 'Transition',
     prerequisites: ['tr-fb-th'],
@@ -62,8 +62,8 @@ export const transitionPoses: Pose[] = [
 **Inicio:** Comienza en Trono.
 **Desarrollo:**
 * **Base:** Extiende las piernas para elevar al volador. Mueve los pies desde los glúteos del volador a sus caderas.
-* **Volador:** Inclínate hacia adelante, coloca tus manos en las de la base y extiende tu cuerpo a una línea de Pájaro Frontal.
-**Culminación:** Estabilización en Pájaro Frontal.`,
+* **Volador:** Inclínate hacia adelante, coloca tus manos en las de la base y extiende tu cuerpo a una línea de Plancha Frontal.
+**Culminación:** Estabilización en Plancha Frontal.`,
     musculos: {
       base: ['Fuerza y control de piernas', 'Core'],
       volador: ['Core', 'Glúteos', 'Espalda'],
@@ -100,7 +100,7 @@ export const transitionPoses: Pose[] = [
   },
   {
     id: 'tr-sb-fb',
-    nombre: 'Pájaro Lateral → Pájaro Frontal\n(Side Bird → Front Bird)',
+    nombre: 'Pájaro Lateral → Plancha Frontal\n(Side Bird → Front Plank)',
     nivel: 3,
     type: 'Transition',
     prerequisites: ['lb-side-bird', 'lb-1'],
@@ -110,7 +110,7 @@ export const transitionPoses: Pose[] = [
 **Desarrollo:**
 * **Base:** Inicia una rotación suave con tus piernas, girando al volador para que quede boca abajo. Reposiciona tus pies en sus caderas.
 * **Volador:** Mantén el cuerpo como una unidad sólida y sigue la rotación guiada por la base.
-**Culminación:** Estabilización en Pájaro Frontal.`,
+**Culminación:** Estabilización en Plancha Frontal.`,
     musculos: {
       base: ['Oblicuos', 'Control de rotación de piernas'],
       volador: ['Oblicuos', 'Core'],

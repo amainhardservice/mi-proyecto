@@ -262,6 +262,8 @@ export default function PoseExplorer({
                           isSelected={selectedRoutePoseIds.includes(pose.id)}
                           showCheckbox={interactionMode === 'route'}
                           onCheckedChange={(checked) => handleRouteChange(pose.id, checked)}
+                          allPoses={allPoses}
+                          concepts={concepts}
                           allPosesMap={allPosesById}
                           initialDisplay={initialDisplay}
                           accordionValue={accordionValue}

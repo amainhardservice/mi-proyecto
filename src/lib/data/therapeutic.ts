@@ -30,36 +30,37 @@ export const therapeuticPoses: Pose[] = [
 `,
   },
   {
-    id: 'th-folded-leaf',
-    nombre: 'Plegaria Invertida\n(Folded Leaf)',
+    id: 'lb-fish-on-shins',
+    nombre: 'Pez sobre Espinillas\n(Fish on Shins)',
     nivel: 11,
     type: 'Therapeutic',
     prerequisites: [],
-    url_video: 'https://www.youtube.com/watch?v=Zc-D_1htX6I',
-    url_imagen: 'https://www.fitsri.com/wp-content/uploads/2021/11/Folded-Leaf-Pose-Acro-Yoga--1024x683.jpg',
-    descripcion: 'Postura terapéutica. La base sostiene al volador por las caderas para una inversión suave y relajante.',
-     narrativa_detallada: `
+    url_video: 'https://www.youtube.com/watch?v=6F9sRYTD0xU',
+    url_imagen: 'https://www.blueosa.com/wp-content/uploads/2021/07/Seated-Forward-Fold-Fish-Pose-partner-yoga-pose.jpg',
+    descripcion: 'Una apertura de pecho terapéutica que sirve como excelente preparación para posturas como Pájaro Inverso y Ballena.',
+    narrativa_detallada: `
 **Inicio:**
-1.  **Base:** Acuéstate y levanta las piernas, flexionadas.
-2.  **Volador:** Párate frente a la base, de espaldas. La base colocará sus pies en tu ingle/pliegue de la cadera.
-3.  **Base:** Toma las manos del volador. Este se inclinará hacia atrás, manteniendo la confianza en ti.
-4.  **Volador:** A medida que te inclinas, deja que tu cuerpo se pliegue hacia adelante, como una hoja.
-5.  **Base:** Extiende tus piernas lentamente, levantando las caderas del volador. El volador quedará colgado, con la parte superior del cuerpo relajada hacia el suelo.
+1. **Base:** Comienza como si fueras a hacer una **Plancha sobre Espinillas (Plank on Shins)**, con tus espinillas paralelas al suelo.
+2. **Volador:** En lugar de colocarte en plancha, siéntate de espaldas a la base, entre sus pies.
+3. **Volador:** Con la guía de la base, acuéstate hacia atrás, colocando tu espalda alta (zona de los omóplatos) sobre las espinillas de la base.
+4. **Base:** Ajusta la altura de tus espinillas para la comodidad del volador. Puedes sujetar sus manos o hombros para dar seguridad.
 
 **Desarrollo:**
-*   **Base:** Mantén los pies firmes en el pliegue de la cadera del volador. Puedes ofrecer un suave masaje en la espalda del volador. Tus manos pueden sostener sus hombros o brazos para dar seguridad.
-*   **Volador:** Relájate por completo. Suelta la cabeza, el cuello y los hombros. Permite que la gravedad cree una suave tracción en tu columna vertebral. Respira profundamente. Es una postura de recepción y confianza.
+* **Base:** Mantén una plataforma estable. Puedes ofrecer un suave balanceo para relajar al volador.
+* **Volador:** Relaja tu cabeza y cuello hacia atrás, permitiendo que tu pecho se abra. Mantén las rodillas dobladas con los pies en el suelo o extiéndelas si te sientes cómodo.
 
 **Culminación:**
-1.  **Base:** Comunica al volador que lo vas a bajar. Flexiona lentamente las rodillas.
-2.  **Volador:** Activa ligeramente el **Core** y prepárate para que tus manos toquen el suelo.
-3.  **Base:** Una vez que las manos del volador estén firmes en el suelo, baja un poco más hasta que pueda apoyar los pies y ponerse de pie.
+1. **Volador:** Usa tu core para levantar la cabeza primero.
+2. **Base:** Ayuda al volador a sentarse y luego a ponerse de pie.
 `,
-    musculos: { base: ['Isquiotibiales', 'Glúteos', 'Core'], volador: ['Relajación de la espalda'] },
+    musculos: {
+      base: ["Core", "Cuádriceps (isométrico)"],
+      volador: ["Estiramiento de pectorales y abdomen"],
+    },
     calibracion: {
-      base: ['Pies en la cadera del volador', 'Extiende las piernas lentamente', 'Manos en los hombros del volador'],
-      volador: ['Déjate caer con confianza', 'Relaja cuello y hombros'],
-      observador: ['Junto a la cabeza del volador', 'Asegura que la cabeza no toque el suelo'],
+      base: ["Ofrece una base cómoda y estable.", "Comunica constantemente.", "Guía la salida con cuidado."],
+      volador: ["Relájate y respira en la apertura.", "Comunica cualquier incomodidad.", "Muévete lentamente."],
+      observador: ["Vigila la cabeza del volador.", "Asegura una salida suave."],
     },
   },
   {
