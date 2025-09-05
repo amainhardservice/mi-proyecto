@@ -34,6 +34,7 @@ import { exportPoseToPdf } from '@/lib/pdf';
 import { toast } from '@/hooks/use-toast';
 import DetailedDescription from './DetailedDescription';
 
+type NameDisplay = 'es' | 'en' | 'both';
 
 type PoseDetailDialogProps = {
   pose: PoseWithImage | null;
@@ -41,6 +42,7 @@ type PoseDetailDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   concepts: Concept[];
+  nameDisplay: NameDisplay;
 };
 
 const getYouTubeEmbedUrl = (url: string) => {
@@ -135,8 +137,10 @@ export function PoseDetailDialog({
   open,
   onOpenChange,
   concepts,
+  nameDisplay,
 }: PoseDetailDialogProps) {
   const [isExporting, setIsExporting] = useState(false);
+
 
   useEffect(() => {
   }, [pose, open]);
@@ -147,7 +151,7 @@ export function PoseDetailDialog({
     if (!pose) return;
     setIsExporting(true);
     try {
-        await exportPoseToPdf(pose);
+        await exportPoseToPdf(pose, nameDisplay);
     } catch(error) {
         console.error("Error exporting PDF:", error);
         toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF. Por favor, inténtalo de nuevo.', variant: 'destructive' });
@@ -206,7 +210,7 @@ export function PoseDetailDialog({
                 </TabsList>
                 <TabsContent value="description" className="mt-4 text-base text-foreground/90">
                    <div className="italic text-muted-foreground mb-4">{pose.descripcion}</div>
-                   <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
+                   <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} nameDisplay={nameDisplay}/>
                 </TabsContent>
                  {isAcroPose && (
                     <>

@@ -1,11 +1,12 @@
+
 import type { Pose } from '@/types';
 
 export const standingPoses: Pose[] = [
-  // Standing Acro: NIVEL 8 (antes 7)
+  // Standing Acro: NIVEL 11 (antes 8)
   {
     id: 'st-high-bird',
     nombre: 'Pájaro Alto\n(High Bird)',
-    nivel: 8,
+    nivel: 11,
     type: 'Standing',
     prerequisites: ['lb-1'],
     url_video: 'https://www.youtube.com/watch?v=eWu3BxMF1Bg',
@@ -20,7 +21,7 @@ export const standingPoses: Pose[] = [
 
 **Desarrollo:**
 * **Base:** Levántate usando la fuerza de tus piernas, no de tu espalda. Extiende los brazos, levantando al volador sobre tu cabeza. Encuentra el **Apilamiento (Stacking)**: las caderas del volador sobre tus hombros, y tus hombros sobre tus caderas.
-* **Volador:** Mantén una línea corporal fuerte (**Hollow Body**), similar a un **Pájaro Frontal (Front Bird)**. Mantén el core activo para ayudar a la base a encontrar el equilibrio.
+* **Volador:** Mantén una línea corporal fuerte (**Hollow Body**), similar a un **pose:lb-front-bird**. Mantén el core activo para ayudar a la base a encontrar el equilibrio.
 
 **Culminación:**
 1. **Base:** Flexiona las rodillas para bajar al volador de manera controlada.
@@ -37,11 +38,11 @@ export const standingPoses: Pose[] = [
     },
   },
   
-  // Standing Acro: NIVEL 9 (antes 8)
+  // Standing Acro: NIVEL 12 (antes 9)
   {
     id: 'st-monkey',
     nombre: 'Mono\n(Monkey)',
-    nivel: 9,
+    nivel: 12,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
     url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
@@ -49,7 +50,7 @@ export const standingPoses: Pose[] = [
     narrativa_detallada: `
 **Inicio:**
 1.  **Base:** De pie, con el volador sentado en sus hombros.
-2.  **Transición:** El volador se inclina hacia adelante, la base lo atrapa en **High Bird**.
+2.  **Transición:** El volador se inclina hacia adelante, la base lo atrapa en **pose:st-high-bird**.
 3.  **Movimiento:** Desde High Bird, la base puede guiar al volador a una posición de **Foot-to-Foot** (de pie sobre los pies de la base).
 4.  **Regreso:** Se puede revertir la secuencia para volver a los hombros.`,
     musculos: {
@@ -65,7 +66,7 @@ export const standingPoses: Pose[] = [
   {
     id: 'st-f2h',
     nombre: 'Pie a Mano\n(Foot-to-Hand)',
-    nivel: 9,
+    nivel: 12,
     type: 'Standing',
     prerequisites: ['st-high-bird', 'lb-14'],
     url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
@@ -74,7 +75,7 @@ export const standingPoses: Pose[] = [
 **Esta es una habilidad avanzada de Standing Acro.**
 
 **Inicio:**
-Se puede entrar desde el suelo o desde **High Bird**.
+Se puede entrar desde el suelo o desde **pose:st-high-bird**.
 1. **Base:** De pie, en una postura muy sólida. Extiende los brazos hacia arriba, listos para recibir.
 2. **Volador:** El volador se coloca frente a la base. Se requiere una entrada dinámica. A menudo, el volador salta a una parada de manos mientras la base, en una sentadilla profunda, atrapa los pies del volador.
 
@@ -96,11 +97,11 @@ Se puede entrar desde el suelo o desde **High Bird**.
     },
   },
 
-  // Standing Acro: NIVEL 10 (antes 9)
+  // Standing Acro: NIVEL 13 (antes 10)
   {
     id: 'st-h2h',
     nombre: 'Mano a Mano\n(H2H)',
-    nivel: 10,
+    nivel: 13,
     type: 'Standing',
     prerequisites: ['st-f2h', 'lb-h2h', 'st-monkey'],
     url_video: 'https://www.youtube.com/watch?v=r-g6qvL8IjM',
@@ -109,8 +110,8 @@ Se puede entrar desde el suelo o desde **High Bird**.
 **El pináculo de la confianza y el equilibrio en pareja.**
 
 **Inicio:**
-La entrada más común es desde **High Bird**.
-1. **Base y Volador:** En una posición estable de **High Bird**, el volador baja la cabeza hacia la base.
+La entrada más común es desde **pose:st-high-bird**.
+1. **Base y Volador:** En una posición estable de **pose:st-high-bird**, el volador baja la cabeza hacia la base.
 2. **Conexión:** Base y volador conectan su agarre **Hand-to-Hand grip**.
 3.  **Transición:** El volador lleva las caderas hacia arriba, entrando en una parada de manos mientras la base ajusta su equilibrio para sostener la postura.
 
@@ -119,7 +120,7 @@ La entrada más común es desde **High Bird**.
 * **Volador:** La línea de parada de manos debe ser perfecta. El más mínimo movimiento afecta a la base.
 
 **Culminación:**
-* Se sale de la misma manera que se entró, revirtiendo el movimiento para volver a **High Bird** y luego al suelo.
+* Se sale de la misma manera que se entró, revirtiendo el movimiento para volver a **pose:st-high-bird** y luego al suelo.
 `,
     musculos: {
       base: ["Todo el cuerpo trabajando en perfecta sinergia."],
@@ -134,7 +135,7 @@ La entrada más común es desde **High Bird**.
   {
     id: 'st-two-high',
     nombre: 'Dos Alturas\n(Two-High)',
-    nivel: 10,
+    nivel: 13,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
     url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',

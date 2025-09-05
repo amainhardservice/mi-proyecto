@@ -24,7 +24,7 @@ export const allModifiersData: PoseModifier[] = [
     {
       id: '4',
       titulo: 'Layout / Straight (Recto/Plancha)',
-      descripcion: 'El cuerpo se mantiene en una línea perfectamente recta desde los talones hasta la cabeza, como una tabla. Requiere una activación total del core y los glúteos. Es la base de posturas como **Pájaro Frontal (Front Bird)** y **Plancha sobre Manos (Free Bird)**.',
+      descripcion: 'El cuerpo se mantiene en una línea perfectamente recta desde los talones hasta la cabeza, como una tabla. Requiere una activación total del core y los glúteos. Es la base de posturas como **pose:lb-front-bird** y **pose:lb-10**.',
     },
     {
       id: '5',
@@ -65,7 +65,7 @@ export const allConceptsData: Concept[] = [
     {
       id: 'ac-dt-11',
       titulo: 'Entradas y Salidas',
-      descripcion: 'Las técnicas para entrar (Mount) y salir (Dismount) de una postura. Dominar las salidas seguras es tan crucial como la postura misma. Una habilidad clave es la **Salida en Rueda (Cartwheel Exit)**, que consiste en salir de una inversión girando lateralmente para aterrizar de pie. Esta misma habilidad evoluciona a la **Transición: Rueda Lateral (Cartwheel)**, usada para entrar dinámicamente en posturas y lavadoras avanzadas.',
+      descripcion: 'Las técnicas para entrar (Mount) y salir (Dismount) de una postura. Dominar las salidas seguras es tan crucial como la postura misma. Una habilidad clave es la **pose:lb-cartwheel-exit**, que consiste en salir de una inversión girando lateralmente para aterrizar de pie.',
       category: 'Dinámicas y Transiciones',
     },
     {
@@ -173,7 +173,7 @@ export const allConceptsData: Concept[] = [
     {
       id: 'ac-cs-05',
       titulo: 'Postura de Descanso (Resting Pose)',
-      descripcion: 'Una postura simple y estable (como Sofá o Pájaro) a la que se puede volver para descansar, recalibrar y comunicarse entre secuencias más difíciles.',
+      descripcion: 'Una postura simple y estable (como **pose:th-sofa** o **pose:lb-front-bird**) a la que se puede volver para descansar, recalibrar y comunicarse entre secuencias más difíciles.',
       category: 'Comunicación y Seguridad',
     },
     {
@@ -295,7 +295,7 @@ export const allConceptsData: Concept[] = [
      {
       id: '57',
       titulo: 'Apilamiento Inverso (Reverse Stacking)',
-      descripcion: 'Principio de alineación para posturas terapéuticas como el Pájaro Inverso. La base usa sus piernas para sostener la espalda del volador, permitiendo que la gravedad abra el pecho del volador de forma segura.',
+      descripcion: 'Principio de alineación para posturas terapéuticas como el **pose:th-back-bird**. La base usa sus piernas para sostener la espalda del volador, permitiendo que la gravedad abra el pecho del volador de forma segura.',
       category: 'Principios Fundamentales',
     },
     {
@@ -399,7 +399,7 @@ export const allConceptsData: Concept[] = [
     {
       id: 'ac-dt-01',
       titulo: 'Helicóptero',
-      descripcion: 'Una transición donde el volador gira horizontalmente sobre la base, a menudo pasando de Pájaro Frontal a Pájaro Invertido sin perder el contacto.',
+      descripcion: 'Una transición donde el volador gira horizontalmente sobre la base, a menudo pasando de **pose:lb-front-bird** a **pose:lb-back-bird-acro** sin perder el contacto.',
       category: 'Dinámicas y Transiciones',
     },
     {
@@ -417,7 +417,7 @@ export const allConceptsData: Concept[] = [
     {
       id: 'ac-dt-02',
       titulo: 'Freefall',
-      descripcion: 'Una transición avanzada donde el volador cae controladamente desde una postura alta (como una parada de manos) a una más baja (como pájaro inverso).',
+      descripcion: 'Una transición avanzada donde el volador cae controladamente desde una postura alta (como una parada de manos) a una más baja (como **pose:lb-back-bird-acro**).',
       category: 'Dinámicas y Transiciones',
     },
     {
@@ -434,13 +434,13 @@ export const allConceptsData: Concept[] = [
     {
       id: '51',
       titulo: 'Ninja Star',
-      descripcion: 'Una lavadora (washing machine) avanzada y dinámica que fluye continuamente entre variaciones de Estrella Invertida (Reverse Star) y Estrella Lateral (Side Star).',
+      descripcion: 'Una lavadora (washing machine) avanzada y dinámica que fluye continuamente entre variaciones de **pose:lb-18** y **pose:lb-12**.',
       category: 'Dinámicas y Transiciones',
     },
     {
       id: '52',
       titulo: 'Ninja Bat',
-      descripcion: 'Una entrada dinámica a la postura de Murciélago (Bat), que generalmente implica un pequeño salto o "pop" desde los pies de la base.',
+      descripcion: 'Una entrada dinámica a la postura de **pose:lb-16**, que generalmente implica un pequeño salto o "pop" desde los pies de la base.',
       category: 'Dinámicas y Transiciones',
     },
      {
@@ -520,13 +520,13 @@ export const allConceptsData: Concept[] = [
     {
       id: '23',
       titulo: 'H2H (Hand-to-Hand)',
-      descripcion: 'Acrónimo de "Mano a Mano". Posturas avanzadas donde las manos de la base sostienen las manos del volador en equilibrio.',
+      descripcion: 'Acrónimo de "Mano a Mano". Posturas avanzadas donde las manos de la base sostienen las manos del volador en equilibrio, como en **pose:lb-h2h**.',
       category: 'Roles y Estilos de Práctica',
     },
     {
       id: '24',
       titulo: 'F2H (Foot-to-Hand)',
-      descripcion: 'Acrónimo de "Pie a Mano". Posturas donde los pies del volador se equilibran sobre las manos de la base.',
+      descripcion: 'Acrónimo de "Pie a Mano". Posturas donde los pies del volador se equilibran sobre las manos de la base, como en **pose:lb-14**.',
       category: 'Roles y Estilos de Práctica',
     },
     {

@@ -11,11 +11,11 @@ export const transitionPoses: Pose[] = [
     url_video: 'https://www.youtube.com/watch?v=ItPTGnBL2tI',
     descripcion: 'Una transición fundamental para pasar de una postura de equilibrio a una sentada.',
     narrativa_detallada: `
-**Inicio:** Comienza en Plancha Frontal estable.
+**Inicio:** Comienza en **pose:lb-1** estable.
 **Desarrollo:**
 * **Base:** Dobla las rodillas para bajar al volador. Mientras baja, el volador se recoge (**Tuck**) y la base mueve sus pies desde las caderas del volador a sus glúteos.
 * **Volador:** Al sentir el descenso, recoge las piernas hacia el pecho y prepárate para sentarte.
-**Culminación:** La base estabiliza al volador en Trono.`,
+**Culminación:** La base estabiliza al volador en **pose:lb-2**.`,
     musculos: {
       base: ['Control de piernas', 'Core'],
       volador: ['Core', 'Conciencia corporal'],
@@ -35,11 +35,11 @@ export const transitionPoses: Pose[] = [
     url_video: 'https://www.youtube.com/watch?v=08wQevc9ux4',
     descripcion: 'Transición desde una apertura de pecho a una postura sentada.',
     narrativa_detallada: `
-**Inicio:** Comienza en Pájaro Inverso Acrobático.
+**Inicio:** Comienza en **pose:lb-back-bird-acro**.
 **Desarrollo:**
 * **Base:** Dobla las rodillas y guía al volador hacia abajo. El volador se desliza por las piernas de la base.
 * **Volador:** Usa el core para sentarte, mientras la base reposiciona los pies bajo tus glúteos.
-**Culminación:** La base estabiliza al volador en Trono.`,
+**Culminación:** La base estabiliza al volador en **pose:lb-2**.`,
     musculos: {
       base: ['Control de piernas', 'Fuerza de brazos'],
       volador: ['Core', 'Flexibilidad'],
@@ -59,11 +59,11 @@ export const transitionPoses: Pose[] = [
     url_video: 'https://www.youtube.com/watch?v=ItPTGnBL2tI',
     descripcion: 'La transición inversa, pasando de una postura sentada a una de equilibrio.',
     narrativa_detallada: `
-**Inicio:** Comienza en Trono.
+**Inicio:** Comienza en **pose:lb-2**.
 **Desarrollo:**
 * **Base:** Extiende las piernas para elevar al volador. Mueve los pies desde los glúteos del volador a sus caderas.
-* **Volador:** Inclínate hacia adelante, coloca tus manos en las de la base y extiende tu cuerpo a una línea de Plancha Frontal.
-**Culminación:** Estabilización en Plancha Frontal.`,
+* **Volador:** Inclínate hacia adelante, coloca tus manos en las de la base y extiende tu cuerpo a una línea de **pose:lb-1**.
+**Culminación:** Estabilización en **pose:lb-1**.`,
     musculos: {
       base: ['Fuerza y control de piernas', 'Core'],
       volador: ['Core', 'Glúteos', 'Espalda'],
@@ -83,11 +83,11 @@ export const transitionPoses: Pose[] = [
     url_video: 'https://www.youtube.com/watch?v=08wQevc9ux4',
     descripcion: 'Transición de una postura sentada a una apertura de pecho.',
     narrativa_detallada: `
-**Inicio:** Comienza en Trono.
+**Inicio:** Comienza en **pose:lb-2**.
 **Desarrollo:**
 * **Base:** Guía al volador para que se incline hacia atrás. Mueve los pies desde los glúteos a la espalda alta del volador.
 * **Volador:** Arquea la espalda y relájate en la postura, manteniendo el core ligeramente activo para la estabilidad.
-**Culminación:** Estabilización en Pájaro Inverso.`,
+**Culminación:** Estabilización en **pose:lb-back-bird-acro**.`,
     musculos: {
       base: ['Control de piernas', 'Core'],
       volador: ['Flexibilidad de espalda', 'Confianza'],
@@ -106,11 +106,11 @@ export const transitionPoses: Pose[] = [
     prerequisites: ['lb-side-bird', 'lb-1'],
     descripcion: 'Una rotación controlada desde un equilibrio lateral a uno frontal.',
     narrativa_detallada: `
-**Inicio:** Comienza en Pájaro Lateral estable.
+**Inicio:** Comienza en **pose:lb-side-bird** estable.
 **Desarrollo:**
 * **Base:** Inicia una rotación suave con tus piernas, girando al volador para que quede boca abajo. Reposiciona tus pies en sus caderas.
 * **Volador:** Mantén el cuerpo como una unidad sólida y sigue la rotación guiada por la base.
-**Culminación:** Estabilización en Plancha Frontal.`,
+**Culminación:** Estabilización en **pose:lb-1**.`,
     musculos: {
       base: ['Oblicuos', 'Control de rotación de piernas'],
       volador: ['Oblicuos', 'Core'],
@@ -129,11 +129,11 @@ export const transitionPoses: Pose[] = [
     prerequisites: ['lb-21', 'lb-2'],
     descripcion: 'Transición desde una inversión sobre la cabeza a una postura sentada.',
     narrativa_detallada: `
-**Inicio:** Comienza en la inversión de Trípode.
+**Inicio:** Comienza en la inversión de **pose:lb-21**.
 **Desarrollo:**
 * **Volador:** Baja las piernas lentamente y recoge las rodillas hacia el pecho.
-* **Base:** Al mismo tiempo, flexiona las rodillas y mueve los pies desde la cabeza del volador a sus glúteos para recibirlo en Trono.
-**Culminación:** Estabilización en Trono.`,
+* **Base:** Al mismo tiempo, flexiona las rodillas y mueve los pies desde la cabeza del volador a sus glúteos para recibirlo en **pose:lb-2**.
+**Culminación:** Estabilización en **pose:lb-2**.`,
     musculos: {
       base: ['Control de piernas', 'Core'],
       volador: ['Hombros', 'Core', 'Control en el descenso'],

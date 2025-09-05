@@ -105,6 +105,8 @@ export default function FlowBuilder({
             item={selectedItem} 
             onUpdateNotes={updateNotes} 
             nameDisplay={nameDisplay}
+            allPoses={allPoses}
+            allConcepts={allConcepts}
           />
         </div>
       </div>

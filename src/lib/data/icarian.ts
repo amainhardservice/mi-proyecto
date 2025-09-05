@@ -1,3 +1,4 @@
+
 import type { Pose } from '@/types';
 
 export const icarianPoses: Pose[] = [
@@ -14,7 +15,7 @@ export const icarianPoses: Pose[] = [
 **¡Bienvenido a Icarian! Aquí la base usa solo los pies.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en una postura de **Trono (Throne)** muy baja, con las rodillas de la base bien flexionadas cerca de su pecho. No hay agarre de manos.
+1.  **Base y Volador:** Comiencen en una postura de **pose:lb-2** muy baja, con las rodillas de la base bien flexionadas cerca de su pecho. No hay agarre de manos.
 2.  **Volador:** Mantén una posición de **Tuck (Recogido/Agrupado)** muy compacta, con las manos en las espinillas o rodillas.
 3.  **Comunicación:** La base dice "listo" y el volador responde "listo". Luego la base cuenta "1, 2, 3...".
 
@@ -48,16 +49,16 @@ export const icarianPoses: Pose[] = [
 **Este ejercicio introduce el cambio de forma en el aire.**
 
 **Inicio:**
-1.  **Base y Volador:** Igual que en **Pop: Trono a Trono**. Comiencen en un Trono bajo y compacto.
+1.  **Base y Volador:** Igual que en **pose:ic-27**. Comiencen en un **pose:lb-2** bajo y compacto.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y la Transición):**
-*   **Base:** El lanzamiento es idéntico al de **Pop: Trono a Trono**. La diferencia está en la recepción. Debes prepararte para recibir al volador en la posición de **Pájaro Frontal (Front Bird)**, moviendo tus pies desde debajo de sus glúteos a sus caderas.
+*   **Base:** El lanzamiento es idéntico al de **pose:ic-27**. La diferencia está en la recepción. Debes prepararte para recibir al volador en la posición de **pose:lb-front-bird**, moviendo tus pies desde debajo de sus glúteos a sus caderas.
 *   **Volador:** En el punto más alto del lanzamiento, cuando sientas la ingravidez, abre rápidamente tu cuerpo desde la posición de **Tuck (Recogido/Agrupado)** a una línea de **Layout / Straight (Recto/Plancha)**. Extiende los brazos y las piernas para crear la forma de **Pájaro Frontal**.
-*   **Recepción:** La base recibe los huesos de la cadera del volador en las plantas de sus pies, extendiendo las piernas a 90 grados para estabilizar la postura de **Pájaro Frontal**.
+*   **Recepción:** La base recibe los huesos de la cadera del volador en las plantas de sus pies, extendiendo las piernas a 90 grados para estabilizar la postura de **pose:lb-front-bird**.
 
 **Culminación:**
-*   Once estable en **Pájaro Frontal**, se puede desmontar como un Pájaro Frontal normal, o la base puede flexionar las rodillas para recibir al volador de nuevo en **Trono** para la siguiente repetición.
+*   Once estable en **pose:lb-front-bird**, se puede desmontar como un Pájaro Frontal normal, o la base puede flexionar las rodillas para recibir al volador de nuevo en **pose:lb-2** para la siguiente repetición.
 `,
     musculos: {
       base: ['Igual que Trono a Trono, más precisión en la recepción.'],
@@ -81,16 +82,16 @@ export const icarianPoses: Pose[] = [
 **Este ejercicio refina el cambio de forma en el aire.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en una postura de **Pájaro Frontal (Front Bird)** baja y estable.
+1.  **Base y Volador:** Comiencen en una postura de **pose:lb-front-bird** baja y estable.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y la Transición):**
-*   **Base:** Lanza verticalmente. Debes prepararte para recibir al volador en **Trono a Horcajadas (Straddle Throne)**, moviendo los pies desde sus caderas hasta la parte interna de sus muslos.
+*   **Base:** Lanza verticalmente. Debes prepararte para recibir al volador en **pose:lb-7**, moviendo los pies desde sus caderas hasta la parte interna de sus muslos.
 *   **Volador:** En el punto más alto, pasa de una línea recta a una posición sentada con las piernas abiertas (**Straddle**). Mantén el torso erguido.
-*   **Recepción:** La base recibe al volador en sus pies, estabilizando la postura de **Trono a Horcajadas**.
+*   **Recepción:** La base recibe al volador en sus pies, estabilizando la postura de **pose:lb-7**.
 
 **Culminación:**
-*   Desde **Trono a Horcajadas**, se puede volver a Pájaro Frontal o desmontar.
+*   Desde **pose:lb-7**, se puede volver a **pose:lb-front-bird** o desmontar.
 `,
     musculos: {
       base: ['Precisión en la recepción.'],
@@ -116,16 +117,16 @@ export const icarianPoses: Pose[] = [
 **Este es el primer pop con rotación de 180 grados.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en **Pájaro Frontal (Front Bird)** bajo y estable.
+1.  **Base y Volador:** Comiencen en **pose:lb-front-bird** bajo y estable.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y el Giro):**
-*   **Base:** El lanzamiento es similar a otros pops, pero aquí el 'timing' es aún más crítico. Debes anticipar la rotación del volador y preparar tus pies para recibirlo en la posición de **Pájaro Invertido (Reverse Bird)** (en su abdomen bajo/caderas).
+*   **Base:** El lanzamiento es similar a otros pops, pero aquí el 'timing' es aún más crítico. Debes anticipar la rotación del volador y preparar tus pies para recibirlo en la posición de **pose:lb-back-bird-acro** (en su abdomen bajo/caderas).
 *   **Volador:** En el punto más alto del lanzamiento, mantén tu cuerpo en **Layout / Straight (Recto/Plancha)** y simultáneamente inicia un giro de 180 grados. Este giro se genera desde el **Core** y los hombros.
 *   **Recepción:** La base recibe al volador, ahora de cara a sus pies, absorbiendo el impacto y estabilizando la postura.
 
 **Culminación:**
-*   Desde **Pájaro Invertido**, se puede transicionar a otros pops o desmontar.
+*   Desde **pose:lb-back-bird-acro**, se puede transicionar a otros pops o desmontar.
 `,
     musculos: {
       base: ['Precisión y timing para la recepción en un nuevo punto.'],
@@ -149,13 +150,13 @@ export const icarianPoses: Pose[] = [
 **Este pop es crucial para desarrollar el control del eje vertical.**
 
 **Inicio (Trono a Parada de Hombros):**
-1. Comiencen en **Trono (Throne)** bajo y compacto.
+1. Comiencen en **pose:lb-2** bajo y compacto.
 2. **Base:** Lanza al volador verticalmente. Debes mover tus pies rápidamente para recibir los hombros del volador.
 3. **Volador:** En el aire, pasa de **Tuck (Recogido/Agrupado)** a una línea vertical (**Tuck** o **Pike**), preparándote para aterrizar sobre tus hombros.
 
 **Regreso (Parada de Hombros a Trono):**
-1. Desde **Parada de Hombros**, la base lanza verticalmente.
-2. **Volador:** Recoge las rodillas al pecho (**Tuck**) para volver a la posición de **Trono**.
+1. Desde **pose:lb-shoulderstand**, la base lanza verticalmente.
+2. **Volador:** Recoge las rodillas al pecho (**Tuck**) para volver a la posición de **pose:lb-2**.
 3. **Base:** Mueve los pies desde los hombros del volador a sus glúteos para la recepción.
 `,
     musculos: {
@@ -180,13 +181,13 @@ export const icarianPoses: Pose[] = [
 **Este es uno de los primeros 'flips' que se aprenden en Icarian.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en una posición de **Pájaro Invertido (Reverse Bird)** baja y estable.
+1.  **Base y Volador:** Comiencen en una posición de **pose:lb-back-bird-acro** baja y estable.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y el Flip):**
-*   **Base:** El lanzamiento debe tener una ligera trayectoria hacia ti para facilitar la rotación hacia atrás del volador. Después de lanzar, prepara tus pies para recibirlo en **Trono (Throne)**.
+*   **Base:** El lanzamiento debe tener una ligera trayectoria hacia ti para facilitar la rotación hacia atrás del volador. Después de lanzar, prepara tus pies para recibirlo en **pose:lb-2**.
 *   **Volador:** En el lanzamiento, recoge tus rodillas hacia el pecho (**Tuck (Recogido/Agrupado)**) muy rápidamente. Esta acción de 'tuck' es lo que genera la rotación hacia atrás. Mantén la mirada en la base el mayor tiempo posible.
-*   **Recepción:** La base recibe al volador en sus pies en la posición de **Trono**, absorbiendo el impacto con las piernas.
+*   **Recepción:** La base recibe al volador en sus pies en la posición de **pose:lb-2**, absorbiendo el impacto con las piernas.
 
 **Culminación:**
 *   Después de una o varias repeticiones exitosas, el volador se inclina hacia adelante y la base lo guía para que aterrice de pie en el suelo.
@@ -213,13 +214,13 @@ export const icarianPoses: Pose[] = [
 **Este es el reverso del Backflip y a menudo se considera más desafiante.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en un **Trono** bajo y compacto.
+1.  **Base y Volador:** Comiencen en un **pose:lb-2** bajo y compacto.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y el Flip):**
-*   **Base:** El lanzamiento debe tener una trayectoria ligeramente alejada de ti para dar espacio a la voltereta hacia adelante. La recepción será de nuevo en **Trono (Throne)**.
+*   **Base:** El lanzamiento debe tener una trayectoria ligeramente alejada de ti para dar espacio a la voltereta hacia adelante. La recepción será de nuevo en **pose:lb-2**.
 *   **Volador:** En el momento del lanzamiento, el volador se abre ligeramente y luego se recoge de nuevo en un **Tuck (Recogido/Agrupado)**, pero esta vez iniciando la rotación hacia adelante. Es un movimiento de "látigo" con el cuerpo.
-*   **Recepción:** La base recibe al volador en **Trono**, con cuidado de no recibir los pies del volador en su cara.
+*   **Recepción:** La base recibe al volador en **pose:lb-2**, con cuidado de no recibir los pies del volador en su cara.
 
 **Culminación:**
 *   Este es un truco cumbre. Después de un aterrizaje exitoso, la celebración es obligatoria.
@@ -247,16 +248,16 @@ export const icarianPoses: Pose[] = [
 
 **Inicio:**
 1.  **Base:** Acuéstate y prepara tus pies como una plataforma.
-2.  **Volador:** Entra en la postura de **Trípode (Tripod)**, con tu cabeza en los pies de la base y las manos en el suelo.
+2.  **Volador:** Entra en la postura de **pose:lb-21**, con tu cabeza en los pies de la base y las manos en el suelo.
 3.  **Base:** Con un movimiento controlado, levanta al volador en esta posición de trípode invertido.
 
 **Desarrollo (El Pop):**
 *   **Base:** Desde la posición de trípode, realiza un lanzamiento controlado. El movimiento es complejo porque el peso está distribuido de manera diferente.
 *   **Volador:** En el lanzamiento, empuja con tus brazos y recoge tus piernas (**Tuck (Recogido/Agrupado)**) para transicionar a una posición sentada en el aire.
-*   **Recepción:** La base mueve rápidamente sus pies desde la cabeza del volador hasta debajo de sus glúteos para recibirlo en la postura de **Trono (Throne)**.
+*   **Recepción:** La base mueve rápidamente sus pies desde la cabeza del volador hasta debajo de sus glúteos para recibirlo en la postura de **pose:lb-2**.
 
 **Culminación:**
-*   Esta es una transición avanzada que demuestra un gran control. Se suele desmontar desde **Trono**.
+*   Esta es una transición avanzada que demuestra un gran control. Se suele desmontar desde **pose:lb-2**.
 `,
     musculos: {
       base: ['Fuerza y estabilidad para soportar el trípode.', 'Un pop muy técnico y preciso.'],
@@ -280,16 +281,16 @@ export const icarianPoses: Pose[] = [
 **Esta lavadora icariana combina una voltereta con un pop de rotación.**
 
 **Secuencia:**
-1.  **Inicio:** Comiencen en **Pájaro Invertido**.
-2.  **Flip:** La base lanza al volador a una **Voltereta: Hacia Atrás a Trono**.
-3.  **Recepción y Pop:** La base recibe en **Trono** e inmediatamente, sin pausa, lanza al volador a un **Pop: Pájaro a Pájaro Invertido**.
-4.  **Recepción:** La base recibe al volador de nuevo en **Pájaro Invertido**, completando el ciclo.
+1.  **Inicio:** Comiencen en **pose:lb-back-bird-acro**.
+2.  **Flip:** La base lanza al volador a una **pose:ic-32**.
+3.  **Recepción y Pop:** La base recibe en **pose:lb-2** e inmediatamente, sin pausa, lanza al volador a un **pose:ic-31**.
+4.  **Recepción:** La base recibe al volador de nuevo en **pose:lb-back-bird-acro**, completando el ciclo.
 
 **Desarrollo:**
 *   Esta secuencia requiere una resistencia y un control del tempo excepcionales. La fluidez es clave.
 
 **Culminación:**
-*   Se detiene en una de las posturas estables (Trono o Pájaro Invertido) y se desmonta.
+*   Se detiene en una de las posturas estables (**pose:lb-2** o **pose:lb-back-bird-acro**) y se desmonta.
 `,
     musculos: {
       base: ["Resistencia, ritmo, precisión."],
@@ -313,9 +314,9 @@ export const icarianPoses: Pose[] = [
 **Esta es una "lavadora" de Icarian, enlazando dos pops avanzados.**
 
 **Secuencia:**
-1.  **Inicio:** Comiencen en **Pájaro Frontal (Front Bird)**.
-2.  **Pop 1 (Pájaro a Straddle):** La base lanza al volador. En el aire, el volador abre las piernas a **Straddle**. La base lo recibe en **Trono a Horcajadas (Straddle Throne)**.
-3.  **Pop 2 (Straddle a Pájaro):** Sin pausa, la base lanza de nuevo al volador desde **Trono a Horcajadas**. El volador junta las piernas y extiende el cuerpo a una línea recta. La base lo recibe de nuevo en **Pájaro Frontal (Front Bird)**.
+1.  **Inicio:** Comiencen en **pose:lb-front-bird**.
+2.  **Pop 1 (a Straddle Throne):** La base lanza al volador. En el aire, el volador abre las piernas a **Straddle**. La base lo recibe en **pose:lb-7**.
+3.  **Pop 2 (a Pájaro Frontal):** Sin pausa, la base lanza de nuevo al volador desde **pose:lb-7**. El volador junta las piernas y extiende el cuerpo a una línea recta. La base lo recibe de nuevo en **pose:lb-front-bird**.
 
 **Desarrollo:**
 *   La clave aquí es el **Tempo** y la fluidez. No hay pausas entre la recepción y el siguiente lanzamiento.
@@ -346,16 +347,16 @@ export const icarianPoses: Pose[] = [
 **Una secuencia dinámica que enseña el control de la rotación y el cambio de plano.**
 
 **Secuencia de ejemplo:**
-1.  **Inicio:** Comiencen en **Pájaro Invertido**.
-2.  **Pop 1 (a Side Star):** La base lanza al volador con una ligera rotación. El volador gira 90 grados para ser recibido en una **Estrella Lateral (Side Star)** sostenida solo por los pies de la base.
-3.  **Pop 2 (a Trono):** Desde la Estrella Lateral, la base lanza al volador, quien se recoge (**Tuck**) para ser recibido en **Trono**.
-4.  **Pop 3 (de vuelta a Pájaro Invertido):** Desde Trono, la base puede lanzar al volador a un **Pop: Pájaro a Pájaro Invertido** para reiniciar el ciclo.
+1.  **Inicio:** Comiencen en **pose:lb-back-bird-acro**.
+2.  **Pop 1 (a Side Star):** La base lanza al volador con una ligera rotación. El volador gira 90 grados para ser recibido en una **pose:lb-12** sostenida solo por los pies de la base.
+3.  **Pop 2 (a Trono):** Desde la Estrella Lateral, la base lanza al volador, quien se recoge (**Tuck**) para ser recibido en **pose:lb-2**.
+4.  **Pop 3 (de vuelta a Pájaro Invertido):** Desde Trono, la base puede lanzar al volador a un **pose:ic-31** para reiniciar el ciclo.
 
 **Desarrollo:**
 *   Esta lavadora es menos sobre altura y más sobre control rotacional y precisión en la recepción.
 
 **Culminación:**
-*   Se puede detener la secuencia en **Trono** para un desmontaje seguro.
+*   Se puede detener la secuencia en **pose:lb-2** para un desmontaje seguro.
 `,
     musculos: {
       base: ['Control de la rotación con los pies.', 'Timing preciso.'],

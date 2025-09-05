@@ -122,16 +122,18 @@ export default function PoseExplorer({
     switch (level) {
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
-        case 2.5: return "Transiciones";
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Intermedio";
         case 5: return "Nivel 5: Washing Machines";
         case 6: return "Nivel 6: Icarian Básico";
         case 7: return "Nivel 7: Icarian Intermedio";
-        case 8: return "Nivel 8: Standing Básico";
-        case 9: return "Nivel 9: Standing Intermedio";
-        case 10: return "Nivel 10: Standing Avanzado";
-        case 11: return "Posturas Terapéuticas";
+        case 8: return "Nivel 8: Whips Básicos";
+        case 9: return "Nivel 9: Whips Intermedios";
+        case 10: return "Nivel 10: Whips Avanzados";
+        case 11: return "Nivel 11: Standing Básico";
+        case 12: return "Nivel 12: Standing Intermedio";
+        case 13: return "Nivel 13: Standing Avanzado";
+        case 14: return "Posturas Terapéuticas";
         default: return `Nivel ${level}`;
     }
   }
@@ -287,6 +289,7 @@ export default function PoseExplorer({
         open={!!selectedPoseForDialog}
         onOpenChange={(open) => !open && setSelectedPoseForDialog(null)}
         concepts={concepts}
+        nameDisplay={nameDisplay}
       />
     </Card>
   );

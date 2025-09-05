@@ -4,6 +4,7 @@
 import jsPDF from 'jspdf';
 import type { Pose, SequenceItem } from '@/types';
 import { toast } from '@/hooks/use-toast';
+import { allPosesData, allConceptsData } from '@/lib/firestore-client';
 
 type NameDisplay = 'es' | 'en' | 'both';
 
@@ -14,7 +15,7 @@ const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
     switch (displayMode) {
       case 'en': return enName.replace(/[()]/g, '') || esName;
       case 'es': return esName;
-      default: return pose.nombre;
+      default: return pose.nombre.replace('\n', ' / ');
     }
 };
 
@@ -22,16 +23,18 @@ const getAcroLevelTitle = (level: number) => {
     switch (level) {
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
-        case 2.5: return "Transiciones";
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Intermedio";
         case 5: return "Nivel 5: Washing Machines";
         case 6: return "Nivel 6: Icarian Básico";
         case 7: return "Nivel 7: Icarian Intermedio";
-        case 8: return "Nivel 8: Standing Básico";
-        case 9: return "Nivel 9: Standing Intermedio";
-        case 10: return "Nivel 10: Standing Avanzado";
-        case 11: return "Posturas Terapéuticas";
+        case 8: return "Nivel 8: Whips Básicos";
+        case 9: return "Nivel 9: Whips Intermedios";
+        case 10: return "Nivel 10: Whips Avanzados";
+        case 11: return "Nivel 11: Standing Básico";
+        case 12: return "Nivel 12: Standing Intermedio";
+        case 13: return "Nivel 13: Standing Avanzado";
+        case 14: return "Posturas Terapéuticas";
         default: return `Nivel ${level}`;
     }
 };
@@ -72,15 +75,28 @@ const addImageToPdf = async (doc: jsPDF, url: string, x: number, y: number, widt
     }
 }
 
+const allPosesById = allPosesData.reduce((acc, p) => {
+    acc[p.id] = p;
+    return acc;
+}, {} as Record<string, Pose>);
 
-export async function exportPoseToPdf(pose: Pose) {
+const processTextForPdf = (text: string, nameDisplay: NameDisplay): string => {
+    if (!text) return '';
+    return text.replace(/\*\*(pose:([a-zA-Z0-9-]+))\*\*/g, (match, p1, poseId) => {
+        const pose = allPosesById[poseId];
+        return pose ? getDisplayName(pose, nameDisplay) : poseId;
+    }).replace(/\*\*/g, ''); // Remove any remaining asterisks
+};
+
+
+export async function exportPoseToPdf(pose: Pose, nameDisplay: NameDisplay) {
     const doc = new jsPDF({
         orientation: 'p',
         unit: 'pt',
         format: 'a4'
     });
 
-    await exportPoseToPdfPage(doc, pose, 40);
+    await exportPoseToPdfPage(doc, pose, 40, nameDisplay);
 
     const safeFilename = pose.nombre.split('\n')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase();
     doc.save(`${safeFilename}_guide.pdf`);
@@ -95,7 +111,7 @@ export async function exportRouteToPdf(poses: Pose[], title: string, nameDisplay
 
     for (const pose of poses) {
         doc.addPage();
-        await exportPoseToPdfPage(doc, pose, 40);
+        await exportPoseToPdfPage(doc, pose, 40, nameDisplay);
     }
     
     const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
@@ -103,7 +119,7 @@ export async function exportRouteToPdf(poses: Pose[], title: string, nameDisplay
 }
 
 
-async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number) {
+async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nameDisplay: NameDisplay) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 40;
     const maxLineWidth = pageWidth - margin * 2;
@@ -112,14 +128,16 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number) {
     // Title
     doc.setFontSize(24);
     doc.setFont('helvetica', 'bold');
-    const titleLines = doc.splitTextToSize(pose.nombre.split('\n').join(' / '), maxLineWidth);
+    const titleText = getDisplayName(pose, nameDisplay === 'both' ? 'es' : nameDisplay) + (nameDisplay === 'both' ? ` / ${getDisplayName(pose, 'en')}` : '');
+    const titleLines = doc.splitTextToSize(titleText, maxLineWidth);
     doc.text(titleLines, margin, y);
     y += (titleLines.length * 24);
 
     // Level Badge
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Nivel ${pose.nivel}`, pageWidth - margin, y - (titleLines.length * 24), { align: 'right' });
+    const levelTitle = pose.type === 'Therapeutic' ? 'Vuelo Terapéutico' : getAcroLevelTitle(pose.nivel);
+    doc.text(levelTitle, pageWidth - margin, y - (titleLines.length * 24), { align: 'right' });
     y += 20;
 
     // Image
@@ -145,11 +163,14 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number) {
     y += 20;
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    const descriptionLines = doc.splitTextToSize(pose.descripcion, maxLineWidth);
+    const processedDescription = processTextForPdf(pose.descripcion, nameDisplay);
+    const descriptionLines = doc.splitTextToSize(processedDescription, maxLineWidth);
     doc.text(descriptionLines, margin, y);
     y += (descriptionLines.length * 10) + 10;
+    
     if (pose.narrativa_detallada) {
-        const narrativeLines = doc.splitTextToSize(pose.narrativa_detallada.replace(/\*\*/g, ''), maxLineWidth);
+        const processedNarrative = processTextForPdf(pose.narrativa_detallada, nameDisplay);
+        const narrativeLines = doc.splitTextToSize(processedNarrative, maxLineWidth);
         doc.text(narrativeLines, margin, y);
         y += (narrativeLines.length * 10) + 20;
     }
@@ -161,7 +182,7 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number) {
         }
     };
 
-    const isAcroPose = pose.type !== 'Thai-Massage';
+    const isAcroPose = pose.type !== 'Thai-Massage' && pose.type !== 'Therapeutic';
     if (isAcroPose) {
         // Muscles
         if (pose.musculos) {
@@ -217,9 +238,10 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number) {
                     y += 12;
                     doc.setFont('helvetica', 'normal');
                     items.forEach(item => {
-                        checkPageEnd();
-                        doc.text(`• ${item}`, margin + 10, y);
-                        y += 12;
+                        const itemLines = doc.splitTextToSize(`• ${item}`, maxLineWidth - 10);
+                        checkPageEnd(itemLines.length * 12);
+                        doc.text(itemLines, margin + 10, y);
+                        y += (itemLines.length * 12);
                     });
                 }
             });

@@ -7,9 +7,10 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import type { SequenceItem } from '@/types';
+import type { SequenceItem, Pose, Concept } from '@/types';
 import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare } from 'lucide-react';
 import { getYouTubeEmbedUrl } from '@/lib/utils';
+import DetailedDescription from './DetailedDescription';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
@@ -18,6 +19,8 @@ interface FlowBuilderDetailProps {
     item: SequenceItem | null;
     onUpdateNotes: (uniqueId: string, notes: string) => void;
     nameDisplay: NameDisplay;
+    allPoses: Pose[];
+    allConcepts: Concept[];
 }
 
 const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
@@ -45,7 +48,7 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
 };
 
 
-export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: FlowBuilderDetailProps) {
+export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, allPoses, allConcepts }: FlowBuilderDetailProps) {
   
   if (!item) {
     return (
@@ -75,8 +78,11 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
   }
 
   const renderContent = () => {
+    const videoUrl = ('url_video' in item && item.url_video) ? getYouTubeEmbedUrl(item.url_video) : null;
+
     switch(item.itemType) {
       case 'pose':
+        const pose = item as import('@/types').Pose;
         return (
           <>
             <div className="flex justify-between items-start">
@@ -84,48 +90,69 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
                   <CardTitle className="text-2xl font-bold text-primary mb-1">{titleParts[0]}</CardTitle>
                   {titleParts.length > 1 && <p className="text-sm text-muted-foreground">{titleParts[1]}</p>}
                 </div>
-                <Badge variant="secondary">Nivel {item.nivel}</Badge>
+                <Badge variant="secondary">Nivel {pose.nivel}</Badge>
             </div>
-            {item.url_imagen && (
+            {pose.url_imagen && (
               <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
-                <Image src={item.url_imagen} alt={titleParts.join(' ')} fill className="object-cover" />
+                <Image src={pose.url_imagen} alt={titleParts.join(' ')} fill className="object-cover" />
               </div>
             )}
-            <p className="text-muted-foreground italic mb-4">{item.descripcion}</p>
-            {item.narrativa_detallada && <p className="whitespace-pre-wrap">{item.narrativa_detallada.replace(/\*\*/g, '')}</p>}
-             {item.musculos && (
+            <p className="text-muted-foreground italic mb-4">{pose.descripcion}</p>
+            {pose.narrativa_detallada && (
+              <DetailedDescription 
+                content={pose.narrativa_detallada} 
+                concepts={allConcepts} 
+                poses={allPoses} 
+                nameDisplay={nameDisplay} 
+              />
+            )}
+            
+            {videoUrl && (
+              <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
+                <iframe
+                    src={videoUrl}
+                    title={`Video de ${titleParts[0]}`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                ></iframe>
+              </div>
+            )}
+
+            {pose.musculos && (
                 <div className="mt-4">
                     <h4 className="font-semibold text-lg text-primary mb-2">Músculos</h4>
-                    {item.musculos.base.length > 0 && <p><strong className="font-medium">Base:</strong> {item.musculos.base.join(', ')}</p>}
-                    {item.musculos.volador.length > 0 && <p><strong className="font-medium">Volador:</strong> {item.musculos.volador.join(', ')}</p>}
+                    {pose.musculos.base.length > 0 && <p><strong className="font-medium">Base:</strong> {pose.musculos.base.join(', ')}</p>}
+                    {pose.musculos.volador.length > 0 && <p><strong className="font-medium">Volador:</strong> {pose.musculos.volador.join(', ')}</p>}
                 </div>
             )}
-            {item.calibracion && (
+            {pose.calibracion && (
                 <div className="mt-4">
                     <h4 className="font-semibold text-lg text-primary mb-2">Calibración</h4>
-                    {item.calibracion.base.length > 0 && <p><strong className="font-medium">Base:</strong> {item.calibracion.base.join(' ')}</p>}
-                    {item.calibracion.volador.length > 0 && <p><strong className="font-medium">Volador:</strong> {item.calibracion.volador.join(' ')}</p>}
-                    {item.calibracion.observador.length > 0 && <p><strong className="font-medium">Observador:</strong> {item.calibracion.observador.join(' ')}</p>}
+                    {pose.calibracion.base.length > 0 && <p><strong className="font-medium">Base:</strong> {pose.calibracion.base.join(' ')}</p>}
+                    {pose.calibracion.volador.length > 0 && <p><strong className="font-medium">Volador:</strong> {pose.calibracion.volador.join(' ')}</p>}
+                    {pose.calibracion.observador.length > 0 && <p><strong className="font-medium">Observador:</strong> {pose.calibracion.observador.join(' ')}</p>}
                 </div>
             )}
           </>
         );
       case 'concept':
+        const concept = item as import('@/types').Concept;
         return (
             <>
                 <div className="flex justify-between items-start">
                     <CardTitle className="text-2xl font-bold text-primary mb-2">{titleParts[0]}</CardTitle>
                     <Badge variant="secondary" className="flex items-center gap-2">
-                        {getCategoryIcon(item.category)}
-                        <span>{item.category}</span>
+                        {getCategoryIcon(concept.category)}
+                        <span>{concept.category}</span>
                     </Badge>
                 </div>
-                <p className="whitespace-pre-wrap">{item.descripcion}</p>
+                <p className="whitespace-pre-wrap">{concept.descripcion}</p>
             </>
         )
       case 'asana':
         const asana = item as import('@/types').Asana & { notes: string };
-        const embedUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
+        const asanaVideoUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
         return (
             <>
                 <div className="flex flex-col">
@@ -133,10 +160,10 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay }: 
                   {titleParts.length > 1 && <p className="text-sm text-muted-foreground">{titleParts[1]}</p>}
                 </div>
                 <p className="whitespace-pre-wrap mt-4">{asana.descripcion}</p>
-                 {embedUrl && (
+                 {asanaVideoUrl && (
                   <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
                     <iframe
-                        src={embedUrl}
+                        src={asanaVideoUrl}
                         title={`Video de ${asana.nombre_es}`}
                         className="w-full h-full"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

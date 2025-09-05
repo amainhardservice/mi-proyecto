@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Pose, Concept } from '@/types';
+import type { Pose, Concept, PoseWithImage } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Video, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/tooltip"
 import Image from 'next/image';
 import DetailedDescription from './DetailedDescription';
+import { PoseDetailDialog } from './PoseDetailDialog';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
@@ -184,6 +185,7 @@ export function PoseNode({
   onAccordionChange
 }: PoseNodeProps) {
   const [activeView, setActiveView] = useState<ActiveView>('description');
+  const [selectedPrereq, setSelectedPrereq] = useState<PoseWithImage | null>(null);
   
   const allVideos = [pose.url_video, ...(pose.gallery_videos || [])].filter(Boolean) as string[];
   const allImages = [pose.url_imagen, ...(pose.gallery_images || [])].filter(Boolean) as string[];
@@ -224,6 +226,12 @@ export function PoseNode({
       onAccordionChange([...(accordionValue as string[]), pose.id]);
     }
   };
+  
+  const handlePrereqClick = (prereq: Pose, e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setSelectedPrereq(prereq as PoseWithImage);
+  }
 
 
   return (
@@ -325,7 +333,10 @@ export function PoseNode({
                         <li key={prereq.id}>
                            <Tooltip>
                             <TooltipTrigger asChild>
-                              <span className="text-primary/80 cursor-pointer hover:text-primary underline decoration-dotted">
+                              <span 
+                                className="text-primary/80 cursor-pointer hover:text-primary underline decoration-dotted"
+                                onClick={(e) => handlePrereqClick(prereq, e)}
+                              >
                                 {prereq.nombre.split('\n')[nameDisplay === 'es' ? 0 : 1] || prereq.nombre.split('\n')[0]}
                               </span>
                             </TooltipTrigger>
@@ -344,7 +355,7 @@ export function PoseNode({
               {pose.narrativa_detallada && (
                 <div>
                   <h4 className="font-semibold text-foreground mb-1">Narrativa Detallada</h4>
-                  <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
+                  <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} nameDisplay={nameDisplay} />
                 </div>
               )}
 
@@ -393,6 +404,13 @@ export function PoseNode({
             </div>
            )}
       </AccordionContent>
+      <PoseDetailDialog
+        pose={selectedPrereq}
+        allPoses={allPoses}
+        open={!!selectedPrereq}
+        onOpenChange={(open) => !open && setSelectedPrereq(null)}
+        concepts={concepts}
+      />
     </AccordionItem>
   );
 }

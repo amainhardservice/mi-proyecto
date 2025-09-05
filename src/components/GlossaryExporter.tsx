@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -26,7 +27,7 @@ const GlossaryExporter: React.FC<GlossaryExporterProps> = ({ title, content, isG
       });
 
       const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internalpageSize.getHeight();
+      const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 40;
       const maxLineWidth = pageWidth - margin * 2;
       let y = margin;
