@@ -1,16 +1,17 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import type { SequenceItem, Pose, Concept } from '@/types';
-import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare } from 'lucide-react';
-import { getYouTubeEmbedUrl } from '@/lib/utils';
+import type { SequenceItem, Pose, Concept, Exercise, PoseWithImage } from '@/types';
+import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare, HeartPulse } from 'lucide-react';
+import { getYouTubeEmbedUrl, cn } from '@/lib/utils';
 import DetailedDescription from './DetailedDescription';
+import { PoseDetailDialog } from './PoseDetailDialog';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
@@ -24,7 +25,7 @@ interface FlowBuilderDetailProps {
 }
 
 const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
-    if ('nombre' in item) { // It's a Pose
+    if (item.itemType === 'pose' || item.itemType === 'transition' || item.itemType === 'flow') {
         const parts = item.nombre.split('\n');
         const esName = parts[0];
         const enName = parts[1] || '';
@@ -35,7 +36,7 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
           default: return [item.nombre];
         }
     }
-    if ('nombre_sans' in item) { // It's an Asana
+    if (item.itemType === 'asana') { // It's an Asana
         const { nombre_sans, nombre_es } = item;
          switch (displayMode) {
           case 'en': return [nombre_sans];
@@ -44,11 +45,23 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
           default: return [nombre_sans];
         }
     }
+     if (item.itemType === 'exercise') { // It's an Exercise
+        const parts = item.titulo.split('\n');
+        const esName = parts[0];
+        const enName = parts[1] || '';
+        switch (displayMode) {
+          case 'en': return [enName.replace(/[()]/g, '') || esName];
+          case 'es': return [esName];
+          case 'both': return [esName, enName];
+          default: return [item.titulo];
+        }
+    }
     return [item.titulo]; // Concept or Modifier
 };
 
 
 export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, allPoses, allConcepts }: FlowBuilderDetailProps) {
+  const [selectedPose, setSelectedPose] = useState<PoseWithImage | null>(null);
   
   if (!item) {
     return (
@@ -77,17 +90,29 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
     }
   }
 
+  const handleTitleClick = () => {
+    if (item.itemType === 'pose') {
+        setSelectedPose(item as PoseWithImage);
+    }
+  }
+
   const renderContent = () => {
     const videoUrl = ('url_video' in item && item.url_video) ? getYouTubeEmbedUrl(item.url_video) : null;
 
     switch(item.itemType) {
       case 'pose':
+      case 'transition':
+      case 'flow':
         const pose = item as import('@/types').Pose;
         return (
           <>
             <div className="flex justify-between items-start">
                 <div className="flex flex-col">
-                  <CardTitle className="text-2xl font-bold text-primary mb-1">{titleParts[0]}</CardTitle>
+                   <button onClick={handleTitleClick} className="text-left">
+                     <CardTitle className="text-2xl font-bold text-primary mb-1 hover:underline underline-offset-4 decoration-dotted">
+                        {titleParts[0]}
+                     </CardTitle>
+                   </button>
                   {titleParts.length > 1 && <p className="text-sm text-muted-foreground">{titleParts[1]}</p>}
                 </div>
                 <Badge variant="secondary">Nivel {pose.nivel}</Badge>
@@ -147,7 +172,12 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                         <span>{concept.category}</span>
                     </Badge>
                 </div>
-                <p className="whitespace-pre-wrap">{concept.descripcion}</p>
+                 <DetailedDescription 
+                    content={concept.descripcion} 
+                    concepts={allConcepts} 
+                    poses={allPoses} 
+                    nameDisplay={nameDisplay} 
+                />
             </>
         )
       case 'asana':
@@ -177,7 +207,29 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
         return (
             <>
                 <CardTitle className="text-2xl font-bold text-primary mb-2">{titleParts[0]}</CardTitle>
-                <p className="whitespace-pre-wrap">{item.descripcion}</p>
+                 <DetailedDescription 
+                    content={item.descripcion} 
+                    concepts={allConcepts} 
+                    poses={allPoses} 
+                    nameDisplay={nameDisplay} 
+                />
+            </>
+        )
+       case 'exercise':
+        const exercise = item as Exercise;
+        return (
+            <>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <CardTitle className="text-2xl font-bold text-primary mb-1">{titleParts[0]}</CardTitle>
+                        {titleParts.length > 1 && <p className="text-sm text-muted-foreground">{titleParts[1]}</p>}
+                    </div>
+                    <Badge variant="secondary" className="flex items-center gap-2">
+                        <HeartPulse className="h-4 w-4" />
+                        <span>{exercise.enfasis}</span>
+                    </Badge>
+                </div>
+                <p className="whitespace-pre-wrap mt-4">{exercise.descripcion}</p>
             </>
         )
       default:
@@ -186,26 +238,36 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
   }
 
   return (
-    <Card className="w-full md:w-1/3 flex-col hidden md:flex">
-      <CardHeader>
-        <CardTitle>Detalles</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-grow overflow-hidden">
-        <ScrollArea className="h-full pr-4">
-          <div className="space-y-4">
-            {renderContent()}
-            <div className="mt-6">
-              <h4 className="font-semibold text-lg text-primary mb-2">Notas Personales</h4>
-              <Textarea 
-                placeholder="Añade tus propios consejos, recordatorios o puntos de enfoque aquí..."
-                value={item.notes}
-                onChange={(e) => onUpdateNotes(item.uniqueId, e.target.value)}
-                className="min-h-[100px]"
-              />
+    <>
+      <Card className="w-full md:w-1/3 flex-col hidden md:flex">
+        <CardHeader>
+          <CardTitle>Detalles</CardTitle>
+        </CardHeader>
+        <CardContent className="flex-grow overflow-hidden">
+          <ScrollArea className="h-full pr-4">
+            <div className="space-y-4">
+              {renderContent()}
+              <div className="mt-6">
+                <h4 className="font-semibold text-lg text-primary mb-2">Notas Personales</h4>
+                <Textarea 
+                  placeholder="Añade tus propios consejos, recordatorios o puntos de enfoque aquí..."
+                  value={item.notes}
+                  onChange={(e) => onUpdateNotes(item.uniqueId, e.target.value)}
+                  className="min-h-[100px]"
+                />
+              </div>
             </div>
-          </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+      <PoseDetailDialog
+        pose={selectedPose}
+        allPoses={allPoses}
+        open={!!selectedPose}
+        onOpenChange={(open) => !open && setSelectedPose(null)}
+        concepts={allConcepts}
+        nameDisplay={nameDisplay}
+      />
+    </>
   );
 }

@@ -1,15 +1,21 @@
 'use client';
 
-import type { PoseModifier } from '@/types';
+import type { PoseModifier, Pose, Concept } from '@/types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import GlossaryExporter from './GlossaryExporter';
+import DetailedDescription from './DetailedDescription';
+
+type NameDisplay = 'es' | 'en' | 'both';
 
 type PoseModifiersProps = {
   modifiers: PoseModifier[];
+  poses: Pose[];
+  concepts: Concept[];
+  nameDisplay: NameDisplay;
 };
 
-export default function PoseModifiers({ modifiers }: PoseModifiersProps) {
+export default function PoseModifiers({ modifiers, poses, concepts, nameDisplay }: PoseModifiersProps) {
   const contentToExport = () => {
     let content = 'Modificadores de Postura\n\n';
     modifiers.forEach(modifier => {
@@ -37,7 +43,12 @@ export default function PoseModifiers({ modifiers }: PoseModifiersProps) {
                   {modifier.titulo}
                 </AccordionTrigger>
                 <AccordionContent className="text-base text-muted-foreground whitespace-pre-wrap">
-                  {modifier.descripcion}
+                    <DetailedDescription
+                        content={modifier.descripcion}
+                        concepts={concepts}
+                        poses={poses}
+                        nameDisplay={nameDisplay}
+                    />
                 </AccordionContent>
               </AccordionItem>
             ))}

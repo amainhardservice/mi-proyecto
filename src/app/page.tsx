@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getPoses, getConcepts, getPoseModifiers, getAsanas } from '@/lib/firestore';
-import type { Pose, Concept, Asana, PoseModifier, SequenceItem } from '@/types';
+import { getPoses, getConcepts, getPoseModifiers, getAsanas, getExercises } from '@/lib/firestore';
+import type { Pose, Concept, Asana, PoseModifier, SequenceItem, Exercise } from '@/types';
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton, SidebarInset } from '@/components/ui/sidebar';
 import PoseExplorer from '@/components/PoseExplorer';
 import ConceptGlossary from '@/components/ConceptGlossary';
@@ -14,10 +15,16 @@ import AsanaGlossary from '@/components/AsanaGlossary';
 import GlossaryExporter from '@/components/GlossaryExporter';
 import { AcroYogaIcon } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Workflow } from 'lucide-react';
+import { Workflow, Video, BookOpen, Layers, HeartHandshake, BookCopy, Dumbbell } from 'lucide-react';
 import FlowBuilder from '@/components/FlowBuilder';
 import { exportSequenceToPdf } from '@/lib/pdf';
 import { toast } from '@/hooks/use-toast';
+import { allPosesData, allConceptsData, allAsanasData, allModifiersData, allExercisesData } from '@/lib/firestore-client';
+import AcroVideos from '@/components/AcroVideos';
+import GlobalSearch from '@/components/GlobalSearch';
+import { PoseDetailDialog } from '@/components/PoseDetailDialog';
+import ExerciseGlossary from '@/components/ExerciseGlossary';
+
 
 type View = 
   | { type: 'acro', levels: number[] }
@@ -26,11 +33,33 @@ type View =
   | { type: 'acro-glossary' }
   | { type: 'thai-glossary' }
   | { type: 'yoga-glossary' }
+  | { type: 'warmup-individual' }
+  | { type: 'warmup-partner' }
   | { type: 'what-is-acro' }
   | { type: 'what-is-thai' }
-  | { type: 'flow-builder' };
+  | { type: 'flow-builder' }
+  | { type: 'acro-videos' };
 
 type NameDisplay = 'es' | 'en' | 'both';
+
+const acroVideos = [
+  {
+    title: "50 ACROYOGA POPS. 😱 Pops for beginners and experts",
+    url: "https://www.youtube.com/watch?v=JmImpFX8srE"
+  },
+  {
+    title: "ACROYOGA - SIMPLE AND BEAUTIFUL FLOW FOR BEGINNERS",
+    url: "https://www.youtube.com/watch?v=sYM4GrsJcRo"
+  },
+  {
+    title: "72 acroyoga pops. Acroyoga pops collection. 🍄 Acroyoga pops for beginners and experts",
+    url: "https://www.youtube.com/watch?v=-LgvinTYuco"
+  },
+  {
+    title: "Acroyoga Washing Machine Tutorial - 'Back-to-Front'",
+    url: "https://www.youtube.com/watch?v=SZr5YMVHGpk&t=7s"
+  }
+];
 
 
 export default function Home() {
@@ -38,27 +67,37 @@ export default function Home() {
   const [concepts, setConcepts] = useState<Concept[]>([]);
   const [modifiers, setModifiers] = useState<PoseModifier[]>([]);
   const [asanas, setAsanas] = useState<Asana[]>([]);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState<View>({ type: 'acro', levels: [1, 2, 4, 5] });
+  const [activeView, setActiveView] = useState<View>({ type: 'acro', levels: [1, 2, 5, 7] });
+  const [featuredItem, setFeaturedItem] = useState<Pose | Concept | null>(null);
+  const [searchSelectedItem, setSearchSelectedItem] = useState<Pose | null>(null);
+  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
+
 
   // --- State for Flow Builder ---
   const [sequence, setSequence] = useState<SequenceItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
 
   useEffect(() => {
     async function fetchData() {
-      const [posesData, conceptsData, modifiersData, asanasData] = await Promise.all([
+      const [posesData, conceptsData, modifiersData, asanasData, exercisesData] = await Promise.all([
         getPoses(),
         getConcepts(),
         getPoseModifiers(),
         getAsanas(),
+        getExercises(),
       ]);
       setPoses(posesData);
       setConcepts(conceptsData);
       setModifiers(modifiersData);
       setAsanas(asanasData);
+      setExercises(exercisesData);
       setLoading(false);
+      
+      const allItems = [...posesData, ...conceptsData];
+      const randomIndex = Math.floor(Math.random() * allItems.length);
+      setFeaturedItem(allItems[randomIndex]);
     }
     fetchData();
   }, []);
@@ -84,18 +123,23 @@ export default function Home() {
     const allLevels = Array.from({ length: level }, (_, i) => i + 1);
     setActiveView({ type: 'thai', levels: allLevels });
   };
-
-  const handleTherapeuticClick = (level: number) => {
-    setActiveView({ type: 'therapeutic', level });
+  
+  const handleResetAcroView = () => {
+    setActiveView({ type: 'acro', levels: [1, 2, 5, 7] });
   };
+  
+  const handleResetThaiView = () => {
+    const allThaiLevels = Array.from(new Set(poses.filter(p => p.type === 'Thai-Massage').map(p => p.nivel))).sort((a,b) => a - b);
+    setActiveView({ type: 'thai', levels: allThaiLevels });
+  }
 
   // --- Handlers for Flow Builder ---
   const handleDrop = useCallback((item: { id: string; type: string }) => {
     let newItem: SequenceItem | null = null;
     const uniqueId = `${item.type}-${item.id}-${Date.now()}`;
     
-    if (item.type === 'pose') {
-      const pose = poses.find(p => p.id === item.id);
+    if (item.type === 'pose' || item.type === 'transition' || item.type === 'flow') {
+      const pose = allPosesData.find(p => p.id === item.id);
       if (pose) newItem = { ...pose, uniqueId, itemType: 'pose', notes: '' };
     } else if (item.type === 'concept') {
       const concept = concepts.find(c => c.id === item.id);
@@ -106,13 +150,16 @@ export default function Home() {
     } else if (item.type === 'modifier') {
         const modifier = modifiers.find(m => m.id === item.id);
         if (modifier) newItem = { ...modifier, uniqueId, itemType: 'modifier', notes: '' };
+    } else if (item.type === 'exercise') {
+        const exercise = exercises.find(e => e.id === item.id);
+        if (exercise) newItem = { ...exercise, uniqueId, itemType: 'exercise', notes: '' };
     }
     
     if (newItem) {
       setSequence(prev => [...prev, newItem!]);
       setSelectedItemId(uniqueId);
     }
-  }, [poses, concepts, asanas, modifiers]);
+  }, [poses, concepts, asanas, modifiers, exercises]);
 
   const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
     setSequence(prev => {
@@ -131,7 +178,7 @@ export default function Home() {
     setSequence(seq => seq.map(item => item.uniqueId === uniqueId ? { ...item, notes } : item));
   };
   
-  const handleExport = () => {
+  const handleExportPdf = () => {
     if (sequence.length === 0) {
       toast({ title: "Secuencia Vacía", description: "Añade al menos un elemento para exportar.", variant: "destructive" });
       return;
@@ -152,12 +199,165 @@ export default function Home() {
     }
     toast({ title: "Elemento Eliminado", description: "El elemento ha sido eliminado de la secuencia." });
   };
+  
+  const getEnglishName = (item: SequenceItem) => {
+    if (item.itemType === 'pose') {
+        return item.nombre.split('\n')[1]?.replace(/[()]/g, '') || item.nombre.split('\n')[0];
+    }
+    if (item.itemType === 'asana') {
+        return item.nombre_sans;
+    }
+    if (item.itemType === 'exercise') {
+        return item.titulo.split('\n')[1]?.replace(/[()]/g, '') || item.titulo.split('\n')[0];
+    }
+    return item.titulo;
+  };
+
+  const generateSequenceText = () => {
+    return sequence.map(item => {
+      const name = getEnglishName(item);
+      const note = item.notes ? ` :: ${item.notes.replace(/\n/g, ' ')}` : '';
+      return `${name}${note}`;
+    }).join('\n');
+  };
+
+  const handleExportToText = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "Añade al menos un elemento para exportar.", variant: "destructive" });
+      return;
+    }
+    const textContent = generateSequenceText();
+    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'acro_sequence.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({ title: "Exportación Exitosa", description: "La secuencia ha sido exportada como archivo de texto." });
+  };
+  
+  const handleCopyToClipboard = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "No hay nada que copiar.", variant: "destructive" });
+      return;
+    }
+    const textContent = generateSequenceText();
+    navigator.clipboard.writeText(textContent).then(() => {
+      toast({ title: "¡Copiado!", description: "La secuencia ha sido copiada al portapapeles." });
+    }, (err) => {
+      toast({ title: "Error al Copiar", description: "No se pudo copiar la secuencia.", variant: "destructive" });
+      console.error('Could not copy text: ', err);
+    });
+  };
+
+  const handleImportSequence = (text: string) => {
+    const lines = text.split('\n').filter(Boolean);
+    if (lines.length === 0) {
+        toast({ title: "Importación Vacía", description: "No se encontró contenido para importar.", variant: "destructive" });
+        return;
+    }
+
+    let itemsAddedCount = 0;
+    const newSequenceItems: SequenceItem[] = [];
+
+    lines.forEach(line => {
+        const parts = line.split(' :: ');
+        const name = parts[0].trim().toLowerCase();
+        const notes = parts.length > 1 ? parts.slice(1).join(' :: ').trim() : '';
+
+        let foundItem: any = null;
+        let itemType: SequenceItem['itemType'] | null = null;
+
+        // Search in poses
+        foundItem = allPosesData.find(item => {
+            const enName = (item.nombre.split('\n')[1]?.replace(/[()]/g, '') || item.nombre.split('\n')[0]).toLowerCase();
+            const esName = item.nombre.split('\n')[0].toLowerCase();
+            return enName === name || esName === name;
+        });
+        if (foundItem) itemType = 'pose';
+        
+        // Search in asanas
+        if (!foundItem) {
+            foundItem = allAsanasData.find(item => item.nombre_sans.toLowerCase() === name || item.nombre_es.toLowerCase() === name);
+            if (foundItem) itemType = 'asana';
+        }
+
+        // Search in concepts
+        if (!foundItem) {
+            foundItem = allConceptsData.find(item => item.titulo.toLowerCase() === name);
+            if (foundItem) itemType = 'concept';
+        }
+        
+        // Search in modifiers
+        if (!foundItem) {
+            foundItem = allModifiersData.find(item => item.titulo.toLowerCase() === name);
+            if (foundItem) itemType = 'modifier';
+        }
+        
+        // Search in exercises
+        if (!foundItem) {
+            foundItem = allExercisesData.find(item => {
+                const enName = (item.titulo.split('\n')[1]?.replace(/[()]/g, '') || item.titulo.split('\n')[0]).toLowerCase();
+                const esName = item.titulo.split('\n')[0].toLowerCase();
+                return enName === name || esName === name;
+            });
+            if (foundItem) itemType = 'exercise';
+        }
+
+        if (foundItem && itemType) {
+            itemsAddedCount++;
+            newSequenceItems.push({
+                ...foundItem,
+                uniqueId: `${itemType}-${foundItem.id}-${Date.now()}-${Math.random()}`,
+                itemType: itemType as SequenceItem['itemType'],
+                notes: notes
+            });
+        }
+    });
+
+    if (newSequenceItems.length > 0) {
+        setSequence(prev => [...prev, ...newSequenceItems]);
+    }
+    
+    toast({ 
+        title: "Importación Completa", 
+        description: `Se añadieron ${itemsAddedCount} de ${lines.length} elementos a la secuencia.` 
+    });
+};
+
+  const handleSearchResultSelect = (item: Pose | Concept | Asana | PoseModifier | Exercise) => {
+    if ('nivel' in item) { // It's a Pose
+      setActiveView({ type: 'acro', levels: [item.nivel] });
+      setSearchSelectedItem(item);
+    } else if ('nombre_sans' in item) { // It's an Asana
+      setActiveView({ type: 'yoga-glossary' });
+    } else if ('enfasis' in item) { // It's an Exercise
+      if (item.categoria === 'Individual') {
+        setActiveView({ type: 'warmup-individual' });
+      } else {
+        setActiveView({ type: 'warmup-partner' });
+      }
+    } else if ('titulo' in item && 'category' in item) { // It's a Concept
+      if (item.category === 'Masaje Tailandés') {
+        setActiveView({ type: 'thai-glossary' });
+      } else if (item.category === 'Yoga') {
+        setActiveView({ type: 'yoga-glossary' });
+      } else {
+        setActiveView({ type: 'acro-glossary' });
+      }
+    }
+  };
 
 
   // --- Data processing for Glossaries ---
   const acroConcepts = concepts.filter(c => c.category === 'Principios Fundamentales' || c.category === 'Dinámicas y Transiciones' || c.category === 'Roles y Estilos de Práctica' || c.category === 'Comunicación y Seguridad');
   const thaiConcepts = concepts.filter(c => c.category === 'Masaje Tailandés');
   const yogaConcepts = concepts.filter(c => c.category === 'Yoga');
+  const individualWarmups = exercises.filter(e => e.categoria === 'Individual');
+  const partnerWarmups = exercises.filter(e => e.categoria === 'En Pareja');
 
   const acroConceptsByCategory = acroConcepts.reduce((acc, concept) => {
     const { category } = concept;
@@ -274,31 +474,41 @@ export default function Home() {
 
     switch (activeView.type) {
       case 'what-is-acro':
-        return <WhatIsAcroYoga />;
+        return <WhatIsAcroYoga featuredItem={featuredItem} nameDisplay={nameDisplay} />;
       case 'what-is-thai':
         return <WhatIsThaiMassage />;
       case 'acro': {
         const selectedPoses = poses.filter(p => 
-          (p.type === 'L-Basing' || p.type === 'Icarian' || p.type === 'Standing' || p.type === 'Transition') &&
-          activeView.levels.includes(p.nivel)
+          activeView.levels.includes(p.nivel) && 
+          p.type !== 'Thai-Massage'
         );
-        return <PoseExplorer poses={selectedPoses} allPoses={poses} concepts={concepts} />;
+        return <PoseExplorer 
+                  poses={selectedPoses} 
+                  allPoses={poses} 
+                  concepts={concepts} 
+                  nameDisplay={nameDisplay} 
+                  setNameDisplay={setNameDisplay} 
+                />;
       }
       case 'thai':{
         const selectedPoses = poses.filter(p => p.type === 'Thai-Massage' && activeView.levels.includes(p.nivel));
-        return <PoseExplorer poses={selectedPoses} allPoses={poses} concepts={concepts} />;
+        return <PoseExplorer 
+                  poses={selectedPoses} 
+                  allPoses={poses} 
+                  concepts={concepts} 
+                  nameDisplay={nameDisplay} 
+                  setNameDisplay={setNameDisplay} 
+                />;
       }
-      case 'therapeutic':
-        return <PoseExplorer poses={poses.filter(p => p.type === 'Therapeutic' && p.nivel === activeView.level)} allPoses={poses} concepts={concepts} />;
       case 'acro-glossary':
         return (
           <div className="space-y-8">
             <div className="mb-4">
               <GlossaryExporter title="Glosario Completo de Acroyoga" content={getFullAcroGlossaryContent()} isGlobal={true} />
             </div>
-            <PoseModifiers modifiers={modifiers} />
+            <PoseModifiers modifiers={modifiers} poses={poses} concepts={concepts} nameDisplay={nameDisplay} />
             {acroCategoryOrder.map(category => (
-              acroConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={acroConceptsByCategory[category]} />
+              acroConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={acroConceptsByCategory[category]} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay} />
             ))}
           </div>
         );
@@ -309,7 +519,7 @@ export default function Home() {
               <GlossaryExporter title="Glosario Completo de Masaje Tailandés" content={getFullThaiGlossaryContent()} isGlobal={true} />
             </div>
             {thaiCategoryOrder.map(category => (
-              thaiConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={thaiConceptsByCategory[category]} />
+              thaiConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={thaiConceptsByCategory[category]} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay}/>
             ))}
           </div>
         );
@@ -320,11 +530,15 @@ export default function Home() {
               <GlossaryExporter title="Glosario Completo de Yoga" content={getFullYogaGlossaryContent()} isGlobal={true} />
             </div>
             {yogaCategoryOrder.map(category => (
-              yogaConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={yogaConceptsByCategory[category]} />
+              yogaConceptsByCategory[category] && <ConceptGlossary key={category} title={category} concepts={yogaConceptsByCategory[category]} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay}/>
             ))}
-            <AsanaGlossary asanas={asanas} />
+            <AsanaGlossary asanas={asanas} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay}/>
           </div>
         );
+       case 'warmup-individual':
+        return <ExerciseGlossary title="Ejercicios de Calentamiento Individual" exercises={individualWarmups} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay} />;
+      case 'warmup-partner':
+        return <ExerciseGlossary title="Ejercicios de Calentamiento en Pareja" exercises={partnerWarmups} allPoses={poses} allConcepts={concepts} nameDisplay={nameDisplay}/>;
       case 'flow-builder':
         return (
           <FlowBuilder
@@ -332,6 +546,7 @@ export default function Home() {
             allConcepts={concepts}
             allModifiers={modifiers}
             allAsanas={asanas}
+            allExercises={exercises}
             sequence={sequence}
             selectedItemId={selectedItemId}
             nameDisplay={nameDisplay}
@@ -340,59 +555,82 @@ export default function Home() {
             moveItem={moveItem}
             handleSelectItem={handleSelectItem}
             updateNotes={updateNotes}
-            handleExport={handleExport}
+            handleExportPdf={handleExportPdf}
+            handleExportToText={handleExportToText}
+            handleImportSequence={handleImportSequence}
+            handleCopyToClipboard={handleCopyToClipboard}
             handleClearSequence={handleClearSequence}
             handleDeleteItem={handleDeleteItem}
           />
         );
+       case 'acro-videos':
+        return <AcroVideos videos={acroVideos} />;
       default:
-        return <WhatIsAcroYoga />;
+        return <WhatIsAcroYoga featuredItem={featuredItem} nameDisplay={nameDisplay} />;
     }
   };
 
   const getAcroLevelTitle = (level: number) => {
     switch (level) {
+        case 0: return "Nivel 0: Vuelo Terapéutico";
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
         case 3: return "Nivel 3: Transiciones";
-        case 4: return "Nivel 4: Intermedio";
-        case 5: return "Nivel 5: Washing Machines";
-        case 6: return "Nivel 6: Icarian Básico";
-        case 7: return "Nivel 7: Icarian Intermedio";
-        case 8: return "Nivel 8: Whips Básicos";
-        case 9: return "Nivel 9: Whips Intermedios";
-        case 10: return "Nivel 10: Whips Avanzados";
-        case 11: return "Nivel 11: Standing Básico";
-        case 12: return "Nivel 12: Standing Intermedio";
-        case 13: return "Nivel 13: Standing Avanzado";
+        case 4: return "Nivel 4: Flow 1 – Básico";
+        case 5: return "Nivel 5: Intermedio";
+        case 6: return "Nivel 6: Flow 2 – Intermedio";
+        case 7: return "Nivel 7: Washing Machines";
+        case 8: return "Nivel 8: Flow 3 – Avanzado";
+        case 9: return "Nivel 9: Icarian Básico";
+        case 10: return "Nivel 10: Icarian Intermedio";
+        case 11: return "Nivel 11: Whips Básicos";
+        case 12: return "Nivel 12: Whips Intermedios";
+        case 13: return "Nivel 13: Whips Avanzados";
+        case 14: return "Nivel 14: Standing Básico";
+        case 15: return "Nivel 15: Standing Intermedio";
+        case 16: return "Nivel 16: Standing Avanzado";
         default: return `Nivel ${level}`;
     }
   }
   
-  const acroLevels = Array.from(new Set(poses.filter(p => p.type !== 'Thai-Massage' && p.type !== 'Therapeutic').map(p => p.nivel)))
-  .sort((a,b) => a - b);
+  const acroLevels = Array.from(new Set(poses.filter(p => p.type !== 'Thai-Massage').map(p => p.nivel)))
+    .sort((a, b) => a - b);
   
   const thaiLevels = Array.from(new Set(poses.filter(p => p.type === 'Thai-Massage').map(p => p.nivel))).sort((a,b) => a - b);
-  const therapeuticLevels = Array.from(new Set(poses.filter(p => p.type === 'Therapeutic').map(p => p.nivel))).sort((a,b) => a - b);
 
 
   return (
+    <>
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex items-center gap-2">
-            <AcroYogaIcon className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-semibold">Acro Companion</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AcroYogaIcon className="h-8 w-8 text-primary" />
+              <h1 className="text-xl font-semibold group-data-[collapsible=icon]:hidden">Acro Companion</h1>
+            </div>
+            <SidebarTrigger className="hidden md:flex" />
           </div>
+           <GlobalSearch onSelect={handleSearchResultSelect} nameDisplay={nameDisplay} />
         </SidebarHeader>
         <ScrollArea className="flex-1">
           <SidebarMenu>
              <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-acro' })} isActive={activeView.type === 'what-is-acro'}>¿Qué es Acroyoga?</SidebarMenuButton>
+                <SidebarMenuButton 
+                  onClick={() => setActiveView({ type: 'what-is-acro' })} 
+                  isActive={activeView.type === 'what-is-acro'}
+                  tooltip="¿Qué es Acroyoga?"
+                >
+                  <BookOpen />
+                  <span>¿Qué es Acroyoga?</span>
+                </SidebarMenuButton>
             </SidebarMenuItem>
             
             <SidebarMenuItem>
-              <SidebarMenuButton>Niveles de Acroyoga</SidebarMenuButton>
+              <SidebarMenuButton tooltip="Niveles de Acroyoga" onClick={handleResetAcroView}>
+                <Layers />
+                <span>Niveles de Acroyoga</span>
+              </SidebarMenuButton>
               <SidebarMenuSub>
                 {acroLevels.map(level => (
                   <SidebarMenuSubItem key={`acro-${level}`}>
@@ -406,27 +644,45 @@ export default function Home() {
                 ))}
               </SidebarMenuSub>
             </SidebarMenuItem>
-
-             <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => handleTherapeuticClick(11)} isActive={activeView.type === 'therapeutic'}>
-                  Vuelo Terapéutico
-                </SidebarMenuButton>
-            </SidebarMenuItem>
             
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setActiveView({ type: 'flow-builder' })} isActive={activeView.type === 'flow-builder'}>
-                <Workflow className="mr-2 h-5 w-5" />
-                Constructor de Secuencias
+              <SidebarMenuButton 
+                onClick={() => setActiveView({ type: 'flow-builder' })} 
+                isActive={activeView.type === 'flow-builder'}
+                tooltip="Constructor de Secuencias"
+              >
+                <Workflow />
+                <span>Constructor de Secuencias</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
 
+             <SidebarMenuItem>
+                <SidebarMenuButton 
+                  onClick={() => setActiveView({ type: 'acro-videos' })} 
+                  isActive={activeView.type === 'acro-videos'}
+                  tooltip="Videos de Acro"
+                >
+                  <Video/>
+                  <span>Videos Acro</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
 
              <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setActiveView({ type: 'what-is-thai' })} isActive={activeView.type === 'what-is-thai'}>¿Qué es Masaje Tai?</SidebarMenuButton>
+                <SidebarMenuButton 
+                  onClick={() => setActiveView({ type: 'what-is-thai' })} 
+                  isActive={activeView.type === 'what-is-thai'}
+                  tooltip="¿Qué es Masaje Tai?"
+                >
+                  <HeartHandshake />
+                  <span>¿Qué es Masaje Tai?</span>
+                </SidebarMenuButton>
             </SidebarMenuItem>
 
             <SidebarMenuItem>
-              <SidebarMenuButton>Niveles de Masaje Tai</SidebarMenuButton>
+              <SidebarMenuButton tooltip="Niveles de Masaje Tai" onClick={handleResetThaiView}>
+                <Layers />
+                <span>Niveles de Masaje Tai</span>
+              </SidebarMenuButton>
               <SidebarMenuSub>
                 {thaiLevels.map(level => (
                    <SidebarMenuSubItem key={`thai-${level}`}>
@@ -437,9 +693,31 @@ export default function Home() {
                 ))}
               </SidebarMenuSub>
             </SidebarMenuItem>
+            
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Calentamiento">
+                <Dumbbell />
+                <span>Calentamiento</span>
+              </SidebarMenuButton>
+              <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton onClick={() => setActiveView({ type: 'warmup-individual' })} isActive={activeView.type === 'warmup-individual'}>
+                      Individual
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton onClick={() => setActiveView({ type: 'warmup-partner' })} isActive={activeView.type === 'warmup-partner'}>
+                      En Pareja
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </SidebarMenuItem>
 
              <SidebarMenuItem>
-              <SidebarMenuButton>Glosarios</SidebarMenuButton>
+              <SidebarMenuButton tooltip="Glosarios">
+                <BookCopy />
+                <span>Glosarios</span>
+              </SidebarMenuButton>
               <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton onClick={() => setActiveView({ type: 'acro-glossary' })} isActive={activeView.type === 'acro-glossary'}>
@@ -463,7 +741,7 @@ export default function Home() {
       </Sidebar>
       <SidebarInset>
         <div className="p-4 sm:p-6 lg:p-8 flex-1 w-full">
-           <header className="flex items-center justify-between mb-8">
+           <header className="flex items-center justify-between mb-8 md:hidden">
               <div className="flex items-center gap-2">
                  <h1 className="text-2xl font-bold text-primary tracking-tight">Acro Companion</h1>
               </div>
@@ -475,5 +753,14 @@ export default function Home() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+     <PoseDetailDialog
+        pose={searchSelectedItem}
+        allPoses={poses}
+        open={!!searchSelectedItem}
+        onOpenChange={(open) => !open && setSearchSelectedItem(null)}
+        concepts={concepts}
+        nameDisplay={nameDisplay}
+      />
+    </>
   );
 }

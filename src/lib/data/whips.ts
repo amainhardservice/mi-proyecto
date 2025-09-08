@@ -2,11 +2,11 @@
 import type { Pose } from '@/types';
 
 export const whipPoses: Pose[] = [
-  // --- WHIPS BÁSICOS ---
+  // --- WHIPS BÁSICOS: NIVEL 11 ---
   {
     id: 'wh-01',
     nombre: 'Látigo a Pájaro\n(Whip to Bird)',
-    nivel: 8,
+    nivel: 11,
     type: 'L-Basing',
     prerequisites: ['lb-1'],
     descripcion: 'Entrada dinámica y suave al Pájaro Frontal. El volador siente la energía del "látigo" por primera vez.',
@@ -37,7 +37,7 @@ export const whipPoses: Pose[] = [
   {
     id: 'wh-02',
     nombre: 'Látigo a Trono\n(Whip to Throne)',
-    nivel: 8,
+    nivel: 11,
     type: 'L-Basing',
     prerequisites: ['wh-01', 'lb-2'],
     descripcion: 'Un whip que termina en una postura sentada. Enseña timing, confianza y control de la dirección en el aterrizaje.',
@@ -66,10 +66,10 @@ export const whipPoses: Pose[] = [
   },
   {
     id: 'wh-03',
-    nombre: 'Látigo a Pájaro Inverso\n(Whip to Reverse Bird)',
-    nivel: 8,
+    nombre: 'Látigo a Pájaro de Espaldas\n(Whip to Back Bird)',
+    nivel: 11,
     type: 'L-Basing',
-    prerequisites: ['wh-01', 'lb-back-bird-acro'],
+    prerequisites: ['wh-01', 'lb-back-bird'],
     descripcion: 'Un whip con rotación de 180°. Requiere mayor conciencia corporal, apertura de pecho y control en la caída.',
     narrativa_detallada: `
 **El primer whip con rotación completa. La confianza es clave.**
@@ -81,10 +81,10 @@ export const whipPoses: Pose[] = [
 **Desarrollo:**
 *   **Base:** Guía al volador en un arco hacia arriba y sobre ti. Prepárate para recibir su espalda alta en tus pies.
 *   **Volador:** Déjate llevar por el tirón. Arquea la espalda y abre el pecho mientras vuelas por encima de la base.
-*   **Aterrizaje:** La base recibe al volador en **pose:lb-back-bird-acro**, absorbiendo el impacto con las rodillas.
+*   **Aterrizaje:** La base recibe al volador en **pose:lb-back-bird**, absorbiendo el impacto con las rodillas.
 
 **Culminación:**
-*   Desde **pose:lb-back-bird-acro**, se puede transicionar o desmontar de la forma habitual.`,
+*   Desde **pose:lb-back-bird**, se puede transicionar o desmontar de la forma habitual.`,
     musculos: {
       base: ["Control de la trayectoria", "Fuerza de brazos y core"],
       volador: ["Flexibilidad de espalda", "Confianza en la inversión"],
@@ -95,11 +95,11 @@ export const whipPoses: Pose[] = [
       observador: ["Vigila la cabeza del volador.", "Asegura que la espalda del volador aterrice en los pies de la base."],
     },
   },
-  // --- WHIPS INTERMEDIOS ---
+  // --- WHIPS INTERMEDIOS: NIVEL 12 ---
   {
     id: 'wh-04',
     nombre: 'Látigo a Trono a Horcajadas\n(Whip to Straddle Throne)',
-    nivel: 9,
+    nivel: 12,
     type: 'L-Basing',
     prerequisites: ['wh-02', 'lb-7'],
     descripcion: 'Añade complejidad al Whip to Throne con una apertura de piernas y mayor control de caderas.',
@@ -129,7 +129,7 @@ export const whipPoses: Pose[] = [
   {
     id: 'wh-05',
     nombre: 'Látigo a Murciélago\n(Whip to Bat)',
-    nivel: 9,
+    nivel: 12,
     type: 'L-Basing',
     prerequisites: ['wh-04', 'lb-16'],
     descripcion: 'Un whip más invertido que exige un gran control de la base en la recepción y del volador al enganchar los pies.',
@@ -160,7 +160,7 @@ export const whipPoses: Pose[] = [
   {
     id: 'wh-06',
     nombre: 'Látigo a Pájaro sobre Manos\n(Whip to Handbird)',
-    nivel: 9,
+    nivel: 12,
     type: 'L-Basing',
     prerequisites: ['wh-01', 'lb-10'],
     url_video: 'https://www.youtube.com/watch?v=S2XCtQrdeFQ',
@@ -187,11 +187,11 @@ export const whipPoses: Pose[] = [
       observador: ["Observador experimentado. Tu objetivo es la cadera del volador.", "Prepárate para una recepción imperfecta."],
     },
   },
-  // --- WHIPS AVANZADOS ---
+  // --- WHIPS AVANZADOS: NIVEL 13 ---
   {
     id: 'wh-07',
     nombre: 'Látigo a Mano a Mano\n(Whip to H2H)',
-    nivel: 10,
+    nivel: 13,
     type: 'L-Basing',
     prerequisites: ['wh-06', 'lb-h2h'],
     descripcion: 'Control total del látigo. El volador es lanzado y aterriza en un equilibrio de parada de manos sobre las manos de la base.',
@@ -221,7 +221,7 @@ export const whipPoses: Pose[] = [
   {
     id: 'wh-08',
     nombre: 'Látigo a Pie a Mano\n(Whip to Foot-to-Hand)',
-    nivel: 10,
+    nivel: 13,
     type: 'L-Basing',
     prerequisites: ['wh-07', 'lb-14'],
     descripcion: 'Una transición aún más vertical que mezcla la energía del whip con la precisión del F2H.',
@@ -251,7 +251,7 @@ export const whipPoses: Pose[] = [
   {
     id: 'wh-09',
     nombre: 'Combo de Látigos\n(Whip Combo / Whip Machine)',
-    nivel: 10,
+    nivel: 13,
     type: 'L-Basing',
     prerequisites: ['wh-01', 'wh-02', 'wh-03', 'wh-04'],
     descripcion: 'Secuencias fluidas que encadenan varios whips entre diferentes posturas sin detenerse.',

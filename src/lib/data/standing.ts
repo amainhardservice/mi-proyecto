@@ -2,11 +2,11 @@
 import type { Pose } from '@/types';
 
 export const standingPoses: Pose[] = [
-  // Standing Acro: NIVEL 11 (antes 8)
+  // Standing Acro: NIVEL 14 (antes 11)
   {
     id: 'st-high-bird',
     nombre: 'Pájaro Alto\n(High Bird)',
-    nivel: 11,
+    nivel: 14,
     type: 'Standing',
     prerequisites: ['lb-1'],
     url_video: 'https://www.youtube.com/watch?v=eWu3BxMF1Bg',
@@ -38,11 +38,11 @@ export const standingPoses: Pose[] = [
     },
   },
   
-  // Standing Acro: NIVEL 12 (antes 9)
+  // Standing Acro: NIVEL 15 (antes 12)
   {
     id: 'st-monkey',
     nombre: 'Mono\n(Monkey)',
-    nivel: 12,
+    nivel: 15,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
     url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
@@ -66,7 +66,7 @@ export const standingPoses: Pose[] = [
   {
     id: 'st-f2h',
     nombre: 'Pie a Mano\n(Foot-to-Hand)',
-    nivel: 12,
+    nivel: 15,
     type: 'Standing',
     prerequisites: ['st-high-bird', 'lb-14'],
     url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
@@ -97,11 +97,11 @@ Se puede entrar desde el suelo o desde **pose:st-high-bird**.
     },
   },
 
-  // Standing Acro: NIVEL 13 (antes 10)
+  // Standing Acro: NIVEL 16 (antes 13)
   {
     id: 'st-h2h',
     nombre: 'Mano a Mano\n(H2H)',
-    nivel: 13,
+    nivel: 16,
     type: 'Standing',
     prerequisites: ['st-f2h', 'lb-h2h', 'st-monkey'],
     url_video: 'https://www.youtube.com/watch?v=r-g6qvL8IjM',
@@ -135,7 +135,7 @@ La entrada más común es desde **pose:st-high-bird**.
   {
     id: 'st-two-high',
     nombre: 'Dos Alturas\n(Two-High)',
-    nivel: 13,
+    nivel: 16,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
     url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',

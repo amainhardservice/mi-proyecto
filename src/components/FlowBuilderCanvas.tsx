@@ -6,7 +6,7 @@ import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
 import type { XYCoord } from 'dnd-core';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { GripVertical, Trash2 } from 'lucide-react';
+import { GripVertical, Trash2, Clipboard } from 'lucide-react';
 import type { SequenceItem } from '@/types';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -21,6 +21,7 @@ interface CanvasProps {
   moveItem: (dragIndex: number, hoverIndex: number) => void;
   nameDisplay: NameDisplay;
   onDeleteItem: (uniqueId: string) => void;
+  onCopyToClipboard: () => void;
 }
 
 const ItemTypes = {
@@ -29,10 +30,13 @@ const ItemTypes = {
   CONCEPT: 'concept',
   MODIFIER: 'modifier',
   ASANA: 'asana',
+  EXERCISE: 'exercise',
+  TRANSITION: 'transition',
+  FLOW: 'flow',
 };
 
 const getDisplayName = (item: any, displayMode: NameDisplay): string => {
-    if ('nombre' in item) { // It's a Pose
+    if (item.itemType === 'pose' || item.itemType === 'transition' || item.itemType === 'flow') { // Pose, Transition, Flow
         const parts = item.nombre.split('\n');
         const esName = parts[0];
         const enName = parts[1] || '';
@@ -43,7 +47,7 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string => {
           default: return item.nombre;
         }
     }
-    if ('nombre_sans' in item) { // It's an Asana
+    if (item.itemType === 'asana') { // It's an Asana
         const { nombre_sans, nombre_es } = item;
          switch (displayMode) {
           case 'en': return nombre_sans;
@@ -52,7 +56,19 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string => {
           default: return nombre_sans;
         }
     }
-    return item.titulo; // Concept or Modifier
+     if (item.itemType === 'exercise') {
+        const titleParts = item.titulo.split('\n');
+        const esTitle = titleParts[0];
+        const enTitle = titleParts[1] || '';
+         switch (displayMode) {
+            case 'en': return enTitle.replace(/[()]/g, '') || esTitle;
+            case 'es': return esTitle;
+            case 'both': return esTitle; // Just show spanish in the list
+            default: return esTitle;
+        }
+    }
+    // Concept or Modifier
+    return item.titulo;
 };
 
 
@@ -141,9 +157,9 @@ const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameD
 };
 
 
-export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, selectedItemId, moveItem, nameDisplay, onDeleteItem }: CanvasProps) {
+export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, selectedItemId, moveItem, nameDisplay, onDeleteItem, onCopyToClipboard }: CanvasProps) {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: [ItemTypes.POSE, ItemTypes.CONCEPT, ItemTypes.ASANA, ItemTypes.MODIFIER],
+    accept: [ItemTypes.POSE, ItemTypes.CONCEPT, ItemTypes.ASANA, ItemTypes.MODIFIER, ItemTypes.EXERCISE, ItemTypes.TRANSITION, ItemTypes.FLOW],
     drop: (item: { id: string; type: string }) => onDrop(item),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -156,7 +172,12 @@ export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, sele
   return (
     <Card ref={drop} className={cn("w-full md:w-1/3 flex flex-col", isActive ? "bg-accent/20" : "")}>
       <CardHeader>
-        <CardTitle>Mi Secuencia</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Mi Secuencia</CardTitle>
+          <Button variant="ghost" size="icon" onClick={onCopyToClipboard} aria-label="Copiar secuencia">
+            <Clipboard className="h-5 w-5" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
         <ScrollArea className="h-full">

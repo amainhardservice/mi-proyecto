@@ -39,6 +39,43 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
+    id: 'lb-jedi-plank',
+    nombre: 'Plancha Jedi / Plancha Caja\n(Jedi Plank / Jedi Box)',
+    nivel: 1,
+    type: 'L-Basing',
+    prerequisites: [],
+    url_imagen: 'https://i.ibb.co/xqCYNz7K/Jedi-Plank.jpg',
+    gallery_images: ['https://i.ibb.co/mr8dfBKK/JediBox1.jpg'],
+    descripcion: 'Un ejercicio de acondicionamiento fundamental para dos personas que enseña la activación del core, la línea y la confianza mutua en una estructura apilada.',
+    narrativa_detallada: `
+**Esta postura tiene dos variaciones principales: la Caja (Box), ideal para empezar, y la Plancha Jedi (Jedi Plank), que es más avanzada.**
+
+**Variación 1: Plancha Caja (Jedi Box)**
+*En esta versión, el volador mantiene los pies en el suelo, creando una forma de caja.*
+1.  **Base:** Colócate en una posición de plancha fuerte, con las manos directamente debajo de los hombros.
+2.  **Volador:** De pie, colócate a horcajadas sobre la base. Pon tus manos en los tobillos de la base.
+3.  **Volador:** Camina con tus pies hacia atrás hasta que tu cuerpo esté en una posición de plancha, manteniendo las manos en los tobillos de la base. El resultado es una estructura de caja fuerte.
+
+**Variación 2: Plancha Jedi (Jedi Plank)**
+*Esta es la versión apilada completa.*
+1.  **Base:** Comienza en una posición de plancha muy sólida.
+2.  **Volador:** Realiza la **Plancha Caja** primero. Una vez estables, el volador levantará un pie y lo colocará con cuidado en el hombro de la base. Luego, el otro pie en el otro hombro.
+3.  **Base:** Activa todo tu cuerpo. Eres la fundación. Mantén la espalda recta y el core apretado para soportar el peso.
+4.  **Volador:** Tu trabajo es ser lo más ligero y tenso posible. Mantén una **Línea** perfecta. No dejes que tus caderas caigan.
+
+**Culminación:**
+*   Para salir, reviertan el proceso. El volador baja un pie, luego el otro, volviendo a la **Plancha Caja**, y finalmente se pone de pie. La comunicación es esencial para una salida segura.`,
+    musculos: {
+      base: ["Core", "Hombros", "Pecho", "Serrato anterior"],
+      volador: ["Core", "Hombros", "Conciencia corporal"],
+    },
+    calibracion: {
+      base: ["Sé una roca. No te muevas.", "Mantén el core apretado para proteger tu espalda baja.", "Respira."],
+      volador: ["Sé una pluma. Mantén una línea recta y tensa.", "Coloca tus pies suavemente, no los dejes caer.", "Comunica cuándo vas a subir y bajar."],
+      observador: ["Vigila la espalda baja de la base.", "Ayuda al volador a colocar los pies si es necesario.", "Asegura una comunicación clara para la salida."],
+    },
+  },
+  {
     id: 'lb-foot-to-shin',
     nombre: 'Pies sobre Espinillas\n(Foot to Shin)',
     nivel: 1,
@@ -80,8 +117,8 @@ export const lBasingPoses: Pose[] = [
     prerequisites: ['lb-15'],
     url_video: 'https://www.youtube.com/watch?v=kT4KNu4sDC8',
     gallery_videos: ['https://www.youtube.com/watch?v=usu93tTl1HQ'],
-    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg',
-    gallery_images: ['https://i.ytimg.com/vi/kT4KNu4sDC8/sddefault.jpg'],
+    url_imagen: 'https://i.ytimg.com/vi/kT4KNu4sDC8/sddefault.jpg',
+    gallery_images: ['https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg'],
     descripcion: 'Una inversión segura sobre las espinillas de la base. Enseña la alineación de caderas sobre hombros en una plataforma estable.',
     narrativa_detallada: `
 **Inicio:**
@@ -109,6 +146,38 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
+    id: 'lb-candlestick',
+    nombre: 'Candelabro / Parada de Hombros sobre Rodillas / Vela\n(Candlestick / Shoulderstand on Knees)',
+    nivel: 1,
+    type: 'L-Basing',
+    prerequisites: [],
+    url_imagen: 'https://i.ibb.co/ymvsRTq6/5457286.jpg',
+    descripcion: 'Una inversión fundamental y muy segura donde el volador se apoya en las rodillas de la base, ideal para ganar confianza en las inversiones.',
+    narrativa_detallada: `
+**Inicio:**
+1.  **Base:** Acuéstate y dobla las rodillas hacia el pecho, creando una plataforma ancha y estable con la parte superior de tus rodillas y la parte inferior de tus muslos.
+2.  **Volador:** De espaldas a la base, coloca tus hombros sobre esta plataforma de rodillas.
+3.  **Base:** Sujeta los hombros del volador con tus manos para dar una conexión segura y guiar la entrada.
+4.  **Volador:** Con confianza, levanta las caderas y luego las piernas (en **Tuck (Recogido/Agrupado)** o extendidas) para entrar en la inversión.
+
+**Desarrollo:**
+*   **Base:** Las rodillas ofrecen una base mucho más estable y suave que las espinillas o los pies, lo que la convierte en una postura muy segura para principiantes. Mantén el core activo.
+*   **Volador:** Encuentra la alineación de las caderas sobre los hombros. Puedes jugar con diferentes posiciones de piernas (Tuck, Straddle, Pike, etc.). La sensación es de gran estabilidad y soporte.
+
+**Culminación:**
+1.  **Volador:** Baja las piernas de forma controlada.
+2.  **Base:** Guía al volador para que aterrice suavemente, flexionando las caderas y rodillas según sea necesario.`,
+    musculos: {
+      base: ["Core", "Flexores de cadera"],
+      volador: ["Core", "Confianza en la inversión"],
+    },
+    calibracion: {
+      base: ["Ofrece una plataforma ancha y estable con tus rodillas.", "Comunica constantemente para dar seguridad."],
+      volador: ["Esta es una postura de confianza. Relájate en la estabilidad que te da la base.", "Explora el equilibrio sin miedo."],
+      observador: ["Aunque es segura, vigila la alineación.", "Asegura una salida suave y comunicada."],
+    },
+  },
+  {
     id: 'lb-shin-to-hands',
     nombre: 'Espinillas a Manos\n(Shin to Hands)',
     nivel: 1,
@@ -121,7 +190,7 @@ export const lBasingPoses: Pose[] = [
 1.  **Base:** Acuéstate y extiende los brazos rectos hacia el cielo, como dos pilares.
 2.  **Volador:** Párate de frente a la base, entre sus brazos. Coloca tus manos en los hombros de la base para estabilizarte.
 3.  **Volador:** Levanta una pierna y coloca tu espinilla en la mano de la base. Luego, haz lo mismo con la otra pierna.
-4.  **Base:** Sostén las espinillas del volador con un agarre firme. Asegúrate de que tus brazos estén rectos y apilados (**Apilamiento (Stacking)**).
+4.  **Base:** Sostén las espinillas del volador con un agarre firme. Asegúrate de que tus brazos estén rectos y apilados (**pose:1**).
 
 **Desarrollo:**
 *   **Base:** Mantén los brazos fuertes y estables. El volador confiará en esta plataforma. Puedes realizar un suave balanceo o masaje en las piernas del volador.
@@ -143,40 +212,6 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: 'th-folded-leaf',
-    nombre: 'Plegaria Invertida\n(Folded Leaf)',
-    nivel: 1,
-    type: 'L-Basing',
-    prerequisites: [],
-    url_video: 'https://www.youtube.com/watch?v=Zc-D_1htX6I',
-    url_imagen: 'https://www.theyoganomads.com/wp-content/uploads/2023/03/image-12-1024x576.jpg',
-    gallery_images: ['https://www.fitsri.com/wp-content/uploads/2021/11/Folded-Leaf-Pose-Acro-Yoga--1024x683.jpg'],
-    descripcion: 'Postura terapéutica y fundamental. La base sostiene al volador por las caderas para una inversión suave y relajante.',
-     narrativa_detallada: `
-**Inicio:**
-1.  **Base:** Acuéstate y levanta las piernas, flexionadas.
-2.  **Volador:** Párate frente a la base, de espaldas. La base colocará sus pies en tu ingle/pliegue de la cadera.
-3.  **Base:** Toma las manos del volador. Este se inclinará hacia atrás, manteniendo la confianza en ti.
-4.  **Volador:** A medida que te inclinas, deja que tu cuerpo se pliegue hacia adelante, como una hoja.
-5.  **Base:** Extiende tus piernas lentamente, levantando las caderas del volador. El volador quedará colgado, con la parte superior del cuerpo relajada hacia el suelo.
-
-**Desarrollo:**
-*   **Base:** Mantén los pies firmes en el pliegue de la cadera del volador. Puedes ofrecer un suave masaje en la espalda del volador. Tus manos pueden sostener sus hombros o brazos para dar seguridad.
-*   **Volador:** Relájate por completo. Suelta la cabeza, el cuello y los hombros. Permite que la gravedad cree una suave tracción en tu columna vertebral. Respira profundamente. Es una postura de recepción y confianza.
-
-**Culminación:**
-1.  **Base:** Comunica al volador que lo vas a bajar. Flexiona lentamente las rodillas.
-2.  **Volador:** Activa ligeramente el **Core** y prepárate para que tus manos toquen el suelo.
-3.  **Base:** Una vez que las manos del volador estén firmes en el suelo, baja un poco más hasta que pueda apoyar los pies y ponerse de pie.
-`,
-    musculos: { base: ['Isquiotibiales', 'Glúteos', 'Core'], volador: ['Relajación de la espalda'] },
-    calibracion: {
-      base: ['Pies en la cadera del volador', 'Extiende las piernas lentamente', 'Manos en los hombros del volador'],
-      volador: ['Déjate caer con confianza', 'Relaja cuello y hombros'],
-      observador: ['Junto a la cabeza del volador', 'Asegura que la cabeza no toque el suelo'],
-    },
-  },
-  {
     id: 'lb-1',
     nombre: 'Plancha Frontal\n(Front Plank)',
     nivel: 1,
@@ -189,11 +224,11 @@ export const lBasingPoses: Pose[] = [
 **Inicio:**
 1.  **Base:** Acuéstate boca arriba. Levanta las piernas y flexiona las rodillas. Coloca tus pies en las caderas delanteras del volador (las crestas ilíacas). Tus pies deben estar paralelos y a la anchura de las caderas.
 2.  **Volador:** Colócate de pie frente a los pies de la base. Toma las manos de la base con un agarre de "muñeca con muñeca". Transfiere tu peso hacia adelante, manteniendo los brazos rectos.
-3.  **Base:** A medida que sientes el peso del volador, extiende lentamente las piernas hasta que estén rectas, a 90 grados del suelo. Los brazos del volador y los tuyos deben estar rectos, formando pilares (**Apilamiento (Stacking)**).
+3.  **Base:** A medida que sientes el peso del volador, extiende lentamente las piernas hasta que estén rectas, a 90 grados del suelo. Los brazos del volador y los tuyos deben estar rectos, formando pilares (**pose:1**).
 
 **Desarrollo:**
 *   **Base:** Mantén las piernas verticales y activas. Tus pies son el volante; úsalos para hacer microajustes. El agarre de manos te da mucho control para estabilizar.
-*   **Volador:** Mantén tu cuerpo en una línea recta y tensa (**Hollow Body**). El **Core** debe estar muy activo. La comunicación es constante a través de las manos.
+*   **Volador:** Mantén tu cuerpo en una línea recta y tensa (**pose:6**). El **Core** debe estar muy activo. La comunicación es constante a través de las manos.
 *   Esta postura es el control rígido y la alineación necesarios antes de intentar el vuelo libre.
 
 **Culminación:**
@@ -344,13 +379,13 @@ export const lBasingPoses: Pose[] = [
 
   // L-BASING: NIVEL 2
   {
-    id: 'lb-shoulderstand',
+    id: 'lb-shoulderstand-on-feet',
     nombre: 'Parada de Hombros sobre Pies\n(Shoulderstand on Feet)',
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['lb-1', 'lb-shoulderstand-on-shins'],
     url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
-    url_imagen: 'https://i.ytimg.com/vi/kT4KNu4sDC8/sddefault.jpg',
+    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg',
     descripcion: 'Una inversión fundamental donde el volador se apoya en los pies de la base, desarrollando equilibrio y alineación.',
     narrativa_detallada: `
 **Inicio:**
@@ -385,7 +420,7 @@ export const lBasingPoses: Pose[] = [
     type: 'L-Basing',
     prerequisites: ['lb-1'],
     url_video: 'https://www.youtube.com/watch?v=bmktYLuksek',
-    url_imagen: 'https://hydratewithcore.com/wp-content/uploads/2020/06/forblog3-1030x687_large.jpg',
+    url_imagen: 'https://i.ibb.co/5WV0ZJrz/pajaro-lateral.jpg',
     descripcion: 'Una variación asimétrica del Pájaro Frontal. El volador se equilibra de lado sobre los pies de la base, preparando el cuerpo para Estrella Lateral.',
     narrativa_detallada: `
 **Inicio:**
@@ -412,14 +447,14 @@ export const lBasingPoses: Pose[] = [
     },
   },
   {
-    id: 'lb-back-bird-acro',
-    nombre: 'Pájaro Inverso Acrobático\n(Acro Back Bird)',
+    id: 'lb-back-bird',
+    nombre: 'Pájaro de Espaldas\n(Back Bird)',
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['th-back-bird', 'th-whale'],
     url_video: 'https://www.youtube.com/watch?v=ks-4IzTcNSk',
-    url_imagen: 'https://camillamia.com/wp-content/uploads/2020/03/backbird-3-500x498.jpg',
-    descripcion: 'La versión acrobática del Pájaro Inverso. El volador mantiene una línea corporal activa y arqueada, sin agarre de manos.',
+    url_imagen: 'https://i.ibb.co/sJct4PKr/back-bird.png',
+    descripcion: 'La versión acrobática del Pájaro de Espaldas Terapéutico. El volador mantiene una línea corporal activa y arqueada, sin agarre de manos.',
     narrativa_detallada: `
 **Inicio:**
 1.  Entra en un **pose:th-back-bird** o **pose:th-whale** con un agarre de manos seguro.
@@ -427,7 +462,7 @@ export const lBasingPoses: Pose[] = [
 
 **Desarrollo:**
 *   **Base:** Mantén tus pies firmes en la espalda alta del volador. El control del equilibrio ahora reside completamente en tus piernas y core.
-*   **Volador:** Activa la espalda, los glúteos y las piernas para mantener un arco fuerte y estable. Extiende los brazos hacia los lados o hacia atrás.
+*   **Volador:** Activa la espalda, los glúteos y las piernas para mantener un arco fuerte y estable (**Arch**). Extiende los brazos hacia los lados o hacia atrás.
 
 **Culminación:**
 1.  **Base y Volador:** Vuelvan a conectar las manos.
@@ -441,6 +476,73 @@ export const lBasingPoses: Pose[] = [
       base: ["Sé una plataforma sólida y predecible.", "Realiza microajustes para mantener el equilibrio."],
       volador: ["Mantén una línea arqueada activa.", "Comunica tu nivel de comodidad."],
       observador: ["Observa atentamente, especialmente durante la liberación y reconexión de las manos."],
+    },
+  },
+  {
+    id: 'lb-reverse-bird',
+    nombre: 'Pájaro Reverso\n(Reverse Bird)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-front-bird'],
+    url_imagen: 'https://www.christiangieger.de/wp-content/uploads/2021/06/Acroyoga-Haltung-Pose006.jpg',
+    gallery_images: ['https://i.ytimg.com/vi/nZk8rZ1cG8c/maxresdefault.jpg'],
+    descripcion: 'Postura acrobática donde el volador se equilibra en los pies de la base, pero mirando en dirección opuesta a un Pájaro Frontal, con el torso arqueado.',
+    narrativa_detallada: `
+**Esta es la versión acrobática y opuesta al Pájaro Frontal, no confundir con Pájaro de Espaldas.**
+
+**Inicio:**
+1.  Una entrada común es desde **pose:th-folded-leaf**.
+2.  **Base:** Desde Plegaria Invertida, guía al volador para que levante el torso.
+3.  **Volador:** Arquea la espalda y busca el equilibrio mientras la base reposiciona los pies desde tus caderas a tu abdomen/caderas bajas.
+4.  **Base:** Encuentra el punto de equilibrio en el torso bajo del volador.
+
+**Desarrollo:**
+*   **Base:** Las piernas estarán más extendidas que en Pájaro Frontal. El equilibrio es más delicado.
+*   **Volador:** Mantén un arco activo (**Arch**), con el pecho abierto y la cabeza relajada hacia atrás. Requiere una gran confianza y control del core para no colapsar. La sensación es acrobática, no terapéutica.
+
+**Culminación:**
+1.  Se puede transicionar a **pose:lb-2** o desmontar de forma segura llevando al volador a una posición sentada en el suelo.`,
+    musculos: {
+      base: ["Cuádriceps", "Core", "Control de pies fino"],
+      volador: ["Core", "Músculos de la espalda", "Glúteos", "Confianza"],
+    },
+    calibracion: {
+      base: ["Sé muy preciso con la colocación de los pies.", "Usa las manos para guiar las caderas del volador.", "La comunicación es vital."],
+      volador: ["Mantén la tensión en todo el arco.", "Comunica sobre el punto de presión.", "Mantén los brazos extendidos para ayudar al equilibrio."],
+      observador: ["Vigila la cabeza y la espalda del volador.", "Asegura una salida controlada."],
+    },
+  },
+  {
+    id: 'lb-reverse-back-bird',
+    nombre: 'Pájaro de Espaldas Invertido\n(Reverse Back Bird)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-back-bird', 'lb-reverse-bird'],
+    url_imagen: 'https://i.ibb.co/B22GYnw9/acroyoga-reverse-back-bird-0a81ebeb36.webp',
+    descripcion: 'Una apertura de pecho donde el volador se arquea de espaldas, mirando en dirección opuesta a la base. Es una expresión de confianza y flexibilidad.',
+    narrativa_detallada: `
+**Esta postura combina la apertura de Pájaro de Espaldas con la orientación de Pájaro Reverso.**
+
+**Inicio:**
+1. Una entrada común es desde **pose:lb-reverse-throne**.
+2. **Volador:** Desde Trono Invertido, se inclina hacia atrás, arqueando la espalda.
+3. **Base:** Con un agarre seguro en los tobillos o pantorrillas del volador, guía el descenso y coloca los pies en la espalda alta del volador, justo debajo de los omóplatos.
+
+**Desarrollo:**
+* **Base:** Mantén una plataforma de pies sólida. El control se ejerce a través de la flexión de tus rodillas y la tensión en el agarre de manos/brazos.
+* **Volador:** Es una postura de entrega. Relaja la cabeza y el cuello, permitiendo que la gravedad abra el pecho. Mantén el core ligeramente activo para la estabilidad.
+
+**Culminación:**
+1. **Volador:** Usa el core para iniciar el regreso a la posición sentada.
+2. **Base:** Guía al volador de vuelta a **pose:lb-reverse-throne** flexionando las rodillas y tirando suavemente de sus piernas.`,
+    musculos: {
+      base: ['Isquiotibiales', 'Core', 'Fuerza de brazos'],
+      volador: ['Flexibilidad de espalda y hombros', 'Confianza'],
+    },
+    calibracion: {
+      base: ['Colocación precisa de los pies en la espalda.', 'Comunica antes de cualquier movimiento.', 'Controla el arco con tus piernas.'],
+      volador: ['Comunica tu nivel de comodidad.', 'Respira profundamente para expandir el pecho.', 'Confía en el agarre de la base.'],
+      observador: ['Vigila la cabeza y el cuello del volador.', 'Asegura que la transición de vuelta a sentado sea controlada.'],
     },
   },
   {
@@ -512,13 +614,41 @@ Generalmente se llega a esta postura a través de una transición, como en la **
     },
   },
   {
+    id: 'lb-reverse-straddle-throne',
+    nombre: 'Trono Invertido a Horcajadas\n(Reverse Straddle Throne)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-7', 'lb-reverse-throne'],
+    descripcion: 'Una postura de inversión sentada fundamental. Es el equivalente inverso de Trono a Horcajadas y una puerta de entrada a muchas lavadoras y transiciones de nivel intermedio.',
+    narrativa_detallada: `
+**Inicio:**
+Se entra comúnmente desde **pose:lb-7**.
+1. **Base y Volador:** Desde un Trono a Horcajadas estable, el volador se inclina hacia adelante, y la base lo guía en una rotación.
+2. **Rotación:** El volador gira 180 grados, manteniendo las piernas en straddle, hasta quedar de espaldas a la base.
+3. **Recepción:** La base recibe al volador en la misma posición de **pose:lb-7**, pero ahora el volador está mirando en la dirección opuesta. La base agarra las caderas o muslos del volador para estabilizar.
+
+**Desarrollo:**
+* **Base:** Mantén una plataforma de pies sólida. Tus manos en las caderas del volador son cruciales para prevenir que se caiga hacia atrás.
+* **Volador:** Mantén el torso erguido y las piernas activas en straddle. El core es fundamental para mantener el equilibrio.
+
+**Culminación:**
+1. Para salir, se puede revertir la rotación para volver a **pose:lb-7**.
+2. Otra opción es que el volador se deslice hacia adelante para aterrizar de pie frente a la base.`,
+    musculos: { base: ['Cuádriceps', 'Aductores', 'Core', 'Fuerza de brazos'], volador: ['Core', 'Flexibilidad de cadera', 'Espalda'] },
+    calibracion: {
+      base: ['Guía la rotación con firmeza.', 'Asegura un agarre sólido en las caderas del volador al llegar.', 'Mantén la comunicación.'],
+      volador: ['Mantén el straddle activo durante todo el giro.', 'Usa tu core para controlar la rotación.', 'Confía en la guía de la base.'],
+      observador: ['Observa la rotación y prepárate para estabilizar las caderas del volador.', 'Una salida segura es la prioridad.'],
+    },
+  },
+  {
     id: 'lb-16',
     nombre: 'Murciélago\n(Bat)',
     nivel: 2,
     type: 'L-Basing',
     prerequisites: ['lb-7'],
     url_video: 'https://www.youtube.com/watch?v=PZ0oq-SHHnE&t=5s',
-    url_imagen: 'https://media.istockphoto.com/id/636653962/photo/acroyoga-straddle-bat-pose.jpg?s=612x612&w=0&k=20&c=LrM6So0Emv9PiWKIMoy-otGjoLB40vQr51GNTx01tBA=',
+    url_imagen: 'https://i.ibb.co/JFCkr0j3/acroyoga-bat-689e58ebc1.jpg',
     descripcion: 'Postura de inversión donde el volador cuelga de las piernas de la base, sostenido por la cadera.',
      narrativa_detallada: `
 **Inicio:**
@@ -590,7 +720,7 @@ Se entra desde **pose:lb-7**.
     nombre: 'Inversión: Trípode\n(Tripod)',
     nivel: 2,
     type: 'L-Basing',
-    prerequisites: ['lb-15', 'lb-shoulderstand'],
+    prerequisites: ['lb-shoulderstand-on-shins'],
     url_video: 'https://www.youtube.com/watch?v=WjMLoXNkQyE',
     url_imagen: 'https://i.ytimg.com/vi/T81646R4btk/maxresdefault.jpg',
     descripcion: 'Una inversión fundamental donde el volador se equilibra sobre la cabeza y las manos, usando los pies de la base como apoyo.',
@@ -619,6 +749,78 @@ Se entra desde **pose:lb-7**.
       base: ["Ofrece una plataforma estable y predecible.", "Usa tus pies para ayudar a alinear al volador.", "Comunica constantemente."],
       volador: ["Distribuye el peso correctamente entre manos y cabeza.", "Mantén el cuello largo y protegido.", "Sube y baja con control."],
       observador: ["Indispensable para proteger el cuello del volador.", "Ayuda a guiar las caderas a la vertical.", "Asegura una salida sin colapso."],
+    },
+  },
+   {
+    id: 'lb-shoulderstand',
+    nombre: 'Parada de Hombros\n(Shoulderstand)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-shoulderstand-on-feet', 'lb-21'],
+    url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
+    url_imagen: 'https://i.ibb.co/bjSjdv0L/acroyoga-shoulder-stand-a3bc4fec69.webp',
+    descripcion: 'Una inversión sin manos donde el volador se equilibra verticalmente sobre los pies de la base. Demuestra una gran alineación y confianza.',
+    narrativa_detallada: `
+**Inicio:**
+Generalmente se entra desde una **pose:lb-shoulderstand-on-feet** con agarre de manos.
+1.  **Base y Volador:** Establezcan una parada de hombros con manos muy sólida y comunicada.
+2.  **Base:** Asegúrate de que tus pies están bien colocados en la parte carnosa de los hombros del volador.
+3.  **Volador:** Encuentra tu línea vertical perfecta. El equilibrio debe sentirse casi sin esfuerzo.
+4.  **Comunicación:** Ambos deben sentirse 100% estables. Comuniquen la intención de soltar las manos.
+
+**Desarrollo:**
+*   **Base:** Mantén las piernas a 90 grados, firmes como pilares. Todo el control del equilibrio está en tus pies y en tu core. Haz microajustes con los tobillos.
+*   **Volador:** Mantén una línea perfectamente recta desde los hombros hasta los pies. Activa el core, los glúteos y las piernas. Los brazos pueden ir a los costados, extendidos o en oración.
+*   Esta postura es de equilibrio puro y confianza.
+
+**Culminación:**
+1.  **Volador:** Para salir, vuelve a conectar las manos con la base de forma segura.
+2.  **Base:** Una vez que el agarre es firme, guía al volador para que baje las piernas de forma controlada al suelo.
+`,
+    musculos: {
+      base: ["Piernas (isométrico)", "Core muy fuerte", "Estabilizadores de tobillo"],
+      volador: ["Core", "Espalda", "Glúteos", "Alineación corporal total"],
+    },
+    calibracion: {
+      base: ["Plataforma de pies completamente nivelada.", "Sé un ancla. Absorbe cualquier movimiento.", "Tus pies son el punto de equilibrio; sé sensible."],
+      volador: ["Tu cuerpo es una sola unidad, tensa y alineada.", "Confía en tu línea y en la base.", "La quietud es la clave."],
+      observador: ["Observador muy atento.", "Permanece cerca de las caderas del volador.", "Asegura una salida controlada, especialmente al reconectar las manos."],
+    },
+  },
+  {
+    id: 'lb-reverse-shoulderstand',
+    nombre: 'Parada de Hombros Inversa\n(Reverse Shoulderstand)',
+    nivel: 2,
+    type: 'L-Basing',
+    prerequisites: ['lb-shoulderstand', 'lb-reverse-throne'],
+    url_imagen: 'https://i.ibb.co/MyZLFwLF/acroyoga-reverse-shoulder-stand-1f8881354d.webp',
+    descripcion: 'Una inversión donde el volador está de espaldas a la base, equilibrándose sobre los pies de esta. Requiere gran control de la base y confianza del volador.',
+    narrativa_detallada: `
+**Inicio:**
+Se entra comúnmente desde **pose:lb-reverse-throne**.
+1.  **Base y Volador:** Desde un Trono Invertido estable, la base tiene un agarre firme en los tobillos del volador.
+2.  **Base:** Guía al volador para que se incline hacia atrás, levantando sus caderas.
+3.  **Volador:** Con confianza, lleva las caderas hacia la vertical mientras la base guía el movimiento.
+4.  **Base:** Mueve los pies desde los muslos del volador hasta sus hombros, creando la plataforma para la parada de hombros inversa.
+
+**Desarrollo:**
+*   **Base:** Mantén las piernas firmes y a 90 grados. El agarre de las manos en los tobillos del volador es crucial para la estabilidad y el control.
+*   **Volador:** Mantén el cuerpo en una línea recta. Activa el core y empuja con los hombros contra los pies de la base. La cabeza está en una posición neutral.
+*   La comunicación y la confianza son primordiales en esta postura.
+
+**Culminación:**
+1.  **Base:** Dobla las rodillas para bajar al volador.
+2.  **Volador:** Usa el core para controlar el descenso y volver a una posición sentada (**pose:lb-reverse-throne**).
+3.  Desde allí, se desmonta de forma segura.
+`,
+    musculos: {
+      base: ["Piernas", "Core", "Fuerza de brazos y agarre"],
+      volador: ["Core", "Hombros", "Confianza en la inversión hacia atrás"],
+    },
+    calibracion: {
+      base: ["El agarre de manos controla la postura.", "Guía las caderas del volador con claridad.", "Sé una plataforma estable."],
+      volador: ["Mantén una línea recta y activa.", "Comunica cualquier incomodidad.", "Confía en que la base te sostiene."],
+      observador: ["Observa la alineación del volador.", "Asegura que el cuello esté protegido.", "Asiste en el descenso de vuelta a Trono Invertido."],
     },
   },
   {
@@ -657,40 +859,15 @@ Se entra desde **pose:lb-7**.
   },
 
 
-  // L-BASING: NIVEL 4 (antes 3)
-  {
-    id: 'lb-cartwheel-exit',
-    nombre: 'Transición: Rueda Lateral\n(Cartwheel)',
-    nivel: 4,
-    type: 'L-Basing',
-    prerequisites: ['lb-shoulderstand', 'lb-21'],
-    url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
-    url_imagen: 'https://i.ytimg.com/vi/ALaWGbiCIZA/maxresdefault.jpg',
-    descripcion: 'Técnica de seguridad fundamental para desmontar de inversiones. Enseña control y conciencia corporal para caídas seguras.',
-    narrativa_detallada: `
-**Esto no es una postura, sino una habilidad de seguridad crucial.**
-
-**Objetivo:** Aprender a salir de una inversión (como **pose:lb-11**) de forma controlada y predecible, aterrizando de pie.
-
-**Técnica:**
-1.  **Desde una inversión estable (ej. **pose:lb-shoulderstand**):** En lugar de bajar hacia atrás, el volador elige un lado.
-2.  **Volador:** Abre las piernas en **Straddle** y comienza a girar las caderas hacia el lado elegido.
-3.  **Volador:** Baja una pierna hacia el suelo, seguida por la otra, imitando el movimiento de una rueda lateral de gimnasia.
-4.  **Base:** Sigue y apoya el movimiento, guiando al volador para que aterrice suavemente de pie al lado.
-5.  **Observador:** El rol es vital. Guía las caderas del volador durante la rotación y asegura que aterrice de manera estable.
-
-**Importancia:**
-*   Dominar la Salida en Rueda elimina el miedo a las inversiones y es un prerrequisito absoluto para intentar posturas como la parada de manos.
-`,
-  },
+  // L-BASING: NIVEL 5 (antes 4)
   {
     id: 'lb-9',
     nombre: 'Equilibrio: Estrella\n(Star)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['lb-shoulderstand', 'lb-7', 'lb-side-bird'],
+    prerequisites: ['lb-shoulderstand-on-feet', 'lb-7', 'lb-side-bird'],
     url_video: 'https://www.youtube.com/watch?v=ydOM4EbhJz0',
-    url_imagen: 'https://i.ytimg.com/vi/6HngmitsKuQ/hqdefault.jpg',
+    url_imagen: 'https://i.ibb.co/zWcPm0sC/estrella.jpg',
     descripcion: 'Postura avanzada de equilibrio sobre un pie y una mano de la base. Requiere alineación y fuerza de ambos.',
      narrativa_detallada: `
 **Inicio:**
@@ -701,7 +878,7 @@ Se entra desde un **pose:lb-7** modificado.
 4.  **Volador:** Una vez estable, extiende la pierna y el brazo libres para formar la estrella.
 
 **Desarrollo:**
-*   **Base:** Apila tu hombro sobre tu codo y muñeca (**Apilamiento (Stacking)**). La pierna de apoyo debe estar fuerte. Usa tu **Core** y tu pierna libre como contrapeso. El pie de apoyo debe estar firme en la cadera del volador, no en el glúteo.
+*   **Base:** Apila tu hombro sobre tu codo y muñeca (**pose:1**). La pierna de apoyo debe estar fuerte. Usa tu **Core** y tu pierna libre como contrapeso. El pie de apoyo debe estar firme en la cadera del volador, no en el glúteo.
 *   **Volador:** Mantén todo el cuerpo tenso (tensión activa). El equilibrio es lateral. Empuja activamente contra el pie y la mano de la base. La mirada puede ir hacia la mano extendida.
 *   **Puntos de Contacto:** Pie derecho de la base en la cadera derecha del volador. Mano izquierda de la base con mano derecha del volador.
 
@@ -719,11 +896,11 @@ Se entra desde un **pose:lb-7** modificado.
   {
     id: 'lb-12',
     nombre: 'Equilibrio: Estrella Lateral\n(Side Star)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-9'],
     url_video: 'https://www.youtube.com/watch?v=PwoWLI9XlG8',
-    url_imagen: 'https://i.ytimg.com/vi/PwoWLI9XlG8/maxresdefault.jpg',
+    url_imagen: 'https://i.ibb.co/bgKX81jS/gettyimages-638275840-2048x2048-1.jpg',
     descripcion: 'Una variación de la Estrella donde el volador está de lado a la base, creando un plano de equilibrio diferente.',
      narrativa_detallada: `
 **Inicio:**
@@ -748,13 +925,148 @@ Se entra desde un **pose:lb-7** modificado.
     },
   },
   {
+    id: 'lb-inside-star',
+    nombre: 'Equilibrio: Estrella Interior\n(Inside Star)',
+    nivel: 5,
+    type: 'L-Basing',
+    prerequisites: ['lb-12'],
+    url_video: 'https://www.youtube.com/watch?v=rZkWVVZhwc4',
+    url_imagen: 'https://i.ytimg.com/vi/rZkWVVZhwc4/maxresdefault.jpg',
+    descripcion: 'Una variación de Estrella Lateral donde la base está boca arriba, cambiando los puntos de contacto y la dinámica del equilibrio. El volador mira hacia el interior.',
+    narrativa_detallada: `
+**Esta variación de Estrella se siente muy diferente y requiere una conexión interna.**
+
+**Inicio:**
+1.  **Base:** Acuéstate boca arriba. Levanta una pierna (ej. la derecha) y prepara el pie para recibir la cadera del volador. La otra pierna puede estar en el suelo o levantada para contrapeso. Agarra la mano del volador con tu mano del mismo lado (mano derecha de la base con mano derecha del volador).
+2.  **Volador:** Párate al lado de la base, de cara a ella. Coloca tu cadera en el pie de la base y toma su mano.
+3.  **Base y Volador:** Usando **Contrapeso**, el volador levanta los pies del suelo. El volador se apoya con su mano libre en la rodilla o muslo de la base para estabilizar.
+
+**Desarrollo:**
+*   **Base:** Tu estabilidad viene de tu conexión con el suelo. La pierna de apoyo debe estar fuerte y el pie bien colocado en la cadera del volador, no en las costillas.
+*   **Volador:** Tu cuerpo está en un plano lateral, pero ahora miras hacia la base. Esto cambia la dinámica de la mirada y el equilibrio. Mantén los oblicuos activos y el cuerpo como una tabla.
+*   **Puntos de Contacto:** Pie derecho de la base en la cadera derecha del volador. Mano derecha de la base en la mano derecha del volador.
+
+**Culminación:**
+1.  **Volador:** Comunica la salida y baja lentamente los pies al suelo.
+2.  **Base:** Flexiona la pierna de apoyo para facilitar un aterrizaje suave.
+`,
+    musculos: { base: ['Core', 'Pierna de apoyo', 'Hombro', 'Estabilizadores'], volador: ['Oblicuos', 'Core', 'Estabilizadores de cadera'] },
+    calibracion: {
+      base: ['Coloca el pie en el hueso de la cadera, no en tejido blando.', 'Usa tu pierna libre como contrapeso activo.', 'El agarre de mano es tu principal línea de comunicación.'],
+      volador: ['Mantén el cuerpo en una línea recta y lateral.', 'Empuja activamente contra el pie de la base para crear tensión.', 'Comunica cualquier deslizamiento del pie de la base.'],
+      observador: ['Colócate del lado abierto del volador.', 'Tu principal función es evitar que el volador rote hacia adelante o hacia atrás.'],
+    },
+  },
+  {
+    id: 'lb-outside-side-star',
+    nombre: 'Estrella Lateral Exterior\n(Outside Side Star)',
+    nivel: 5,
+    type: 'L-Basing',
+    prerequisites: ['lb-inside-star'],
+    url_imagen: 'https://i.ibb.co/JD8Y3xp/acroyoga-outside-side-star-4cd0502384.webp',
+    descripcion: 'Variación de Estrella donde el volador mira hacia afuera, creando un desafío de contrapeso y equilibrio abierto.',
+    narrativa_detallada: `
+**Esta postura es la contraparte de Inside Star y requiere una gran confianza y comunicación no verbal.**
+
+**Inicio:**
+1.  **Base:** Acuéstate boca arriba. Levanta una pierna (ej. la derecha) y tu mano opuesta (la izquierda).
+2.  **Volador:** Párate al lado de la base, pero de espaldas a ella. Tu cadera derecha se alineará con el pie derecho de la base.
+3.  **Base y Volador:** Tomen un agarre cruzado (mano izquierda de la base con mano derecha del volador).
+4.  **Base:** Coloca tu pie derecho en la cadera/glúteo derecho del volador.
+5.  **Volador:** Confiando en el agarre y el punto de apoyo, inclínate hacia un lado, lejos de la base, para levantar los pies del suelo usando **Contrapeso**.
+
+**Desarrollo:**
+*   **Base:** Mantén una pierna de apoyo muy fuerte. Tu brazo de agarre debe estar firme. Usa tu cuerpo como un ancla.
+*   **Volador:** Mantén una línea lateral fuerte. Tu mirada se dirige hacia afuera, lo que hace el equilibrio más desafiante. Confía en la tensión del agarre.
+
+**Culminación:**
+1.  **Volador:** Comunica la salida. Baja los pies lentamente hacia el suelo.
+2.  **Base:** Flexiona la pierna de apoyo y guía al volador para un aterrizaje seguro.
+`,
+    musculos: {
+      base: ['Core', 'Oblicuos', 'Pierna de apoyo', 'Hombro'],
+      volador: ['Core', 'Oblicuos', 'Confianza'],
+    },
+    calibracion: {
+      base: ['El contrapeso es clave. Sé el ancla.', 'Un agarre firme y constante es fundamental.', 'Comunica con la presión de tu pie.'],
+      volador: ['Inclínate lejos de la base para crear tensión.', 'Mantén una línea corporal fuerte y activa.', 'Confía en que la base te sostendrá.'],
+      observador: ['Posiciónate del lado abierto del volador.', 'Prepárate para soportar peso si el contrapeso falla.'],
+    },
+  },
+  {
+    id: 'lb-reverse-inside-star',
+    nombre: 'Estrella Interior Inversa\n(Reverse Inside Side Star)',
+    nivel: 5,
+    type: 'L-Basing',
+    prerequisites: ['lb-outside-side-star'],
+    url_imagen: 'https://i.ibb.co/R47B2Q8X/acroyoga-reverse-inside-star-df01b7aeb9.webp',
+    descripcion: 'Variación de contrapeso donde el volador da la espalda a la base, pero el agarre es del mismo lado, forzando una torsión y un equilibrio complejos.',
+    narrativa_detallada: `
+**Una variación muy desafiante que juega con la torsión y el contrapeso.**
+
+**Inicio:**
+1.  **Base:** Acostada boca arriba, levanta una pierna (ej. derecha) y el brazo del mismo lado (derecho).
+2.  **Volador:** De espaldas a la base, alínea tu espalda baja/sacro con el pie de la base. Con tu mano derecha, busca hacia atrás para tomar la mano derecha de la base.
+3.  **Entrada:** El volador se inclina hacia adelante (lejos de la base), generando tensión. La base resiste esta tensión, creando un **Contrapeso**. El volador levanta los pies.
+
+**Desarrollo:**
+*   **Base:** Eres el ancla. La pierna de apoyo debe estar muy fuerte. La clave es resistir la tracción del volador.
+*   **Volador:** Tu cuerpo está en una posición de arco lateral/torsión. Extiende tu brazo y pierna libres para encontrar el equilibrio. Es una postura de gran apertura de pecho y hombro.
+
+**Culminación:**
+1.  **Volador:** Recoge las extremidades y busca el suelo con los pies.
+2.  **Base:** Controla el descenso flexionando la pierna de apoyo.`,
+    musculos: {
+      base: ['Core', 'Piernas', 'Fuerza de agarre'],
+      volador: ['Oblicuos', 'Espalda', 'Hombros', 'Core'],
+    },
+    calibracion: {
+      base: ['Sé un ancla sólida.', 'El pie debe estar en el sacro, no en la columna.', 'Comunica sobre la tensión.'],
+      volador: ['Confía en el contrapeso.', 'Encuentra la extensión en la torsión.', 'Comunica sobre la comodidad del agarre.'],
+      observador: ['Observador muy atento. Colócate para detener la caída si el contrapeso falla.'],
+    },
+  },
+  {
+    id: 'lb-reverse-outside-star',
+    nombre: 'Estrella Exterior Inversa\n(Reverse Outside Side Star)',
+    nivel: 5,
+    type: 'L-Basing',
+    prerequisites: ['lb-reverse-inside-star', 'lb-18'],
+    url_imagen: 'https://i.ibb.co/T6v24Cj/acroyoga-reverse-outside-star-fdf3eef8ab.webp',
+    descripcion: 'Una de las variaciones más exigentes de Estrella, que combina una orientación inversa y un agarre cruzado, demandando máxima confianza y alineación.',
+    narrativa_detallada: `
+**Combina la orientación de Reverse Star con la dinámica de Outside Star.**
+
+**Inicio:**
+1.  **Base:** Acostada, levanta una pierna (ej. derecha) y el brazo opuesto (izquierdo).
+2.  **Volador:** De espaldas a la base, alínea tu sacro/espalda baja con el pie de la base. Con tu mano derecha, busca hacia atrás para tomar la mano izquierda de la base (agarre cruzado).
+3.  **Entrada:** El volador se inclina hacia adelante, generando la tensión del **Contrapeso** para levantarse.
+
+**Desarrollo:**
+*   **Base:** Mantén una estructura de anclaje sólida con la pierna y el brazo opuestos. El equilibrio aquí es muy delicado.
+*   **Volador:** Mantén una línea de arco fuerte. La torsión del agarre cruzado añade complejidad. Extiende tus extremidades libres para estabilizar.
+
+**Culminación:**
+1.  Salida controlada y comunicada, bajando los pies al suelo.
+2.  La base guía el descenso flexionando la pierna de apoyo.`,
+    musculos: {
+      base: ['Todo el cuerpo', 'Concentración máxima'],
+      volador: ['Todo el cuerpo', 'Confianza absoluta'],
+    },
+    calibracion: {
+      base: ['Apilamiento y anclaje perfectos.', 'Comunicación constante a través del agarre.'],
+      volador: ['Confianza ciega en la base.', 'Mantén una línea fuerte y predecible.', 'Respira.'],
+      observador: ['Observador de nivel élite. Debe entender perfectamente la dinámica de la postura.'],
+    },
+  },
+  {
     id: 'lb-18',
     nombre: 'Equilibrio: Estrella Invertida\n(Reverse Star)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-12'],
     url_video: 'https://www.youtube.com/watch?v=vccFNDI6y74',
-    url_imagen: 'https://i.ytimg.com/vi/yS3NANY2CpI/maxresdefault.jpg',
+    url_imagen: 'https://i.ibb.co/FNN3mD9/Reverse-Star.jpg',
     descripcion: 'Variación avanzada de la Estrella donde el volador mira en dirección opuesta a la base. Exige un contrapeso y confianza inmensos.',
      narrativa_detallada: `
 **Inicio:**
@@ -786,7 +1098,7 @@ Similar a la **pose:lb-9**, pero la conexión es espalda con espalda.
   {
     id: 'lb-10',
     nombre: 'Inversión: Plancha sobre Manos\n(Free Bird)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-15', 'lb-1'],
     url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
@@ -799,7 +1111,7 @@ Esta postura es también conocida como **Free Bird**.
 1.  **Base:** Acuéstate y extiende los brazos rectos hacia el cielo, como dos pilares. Los hombros bien conectados al suelo.
 2.  **Volador:** Párate frente a las manos de la base. Coloca tus hombros sobre sus manos. El agarre es con los dedos de la base apuntando hacia los hombros del volador.
 3.  **Volador:** Transfiere tu peso hacia adelante, como si hicieras una plancha. La base te ayudará a encontrar el punto de equilibrio.
-4.  **Base:** Mantén los brazos completamente rectos y bloqueados (**Apilamiento (Stacking)**). El equilibrio se maneja con microajustes de los dedos y la presión de las palmas.
+4.  **Base:** Mantén los brazos completamente rectos y bloqueados (**pose:1**). El equilibrio se maneja con microajustes de los dedos y la presión de las palmas.
 5.  **Volador:** Levanta un pie y luego el otro, manteniendo una **Línea** corporal de plancha perfecta.
 
 **Desarrollo:**
@@ -821,9 +1133,9 @@ Esta postura es también conocida como **Free Bird**.
   {
     id: 'lb-11',
     nombre: 'Inversión: Parada de Manos sobre Pies\n(Handstand on Feet)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
-    prerequisites: ['lb-shoulderstand', 'lb-21', 'lb-cartwheel-exit'],
+    prerequisites: ['lb-shoulderstand-on-feet', 'lb-21', 'tr-cartwheel-exit'],
     url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',
     url_imagen: 'https://as1.ftcdn.net/jpg/03/11/30/08/1000_F_311300878_uUrWjkC20Y6WxlPIs6cr1kbGoLRKgPXR.jpg',
     descripcion: 'Postura icónica. El volador realiza una parada de manos sobre los pies de la base.',
@@ -841,7 +1153,7 @@ Esta postura es también conocida como **Free Bird**.
 *   **Puntos de Contacto:** Los pies de la base en los hombros del volador. Las manos del volador en el suelo.
 
 **Culminación:**
-1.  **Volador:** La salida más segura es hacer una **pose:lb-cartwheel-exit**, bajando una pierna hacia un lado.
+1.  **Volador:** La salida más segura es hacer una **pose:tr-cartwheel-exit**, bajando una pierna hacia un lado.
 2.  **Observador:** Debe estar preparado para guiar esta salida lateral y asegurar que el volador aterrice de pie.
 `,
     musculos: { base: ['Piernas', 'Core', 'Flexibilidad de isquiotibiales'], volador: ['Hombros', 'Brazos', 'Core', 'Espalda'] },
@@ -854,7 +1166,7 @@ Esta postura es también conocida como **Free Bird**.
   {
     id: 'lb-croc',
     nombre: 'Inversión: Cocodrilo\n(Croc)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-10', 'lb-11'],
     url_video: 'https://www.youtube.com/watch?v=IKFZ6KMWZNo',
@@ -868,7 +1180,7 @@ Esta postura es también conocida como **Free Bird**.
 
 **Desarrollo:**
 *   **Base:** Coloca tus pies en las caderas o en la parte baja del abdomen del volador para darle soporte.
-*   **Volador:** Baja a una posición de chaturanga (flexión baja), manteniendo los codos pegados al cuerpo y una línea recta. Esto es "Croc". Sostener esta postura es un gran entrenamiento de fuerza para **H2H (Hand-to-Hand)**.
+*   **Volador:** Baja a una posición de chaturanga (flexión baja), manteniendo los codos pegados al cuerpo y una línea recta. Esto es "Croc". Sostener esta postura es un gran entrenamiento de fuerza para **pose:lb-h2h**.
 *   **Base:** Mantén los brazos estables. El desafío es sostener al volador en esta posición baja.
 
 **Culminación:**
@@ -883,7 +1195,7 @@ Esta postura es también conocida como **Free Bird**.
   {
     id: 'lb-14',
     nombre: 'Inversión: Pies a Mano\n(Foot-to-Hand)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-11'],
     url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
@@ -918,7 +1230,7 @@ Esta postura es también conocida como **Free Bird**.
   {
     id: 'lb-h2h',
     nombre: 'Inversión: Parada de Manos sobre Manos\n(H2H)',
-    nivel: 4,
+    nivel: 5,
     type: 'L-Basing',
     prerequisites: ['lb-14', 'lb-croc'],
     url_video: 'https://www.youtube.com/watch?v=uqryFIDRwSA',
@@ -935,7 +1247,7 @@ Se puede entrar desde **pose:lb-10** extendida.
 6.  **Base:** Extiende los brazos para levantar al volador en la parada de manos final.
 
 **Desarrollo:**
-*   **Base:** Mantén los brazos perfectamente rectos (**Apilamiento (Stacking)**). Los hombros deben estar apilados sobre los codos y muñecas. El equilibrio se controla con microajustes de los dedos y las muñecas, no doblando los codos.
+*   **Base:** Mantén los brazos perfectamente rectos (**pose:1**). Los hombros deben estar apilados sobre los codos y muñecas. El equilibrio se controla con microajustes de los dedos y las muñecas, no doblando los codos.
 *   **Volador:** Encuentra tu **Línea** de parada de manos. Aprieta todo el cuerpo: piernas juntas, pies en punta, **Core** activo. La mirada puede estar en las manos de la base.
 *   **Puntos de Contacto:** Manos de la base agarrando las manos del volador (**Hand-to-Hand grip**).
 
@@ -955,22 +1267,108 @@ Se puede entrar desde **pose:lb-10** extendida.
     },
   },
   
-  // L-BASING: NIVEL 5 (antes 4) (LAVADORAS)
+  // L-BASING: NIVEL 7 (WASHING MACHINES)
+  {
+    id: 'wm-four-step',
+    nombre: 'Cuatro Pasos\n(Four-Step)',
+    nivel: 7,
+    type: 'L-Basing',
+    prerequisites: ['lb-7', 'lb-back-bird', 'lb-shoulderstand'],
+    url_video: 'https://www.youtube.com/watch?v=F_7y2H0sRIY',
+    url_imagen: 'https://i.ibb.co/21QyLvPs/fourstep.jpg',
+    descripcion: 'Una lavadora fundamental que combina cuatro posturas en un flujo suave: Trono a Horcajadas, Pájaro de Espaldas, Parada de Hombros y de vuelta a Trono.',
+    narrativa_detallada: `
+**Inicio:** Comienza en **pose:lb-7** estable.
+**Paso 1 (a Pájaro de Espaldas):**
+* Desde Trono a Horcajadas, el volador se reclina hacia atrás mientras la base reposiciona los pies en la espalda alta para entrar en **pose:lb-back-bird**.
+**Paso 2 (a Parada de Hombros):**
+* Desde **Pájaro de Espaldas**, el volador se recoge, y la base mueve sus pies a los hombros del volador, entrando en **pose:lb-shoulderstand**.
+**Paso 3 (a Trono Invertido):**
+* Desde Parada de Hombros, el volador se sienta, y la base mueve los pies a los muslos internos del volador, entrando en **pose:lb-reverse-throne**.
+**Paso 4 (a Trono a Horcajadas):**
+* Desde Trono Invertido, el volador gira 180 grados, guiado por la base, para volver al inicio en **pose:lb-7**.`,
+  },
+  {
+    id: 'wm-helicopter',
+    nombre: 'Helicóptero\n(Helicopter)',
+    nivel: 7,
+    type: 'L-Basing',
+    prerequisites: ['lb-front-bird', 'lb-back-bird'],
+    url_video: 'https://www.youtube.com/watch?v=nHuaq_xHq48',
+    url_imagen: 'https://i.ytimg.com/vi/x8ipsmMEI28/maxresdefault.jpg',
+    descripcion: 'Una transición rotacional clásica donde el volador gira 360 grados horizontalmente, pasando de Pájaro Frontal a Pájaro de Espaldas y de vuelta.',
+    narrativa_detallada: `
+**Esta lavadora es fundamental para entender la rotación en el plano horizontal.**
+
+**Inicio:**
+1. Comiencen en **pose:lb-front-bird**, sin manos.
+
+**Desarrollo (La Lavadora):**
+2. **Inicio del Giro:** El volador inicia la rotación girando la cabeza y los hombros hacia un lado. La base sigue este movimiento con los pies, permitiendo que el volador gire sobre ellos.
+3. **Paso por Lateral:** El volador pasa por una posición de lado (**pose:lb-side-bird**), manteniendo la línea corporal.
+4. **Pájaro de Espaldas:** El giro continúa hasta que el volador completa 180 grados y se estabiliza en **pose:lb-back-bird**.
+5. **El Regreso:** Desde **pose:lb-back-bird**, la rotación continúa en la misma dirección, pasando por el otro lado en **pose:lb-side-bird**, hasta completar los 360 grados y volver a **pose:lb-front-bird**.
+
+**Culminación:**
+* El ciclo puede repetirse varias veces. Para salir, deténganse en **pose:lb-front-bird** y desmonten.`,
+    musculos: {
+      base: ['Control y precisión de pies', 'Core', 'Resistencia'],
+      volador: ['Core', 'Oblicuos', 'Habilidad para mantener la línea durante la rotación'],
+    },
+    calibracion: {
+      base: ['Tus pies actúan como un plato giratorio.', 'Mantén un punto de presión constante y permite que el volador gire sobre él.', 'Ajusta la posición de tus pies para seguir el centro de gravedad del volador.'],
+      volador: ['Inicia el giro desde tu centro (core).', 'Mantén una línea tensa y recta durante toda la rotación.', 'Tu cuerpo es una sola pieza que gira.'],
+      observador: ['Muévete alrededor de la pareja.', 'El mayor riesgo es que el volador se deslice de los pies. Prepárate para guiar sus caderas.'],
+    },
+  },
+  {
+    id: 'lb-high-barrel-roll',
+    nombre: 'High Barrel Roll\n(High Barrel Roll)',
+    nivel: 7,
+    type: 'L-Basing',
+    prerequisites: ['lb-1', 'lb-back-bird', 'lb-side-bird'],
+    url_video: 'https://www.youtube.com/watch?v=cepXBQyMbQI',
+    url_imagen: 'https://daman.co.id/_next/image?url=https%3A%2F%2Fbackend.daman.co.id%2Fwp-content%2Fuploads%2F2018%2F07%2FFitness-0607.jpg&w=1920&q=75',
+    descripcion: 'Una lavadora rotacional donde el volador "rueda" sobre el torso de la base, pasando por Pájaro Frontal y Pájaro de Espaldas.',
+    narrativa_detallada: `
+**Esta lavadora enseña un control de equilibrio lateral exquisito.**
+
+**Inicio:**
+1.  Comienza en **pose:lb-1**, manos conectadas.
+
+**Desarrollo (La Lavadora):**
+2.  **El Rollo:** El volador se inclina hacia un lado, por ejemplo, el izquierdo. La base baja su pierna izquierda y sube su pierna derecha, creando una "rampa".
+3.  **Transición:** El volador, manteniendo su cuerpo como una unidad sólida, rueda sobre el torso de la base, pasando por una posición similar a **pose:lb-side-bird**.
+4.  **Recepción:** El volador completa el giro y aterriza suavemente en **pose:lb-back-bird**, con los pies de la base ahora en su espalda.
+5.  **Regreso:** El movimiento se puede revertir para volver a **pose:lb-1**, completando el "barrel roll".
+
+**Culminación:**
+*   Se detiene en **pose:lb-1** o **pose:lb-back-bird** y se desmonta de forma segura. La clave es la fluidez y una conexión de manos constante.`,
+    musculos: {
+      base: ["Core", "Control de piernas", "Fuerza de brazos"],
+      volador: ["Core", "Oblicuos", "Conciencia espacial"],
+    },
+    calibracion: {
+      base: ["Guía la rotación con las piernas y los brazos.", "Mantén un movimiento fluido y constante.", "Sé una plataforma estable para el rollo."],
+      volador: ["Mantén el cuerpo como un bloque sólido y recto.", "No intentes 'ayudar' en el giro, déjate guiar por la base.", "Mantén la conexión de manos."],
+      observador: ["Muévete con la rotación.", "Asegura que el volador no se deslice del torso de la base y vigila la cabeza."],
+    },
+  },
   {
     id: 'lb-around-the-world',
     nombre: 'Alrededor del Mundo\n(Around the World)',
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
-    prerequisites: ['lb-1', 'th-folded-leaf', 'lb-back-bird-acro'],
+    prerequisites: ['lb-1', 'th-folded-leaf', 'lb-back-bird'],
     url_video: 'https://www.youtube.com/watch?v=8oq4eUG5TBs',
     url_imagen: 'https://i.ibb.co/4ZqZxRHt/image.png',
-    descripcion: 'Una de las primeras lavadoras que se aprenden, conectando Pájaro Frontal, Plegaria Invertida y Pájaro Invertido en un flujo circular.',
+    descripcion: 'Una de las primeras lavadoras que se aprenden, conectando Pájaro Frontal, Plegaria Invertida y Pájaro de Espaldas en un flujo circular.',
     narrativa_detallada: `
 **Secuencia:**
 1.  **Inicio:** Empieza en **pose:lb-1**, con manos conectadas.
 2.  **Transición a Plegaria Invertida:** La base dobla las rodillas, el volador se pliega hacia adelante hasta que sus manos tocan el suelo y la base mueve los pies a las caderas para **pose:th-folded-leaf**.
-3.  **Transición a Pájaro Invertido:** Desde **pose:th-folded-leaf**, el volador se endereza, la base mueve los pies a la espalda alta para **pose:lb-back-bird-acro**.
-4.  **Regreso a Plancha Frontal:** Desde **pose:lb-back-bird-acro**, se baja al suelo para reiniciar en **pose:lb-1**, o para practicantes avanzados, se puede intentar una transición directa.`,
+3.  **Transición a Pájaro de Espaldas:** Desde **pose:th-folded-leaf**, el volador se endereza, la base mueve los pies a la espalda alta para **pose:lb-back-bird**.
+4.  **Regreso a Plancha Frontal:** Desde **pose:lb-back-bird**, se baja al suelo para reiniciar en **pose:lb-1**, o para practicantes avanzados, se puede intentar una transición directa.`,
     musculos: {
       base: ["Control de piernas", "Transiciones suaves"],
       volador: ["Conciencia corporal", "Core"],
@@ -982,36 +1380,11 @@ Se puede entrar desde **pose:lb-10** extendida.
     },
   },
   {
-    id: 'lb-four-step',
-    nombre: 'Cuatro Pasos\n(Four-Step)',
-    nivel: 5,
-    type: 'L-Basing',
-    prerequisites: ['lb-7', 'lb-back-bird-acro'],
-    url_video: 'https://www.youtube.com/watch?v=Hi4xS9E-rck',
-    url_imagen: 'https://i.ytimg.com/vi/W9oA6iLEeMs/maxresdefault.jpg',
-    descripcion: 'Un flujo clásico que conecta Pájaro Frontal, Pájaro Invertido y Trono a Horcajadas, pasando por el suelo.',
-    narrativa_detallada: `
-**Secuencia:**
-1.  **Inicio:** En **pose:lb-front-bird**. El volador salta hacia atrás.
-2.  **Paso 2:** Base y volador giran. Entran en **pose:lb-back-bird-acro**.
-3.  **Paso 3:** Desde Pájaro Inverso, el volador se desliza hacia abajo para sentarse en **pose:lb-7**.
-4.  **Paso 4:** Desde Trono a Horcajadas, el volador se desmonta hacia adelante para reiniciar la secuencia.`,
-    musculos: {
-      base: ["Ritmo y fluidez", "Control"],
-      volador: ["Agilidad", "Conciencia espacial"],
-    },
-    calibracion: {
-      base: ["Mantén el ritmo.", "Cada movimiento debe fluir al siguiente."],
-      volador: ["Sé ligero en tus pies.", "Confía en el ritmo de la secuencia."],
-      observador: ["Observa el flujo completo, estate listo para intervenir si el ritmo se rompe."],
-    },
-  },
-  {
     id: 'lb-corkscrew',
     nombre: 'Sacacorchos\n(Corkscrew)',
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
-    prerequisites: ['lb-2', 'lb-back-bird-acro', 'lb-7', 'lb-12'],
+    prerequisites: ['lb-2', 'lb-back-bird', 'lb-7', 'lb-12'],
     url_video: 'https://www.youtube.com/watch?v=76m0AXh_Q5Y',
     url_imagen: 'http://basaho.com/cdn/shop/articles/Acro_yoga_1.1_1200x1200.jpg?v=1708350035',
     descripcion: 'Una lavadora clásica que implica una rotación completa del volador alrededor de las piernas de la base.',
@@ -1021,7 +1394,7 @@ Se puede entrar desde **pose:lb-10** extendida.
 
 **Desarrollo (La Lavadora):**
 Entrada al giro: El volador se inclina hacia un lado. La base baja la pierna de ese lado y sube la otra, guiando la cadera del volador hacia la rotación.
-Transición a **pose:lb-back-bird-acro**: El volador se extiende hacia atrás, apoyado en las piernas de la base. Aquí se abre el pecho y se alinea la cadera con las piernas de la base.
+Transición a **pose:lb-back-bird**: El volador se extiende hacia atrás, apoyado en las piernas de la base. Aquí se abre el pecho y se alinea la cadera con las piernas de la base.
 Paso por **pose:lb-12**: Con control de manos y empuje de la pierna activa, la base rota al volador lateralmente. El volador mantiene tensión en el core y brazos para controlar la torsión. Este momento crea el efecto de “sacacorchos”.
 Transición a **pose:lb-2**: Desde Side Star, el volador se recoge (tuck) y se coloca nuevamente sentado en los pies de la base.
 
@@ -1040,46 +1413,13 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     calibracion: {
       base: ["Guía las caderas del volador en todo momento.", "Movimientos suaves y circulares.", "Mantén un ritmo constante."],
       volador: ["Mantén la tensión corporal pero sin rigidez.", "Confía en la guía de la base.", "Mantente orientado durante las rotaciones."],
-      observador: ["Sigue el flujo de la lavadora.", "Prepárate para intervenir en las transiciones clave, como de invertido a sentado."],
-    },
-  },
-  {
-    id: 'lb-high-barrel-roll',
-    nombre: 'High Barrel Roll\n(High Barrel Roll)',
-    nivel: 5,
-    type: 'L-Basing',
-    prerequisites: ['lb-1', 'lb-back-bird-acro', 'lb-side-bird'],
-    url_video: 'https://www.youtube.com/watch?v=cepXBQyMbQI',
-    url_imagen: 'https://daman.co.id/_next/image?url=https%3A%2F%2Fbackend.daman.co.id%2Fwp-content%2Fuploads%2F2018%2F07%2FFitness-0607.jpg&w=1920&q=75',
-    descripcion: 'Una lavadora rotacional donde el volador "rueda" sobre el torso de la base, pasando por Pájaro Frontal y Pájaro Invertido.',
-    narrativa_detallada: `
-**Esta lavadora enseña un control de equilibrio lateral exquisito.**
-
-**Inicio:**
-1.  Comienza en **pose:lb-1**, manos conectadas.
-
-**Desarrollo (La Lavadora):**
-2.  **El Rollo:** El volador se inclina hacia un lado, por ejemplo, el izquierdo. La base baja su pierna izquierda y sube su pierna derecha, creando una "rampa".
-3.  **Transición:** El volador, manteniendo su cuerpo como una unidad sólida, rueda sobre el torso de la base, pasando por una posición similar a **pose:lb-side-bird**.
-4.  **Recepción:** El volador completa el giro y aterriza suavemente en **pose:lb-back-bird-acro**, con los pies de la base ahora en su espalda.
-5.  **Regreso:** El movimiento se puede revertir para volver a **pose:lb-1**, completando el "barrel roll".
-
-**Culminación:**
-*   Se detiene en **pose:lb-1** o **pose:lb-back-bird-acro** y se desmonta de forma segura. La clave es la fluidez y una conexión de manos constante.`,
-    musculos: {
-      base: ["Core", "Control de piernas", "Fuerza de brazos"],
-      volador: ["Core", "Oblicuos", "Conciencia espacial"],
-    },
-    calibracion: {
-      base: ["Guía la rotación con las piernas y los brazos.", "Mantén un movimiento fluido y constante.", "Sé una plataforma estable para el rollo."],
-      volador: ["Mantén el cuerpo como un bloque sólido y recto.", "No intentes 'ayudar' en el giro, déjate guiar por la base.", "Mantén la conexión de manos."],
-      observador: ["Muévete con la rotación.", "Asegura que el volador no se deslice del torso de la base y vigila la cabeza."],
+      observador: ["Sigue el flujo de la lavadora.", "Prepárate para intervenir en los puntos de transición clave, como de invertido a sentado."],
     },
   },
   {
     id: 'lb-13',
     nombre: "Rueda de Catalina\n(Catherine's Wheel)",
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
     prerequisites: ['lb-7', 'lb-16', 'lb-reverse-throne'],
     url_video: 'https://www.youtube.com/watch?v=UyqkvT_5Z8c',
@@ -1108,9 +1448,42 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
     },
   },
   {
+    id: 'wm-rotisserie',
+    nombre: 'Rostisseria\n(Rotisserie)',
+    nivel: 7,
+    type: 'L-Basing',
+    prerequisites: ['lb-front-bird', 'lb-back-bird', 'lb-side-bird'],
+    url_video: 'https://www.youtube.com/watch?v=P35KID6vDiM',
+    url_imagen: 'https://i.ytimg.com/vi/cbbrJWsSZnY/maxresdefault.jpg',
+    descripcion: 'Una lavadora continua en la que el volador gira sobre los pies de la base, pasando por todas las orientaciones (frontal, lateral, de espaldas).',
+    narrativa_detallada: `
+**Esta lavadora enseña un control exquisito del equilibrio en 360 grados.**
+
+**Inicio:**
+1. Comiencen en una postura estable de **pose:lb-front-bird**.
+
+**Desarrollo (La Lavadora):**
+2. **De Frontal a Lateral:** La base inicia una rotación con los pies, guiando al volador hacia una posición de **pose:lb-side-bird**. El volador debe mantener su cuerpo en una línea recta y tensa.
+3. **De Lateral a Inverso:** La rotación continúa. La base ajusta sus pies desde la cadera y el torso del volador hasta su espalda, mientras el volador completa el giro de 180 grados para aterrizar en **pose:lb-back-bird**.
+4. **De Inverso a Lateral (otro lado):** La base continúa la rotación en la misma dirección, llevando al volador a la posición de **pose:lb-side-bird** en el otro lado.
+5. **De Lateral a Frontal:** La rotación se completa cuando la base guía al volador de vuelta a la posición inicial de **pose:lb-front-bird**.
+
+**Culminación:**
+* El ciclo puede continuar fluidamente. Para salir, deténganse en **pose:lb-front-bird** o **pose:lb-back-bird** y desmonten de la forma habitual.`,
+    musculos: {
+      base: ['Control preciso de los pies', 'Core', 'Resistencia'],
+      volador: ['Core muy fuerte', 'Conciencia corporal completa', 'Habilidad para mantener la línea en todos los planos'],
+    },
+    calibracion: {
+      base: ['Tus pies actúan como un plato giratorio.', 'Mantén un punto de presión constante y permite que el volador gire sobre él.', 'Ajusta la posición de tus pies para seguir el centro de gravedad del volador.'],
+      volador: ['Tu cuerpo es un lápiz que gira.', 'Mantén la línea y la tensión en todo momento.', 'Confía en los pies de tu base.'],
+      observador: ['Sigue el giro constantemente.', 'Vigila la cabeza y la columna del volador.', 'La fluidez es seguridad aquí.'],
+    },
+  },
+  {
     id: 'lb-tick-tock',
     nombre: 'Tick-Tock\n(Tick-Tock)',
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
     prerequisites: ['lb-9', 'lb-18'],
     url_video: 'https://www.youtube.com/watch?v=zen2HDxr3-Y',
@@ -1134,9 +1507,9 @@ Clave: el paso por Side Star asegura la continuidad circular del movimiento, evi
   {
     id: 'lb-22',
     nombre: 'Ninja Star\n(Ninja Star)',
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
-    prerequisites: ['lb-18', 'lb-12', 'lb-cartwheel-exit'],
+    prerequisites: ['lb-18', 'lb-12', 'tr-cartwheel-exit'],
     url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
     url_imagen: 'https://i.ytimg.com/vi/koJAiJX30_w/maxresdefault.jpg',
     descripcion: 'Una lavadora icónica y dinámica que fluye a través de diferentes posturas de estrella, requiriendo una comunicación y fluidez impecables.',
@@ -1168,7 +1541,7 @@ La lavadora generalmente comienza desde una **pose:lb-18** estable.
   {
     id: 'lb-ninja-star-reverse',
     nombre: 'Ninja Star Inversa\n(Ninja Star Reverse)',
-    nivel: 5,
+    nivel: 7,
     type: 'L-Basing',
     prerequisites: ['lb-22'],
     url_video: 'https://www.youtube.com/watch?v=PmP5OegaDKk',
@@ -1192,3 +1565,22 @@ Esta lavadora sigue la misma trayectoria que la **pose:lb-22**, pero en la direc
     },
   },
 ];
+
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

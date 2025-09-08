@@ -9,7 +9,7 @@ export interface Pose {
   id: string;
   nombre: string;
   nivel: number;
-  type: 'L-Basing' | 'Icarian' | 'Standing' | 'Thai-Massage' | 'Transition' | 'Therapeutic';
+  type: 'L-Basing' | 'Icarian' | 'Standing' | 'Thai-Massage' | 'Transition' | 'Therapeutic' | 'Flow';
   descripcion: string;
   narrativa_detallada?: string;
   musculos?: {
@@ -76,9 +76,18 @@ export interface PoseModifier {
   descripcion: string;
 }
 
+export interface Exercise {
+  id: string;
+  titulo: string; // "Nombre en Español\n(English Name)"
+  descripcion: string;
+  enfasis: string; // 'Core', 'Movilidad Articular', 'Cardio', 'Piernas', etc.
+  categoria: 'Individual' | 'En Pareja';
+}
+
+
 // Type for items in the sequence builder
-export type SequenceItem = (Pose | Concept | Asana | PoseModifier) & {
+export type SequenceItem = (Pose | Concept | Asana | PoseModifier | Exercise) & {
   uniqueId: string;
-  itemType: 'pose' | 'concept' | 'asana' | 'modifier';
+  itemType: 'pose' | 'concept' | 'asana' | 'modifier' | 'exercise';
   notes: string;
 };

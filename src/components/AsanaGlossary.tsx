@@ -1,16 +1,21 @@
 'use client';
 
-import type { Asana } from '@/types';
+import type { Asana, Pose, Concept } from '@/types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Accordion } from '@/components/ui/accordion';
 import { AsanaCard } from './AsanaCard';
 import GlossaryExporter from './GlossaryExporter';
 
+type NameDisplay = 'es' | 'en' | 'both';
+
 type AsanaGlossaryProps = {
   asanas: Asana[];
+  allPoses: Pose[];
+  allConcepts: Concept[];
+  nameDisplay: NameDisplay;
 };
 
-export default function AsanaGlossary({ asanas }: AsanaGlossaryProps) {
+export default function AsanaGlossary({ asanas, allPoses, allConcepts, nameDisplay }: AsanaGlossaryProps) {
   if (asanas.length === 0) {
     return null;
   }
@@ -36,7 +41,13 @@ export default function AsanaGlossary({ asanas }: AsanaGlossaryProps) {
       <CardContent>
         <Accordion type="single" collapsible className="w-full">
           {asanas.map((asana) => (
-            <AsanaCard key={asana.id} asana={asana} />
+            <AsanaCard 
+                key={asana.id} 
+                asana={asana}
+                allPoses={allPoses}
+                allConcepts={allConcepts}
+                nameDisplay={nameDisplay}
+            />
           ))}
         </Accordion>
       </CardContent>

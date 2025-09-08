@@ -2,11 +2,11 @@
 import type { Pose } from '@/types';
 
 export const icarianPoses: Pose[] = [
-  // Icarian Games: NIVEL 6 (antes 5)
+  // Icarian Games: NIVEL 9 (antes 6)
   {
     id: 'ic-27',
     nombre: 'Pop: Trono a Trono\n(Throne-to-Throne Pop)',
-    nivel: 6,
+    nivel: 9,
     type: 'Icarian',
     prerequisites: ['lb-2'],
     url_video: 'https://www.youtube.com/watch?v=NTFFY2wm77o',
@@ -40,7 +40,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-28',
     nombre: 'Pop: Trono a Pájaro Frontal\n(Throne-to-Front-Bird Pop)',
-    nivel: 6,
+    nivel: 9,
     type: 'Icarian',
     prerequisites: ['ic-27'],
     url_video: 'https://www.youtube.com/watch?v=O2Fsx4aDX1s',
@@ -73,7 +73,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-29',
     nombre: 'Pop: Pájaro a Horcajadas\n(Bird-to-Straddle Pop)',
-    nivel: 6,
+    nivel: 9,
     type: 'Icarian',
     prerequisites: ['ic-28'],
     url_video: 'https://www.youtube.com/watch?v=BqUpzbc2uxM',
@@ -104,15 +104,15 @@ export const icarianPoses: Pose[] = [
     },
   },
   
-  // Icarian Games: NIVEL 7 (antes 6)
+  // Icarian Games: NIVEL 10 (antes 7)
   {
     id: 'ic-31',
-    nombre: 'Pop: Pájaro a Pájaro Invertido\n(Bird-to-Reverse-Bird Pop)',
-    nivel: 7,
+    nombre: 'Pop: Pájaro a Pájaro Reverso\n(Bird-to-Reverse-Bird Pop)',
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-28'],
     url_video: 'https://www.youtube.com/watch?v=qa5iG6k3W0s',
-    descripcion: 'El volador es lanzado desde Pájaro Frontal y ejecuta un giro de 180° en el aire para ser recibido en Pájaro Invertido.',
+    descripcion: 'El volador es lanzado desde Pájaro Frontal y ejecuta un giro de 180° en el aire para ser recibido en Pájaro Reverso.',
     narrativa_detallada: `
 **Este es el primer pop con rotación de 180 grados.**
 
@@ -121,12 +121,12 @@ export const icarianPoses: Pose[] = [
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y el Giro):**
-*   **Base:** El lanzamiento es similar a otros pops, pero aquí el 'timing' es aún más crítico. Debes anticipar la rotación del volador y preparar tus pies para recibirlo en la posición de **pose:lb-back-bird-acro** (en su abdomen bajo/caderas).
+*   **Base:** El lanzamiento es similar a otros pops, pero aquí el 'timing' es aún más crítico. Debes anticipar la rotación del volador y preparar tus pies para recibirlo en la posición de **pose:lb-reverse-bird** (en su abdomen bajo/caderas).
 *   **Volador:** En el punto más alto del lanzamiento, mantén tu cuerpo en **Layout / Straight (Recto/Plancha)** y simultáneamente inicia un giro de 180 grados. Este giro se genera desde el **Core** y los hombros.
 *   **Recepción:** La base recibe al volador, ahora de cara a sus pies, absorbiendo el impacto y estabilizando la postura.
 
 **Culminación:**
-*   Desde **pose:lb-back-bird-acro**, se puede transicionar a otros pops o desmontar.
+*   Desde **pose:lb-reverse-bird**, se puede transicionar a otros pops o desmontar.
 `,
     musculos: {
       base: ['Precisión y timing para la recepción en un nuevo punto.'],
@@ -141,7 +141,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-throne-shoulderstand-pop',
     nombre: 'Pop: Trono a Parada de Hombros\n(Throne-to-Shoulderstand Pop)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-27', 'lb-shoulderstand'],
     url_video: 'https://www.youtube.com/watch?v=usu93tTl1HQ',
@@ -172,16 +172,16 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-32',
     nombre: 'Voltereta: Hacia Atrás a Trono\n(Backflip to Throne)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-31'],
     url_video: 'https://www.youtube.com/watch?v=UyqkvT_5Z8c',
-    descripcion: 'Un movimiento icónico. El volador es lanzado desde Pájaro Invertido y realiza una voltereta hacia atrás para ser recibido en Trono.',
+    descripcion: 'Un movimiento icónico. El volador es lanzado desde Pájaro Reverso y realiza una voltereta hacia atrás para ser recibido en Trono.',
     narrativa_detallada: `
 **Este es uno de los primeros 'flips' que se aprenden en Icarian.**
 
 **Inicio:**
-1.  **Base y Volador:** Comiencen en una posición de **pose:lb-back-bird-acro** baja y estable.
+1.  **Base y Volador:** Comiencen en una posición de **pose:lb-reverse-bird** baja y estable.
 2.  **Comunicación:** "Listo", "listo", "1, 2, 3...".
 
 **Desarrollo (El Pop y el Flip):**
@@ -205,7 +205,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-35',
     nombre: 'Voltereta: Hacia Adelante a Trono\n(Frontflip to Throne)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-32'],
     url_video: 'https://www.youtube.com/watch?v=Hi4xS9E-rck',
@@ -238,7 +238,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-36',
     nombre: 'Pop: Trípode a Trono\n(Tripod-to-Throne Pop)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['lb-21', 'ic-throne-shoulderstand-pop'],
     url_video: 'https://www.youtube.com/watch?v=WjMLoXNkQyE',
@@ -272,25 +272,25 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-corkscrew-pop',
     nombre: 'Lavadora Pop: Sacacorchos\n(Corkscrew Pop)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-31', 'ic-32'],
     url_video: 'https://www.youtube.com/watch?v=76m0AXh_Q5Y',
-    descripcion: 'Una secuencia de Icarian que fluye de Pájaro Invertido a Trono (usando una voltereta hacia atrás) y de vuelta a Pájaro.',
+    descripcion: 'Una secuencia de Icarian que fluye de Pájaro Reverso a Trono (usando una voltereta hacia atrás) y de vuelta a Pájaro.',
     narrativa_detallada: `
 **Esta lavadora icariana combina una voltereta con un pop de rotación.**
 
 **Secuencia:**
-1.  **Inicio:** Comiencen en **pose:lb-back-bird-acro**.
+1.  **Inicio:** Comiencen en **pose:lb-reverse-bird**.
 2.  **Flip:** La base lanza al volador a una **pose:ic-32**.
 3.  **Recepción y Pop:** La base recibe en **pose:lb-2** e inmediatamente, sin pausa, lanza al volador a un **pose:ic-31**.
-4.  **Recepción:** La base recibe al volador de nuevo en **pose:lb-back-bird-acro**, completando el ciclo.
+4.  **Recepción:** La base recibe al volador de nuevo en **pose:lb-reverse-bird**, completando el ciclo.
 
 **Desarrollo:**
 *   Esta secuencia requiere una resistencia y un control del tempo excepcionales. La fluidez es clave.
 
 **Culminación:**
-*   Se detiene en una de las posturas estables (**pose:lb-2** o **pose:lb-back-bird-acro**) y se desmonta.
+*   Se detiene en una de las posturas estables (**pose:lb-2** o **pose:lb-reverse-bird**) y se desmonta.
 `,
     musculos: {
       base: ["Resistencia, ritmo, precisión."],
@@ -305,7 +305,7 @@ export const icarianPoses: Pose[] = [
   {
     id: 'ic-34',
     nombre: "Lavadora Pop: Rueda de Catalina\n(Catherine's Wheel Pop)",
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-29', 'ic-31'],
     url_video: 'https://www.youtube.com/watch?v=8h2ZYO5_sYw',
@@ -338,19 +338,19 @@ export const icarianPoses: Pose[] = [
    {
     id: 'ic-ninja-star-pop',
     nombre: 'Lavadora Pop: Ninja Star\n(Ninja Star Pop)',
-    nivel: 7,
+    nivel: 10,
     type: 'Icarian',
     prerequisites: ['ic-corkscrew-pop'],
     url_video: 'https://www.youtube.com/watch?v=bvkHU4raLfI',
-    descripcion: 'Una lavadora Icariana muy fluida y rotacional que conecta Pájaro Invertido, Estrella Lateral y Trono.',
+    descripcion: 'Una lavadora Icariana muy fluida y rotacional que conecta Pájaro Reverso, Estrella Lateral y Trono.',
     narrativa_detallada: `
 **Una secuencia dinámica que enseña el control de la rotación y el cambio de plano.**
 
 **Secuencia de ejemplo:**
-1.  **Inicio:** Comiencen en **pose:lb-back-bird-acro**.
+1.  **Inicio:** Comiencen en **pose:lb-reverse-bird**.
 2.  **Pop 1 (a Side Star):** La base lanza al volador con una ligera rotación. El volador gira 90 grados para ser recibido en una **pose:lb-12** sostenida solo por los pies de la base.
 3.  **Pop 2 (a Trono):** Desde la Estrella Lateral, la base lanza al volador, quien se recoge (**Tuck**) para ser recibido en **pose:lb-2**.
-4.  **Pop 3 (de vuelta a Pájaro Invertido):** Desde Trono, la base puede lanzar al volador a un **pose:ic-31** para reiniciar el ciclo.
+4.  **Pop 3 (de vuelta a Pájaro Reverso):** Desde Trono, la base puede lanzar al volador a un **pose:ic-31** para reiniciar el ciclo.
 
 **Desarrollo:**
 *   Esta lavadora es menos sobre altura y más sobre control rotacional y precisión en la recepción.

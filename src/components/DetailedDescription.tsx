@@ -39,6 +39,11 @@ export default function DetailedDescription({ content, concepts, poses, nameDisp
 
     if (!content) return null;
 
+    const allConceptsById = concepts.reduce((acc, c) => {
+        acc[c.id] = c;
+        return acc;
+    }, {} as Record<string, Concept>);
+
     const allConceptsByName = concepts.reduce((acc, c) => {
         acc[c.titulo.toLowerCase()] = c;
         return acc;
@@ -55,7 +60,7 @@ export default function DetailedDescription({ content, concepts, poses, nameDisp
     }, {} as Record<string, Pose>);
 
 
-    const parts = content.trim().split(/(\*\*.*?\*\*)/g).filter(Boolean);
+    const parts = content.trim().split(/(\*\*pose:[a-zA-Z0-9-]+?\*\*|\*\*.*?\*\*)/g).filter(Boolean);
 
     const handlePoseClick = (pose: Pose, e: React.MouseEvent) => {
         e.preventDefault();
@@ -68,47 +73,49 @@ export default function DetailedDescription({ content, concepts, poses, nameDisp
             <TooltipProvider>
             {parts.map((part, index) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
-                const term = part.substring(2, part.length - 2);
-                let item: Pose | Concept | undefined;
-                let displayTerm: string = term;
+                    const term = part.substring(2, part.length - 2);
+                    let item: Pose | Concept | undefined;
+                    let displayTerm: string = term;
 
-                if (term.startsWith('pose:')) {
-                    const poseId = term.substring(5);
-                    item = allPosesById[poseId];
+                    if (term.startsWith('pose:')) {
+                        const referenceId = term.substring(5);
+                        item = allPosesById[referenceId] || allConceptsById[referenceId];
+                        if (item && 'nombre' in item) { // It's a Pose
+                            displayTerm = getDisplayName(item, nameDisplay);
+                        } else if (item) { // It's a Concept
+                            displayTerm = item.titulo;
+                        }
+                    } else {
+                        item = allPosesByName[term.toLowerCase()] || allConceptsByName[term.toLowerCase()];
+                    }
+    
                     if (item) {
-                        displayTerm = getDisplayName(item, nameDisplay);
+                        const isPose = 'prerequisites' in item; // Simple check to differentiate Pose from Concept
+                        return (
+                            <Tooltip key={index}>
+                                <TooltipTrigger asChild>
+                                    <strong 
+                                        className="text-primary font-bold cursor-pointer underline decoration-dotted"
+                                        onClick={(e) => isPose && handlePoseClick(item as Pose, e)}
+                                    >
+                                        {displayTerm}
+                                    </strong>
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs p-3 bg-card border-border shadow-lg rounded-md">
+                                    <div className="font-bold text-primary mb-2">{'nombre' in item ? item.nombre.split('\n')[0] : item.titulo}</div>
+                                    <p className="text-sm text-foreground/80">{item.descripcion}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        );
+                    } else {
+                        return (
+                        <strong key={index} className="font-bold text-foreground">
+                            {term}
+                        </strong>
+                        );
                     }
                 } else {
-                    item = allPosesByName[term.toLowerCase()] || allConceptsByName[term.toLowerCase()];
-                }
-    
-                if (item) {
-                    const isPose = 'prerequisites' in item; // Simple check to differentiate Pose from Concept
-                    return (
-                        <Tooltip key={index}>
-                            <TooltipTrigger asChild>
-                                <strong 
-                                    className="text-primary font-bold cursor-pointer underline decoration-dotted"
-                                    onClick={(e) => isPose && handlePoseClick(item as Pose, e)}
-                                >
-                                    {displayTerm}
-                                </strong>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs p-3 bg-card border-border shadow-lg rounded-md">
-                                <div className="font-bold text-primary mb-2">{'nombre' in item ? item.nombre.split('\n')[0] : item.titulo}</div>
-                                <p className="text-sm text-foreground/80">{item.descripcion}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    );
-                } else {
-                    return (
-                    <strong key={index} className="font-bold text-foreground">
-                        {term}
-                    </strong>
-                    );
-                }
-                } else {
-                return <React.Fragment key={index}>{part}</React.Fragment>;
+                    return <React.Fragment key={index}>{part}</React.Fragment>;
                 }
             })}
             </TooltipProvider>

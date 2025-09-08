@@ -79,11 +79,13 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
         e.stopPropagation();
         setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
     };
+    
+    const imageUrl = `/api/image-proxy?url=${encodeURIComponent(images[currentIndex])}`;
 
     return (
         <div className="relative aspect-video rounded-md overflow-hidden group/carousel" onClick={onImageClick}>
             <Image
-                src={images[currentIndex]}
+                src={imageUrl}
                 alt={`${alt} ${currentIndex + 1}`}
                 fill
                 className="object-cover"
@@ -184,7 +186,7 @@ export function PoseNode({
   accordionValue,
   onAccordionChange
 }: PoseNodeProps) {
-  const [activeView, setActiveView] = useState<ActiveView>('description');
+  const [activeView, setActiveView] = useState<ActiveView>(initialDisplay);
   const [selectedPrereq, setSelectedPrereq] = useState<PoseWithImage | null>(null);
   
   const allVideos = [pose.url_video, ...(pose.gallery_videos || [])].filter(Boolean) as string[];
@@ -198,14 +200,8 @@ export function PoseNode({
   const isExpanded = Array.isArray(accordionValue) && accordionValue.includes(pose.id);
 
   useEffect(() => {
-    if (isExpanded) {
-      if (initialDisplay !== 'description') {
-        setActiveView(initialDisplay);
-      }
-    } else {
-      setActiveView('description');
-    }
-  }, [isExpanded, initialDisplay]);
+    setActiveView(initialDisplay);
+  }, [initialDisplay]);
     
   const handleIconClick = (view: ActiveView, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -310,11 +306,11 @@ export function PoseNode({
         </div>
       </div>
       <AccordionContent className="p-0 pt-2">
-          {activeView === 'video' && hasVideo ? (
+          {activeView === 'video' && hasVideo && isExpanded ? (
             <div className="p-1">
                 <VideoCarouselNode videos={allVideos} title={pose.nombre} />
             </div>
-           ) : activeView === 'image' && hasImage ? (
+           ) : activeView === 'image' && hasImage && isExpanded ? (
              <div className="p-1">
                 <ImageCarouselNode images={allImages} alt={`Imagen de ${pose.nombre}`} onImageClick={(e) => {e.stopPropagation(); onSelect();}} />
              </div>
@@ -410,6 +406,7 @@ export function PoseNode({
         open={!!selectedPrereq}
         onOpenChange={(open) => !open && setSelectedPrereq(null)}
         concepts={concepts}
+        nameDisplay={nameDisplay}
       />
     </AccordionItem>
   );

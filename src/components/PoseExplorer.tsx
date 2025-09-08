@@ -11,30 +11,33 @@ import RouteExporter from './RouteExporter';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion } from '@/components/ui/accordion';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { HelpCircle, Rows3, Video, Image as ImageIcon } from 'lucide-react';
+import { HelpCircle, Video, Image as ImageIcon, Text, ChevronsDownUp } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
 type InteractionMode = 'explore' | 'route';
-type ExpandedView = 'video' | 'image';
+type ExpandedView = 'video' | 'image' | 'description';
 
 type PoseExplorerProps = {
   poses: Pose[];
   allPoses: Pose[];
   concepts: Concept[];
+  nameDisplay: NameDisplay;
+  setNameDisplay: (value: NameDisplay) => void;
 };
 
 export default function PoseExplorer({ 
   poses,
   allPoses,
   concepts, 
+  nameDisplay,
+  setNameDisplay
 }: PoseExplorerProps) {
   
   const [selectedPoseForDialog, setSelectedPoseForDialog] = useState<PoseWithImage | null>(null);
-  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
   const [interactionMode, setInteractionMode] = useState<InteractionMode>('explore');
   
   const [hoveredPoseId, setHoveredPoseId] = useState<string | null>(null);
@@ -42,7 +45,7 @@ export default function PoseExplorer({
   const [selectedRoutePoseIds, setSelectedRoutePoseIds] = useState<string[]>([]);
 
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
-  const [initialDisplay, setInitialDisplay] = useState<ExpandedView | 'description'>('description');
+  const [expandedView, setExpandedView] = useState<ExpandedView>('description');
   
   const allPosesById = useMemo(() => {
     return allPoses.reduce((acc, pose) => {
@@ -109,7 +112,7 @@ export default function PoseExplorer({
 
     switch (displayMode) {
       case 'en':
-        return enName.replace(/[()]/g, '');
+        return enName.replace(/[()]/g, '') || esName;
       case 'es':
         return esName;
       case 'both':
@@ -120,20 +123,23 @@ export default function PoseExplorer({
 
   const getAcroLevelTitle = (level: number) => {
     switch (level) {
+        case 0: return "Nivel 0: Vuelo Terapéutico";
         case 1: return "Nivel 1: Introducción";
         case 2: return "Nivel 2: Básico";
         case 3: return "Nivel 3: Transiciones";
-        case 4: return "Nivel 4: Intermedio";
-        case 5: return "Nivel 5: Washing Machines";
-        case 6: return "Nivel 6: Icarian Básico";
-        case 7: return "Nivel 7: Icarian Intermedio";
-        case 8: return "Nivel 8: Whips Básicos";
-        case 9: return "Nivel 9: Whips Intermedios";
-        case 10: return "Nivel 10: Whips Avanzados";
-        case 11: return "Nivel 11: Standing Básico";
-        case 12: return "Nivel 12: Standing Intermedio";
-        case 13: return "Nivel 13: Standing Avanzado";
-        case 14: return "Posturas Terapéuticas";
+        case 4: return "Nivel 4: Flow 1 – Básico";
+        case 5: return "Nivel 5: Intermedio";
+        case 6: return "Nivel 6: Flow 2 – Intermedio";
+        case 7: return "Nivel 7: Washing Machines";
+        case 8: return "Nivel 8: Flow 3 – Avanzado";
+        case 9: return "Nivel 9: Icarian Básico";
+        case 10: return "Nivel 10: Icarian Intermedio";
+        case 11: return "Nivel 11: Whips Básicos";
+        case 12: return "Nivel 12: Whips Intermedios";
+        case 13: return "Nivel 13: Whips Avanzados";
+        case 14: return "Nivel 14: Standing Básico";
+        case 15: return "Nivel 15: Standing Intermedio";
+        case 16: return "Nivel 16: Standing Avanzado";
         default: return `Nivel ${level}`;
     }
   }
@@ -150,15 +156,25 @@ export default function PoseExplorer({
     );
   };
   
-  const handleExpandAll = (view: ExpandedView) => {
-    setInitialDisplay(view);
-    setAccordionValue(poses.map(p => p.id));
+  const handleToggleView = (view: ExpandedView) => {
+    const isAlreadyActive = accordionValue.length > 0 && expandedView === view;
+
+    if (isAlreadyActive) {
+      setAccordionValue([]);
+    } else {
+      setExpandedView(view);
+      let relevantPoseIds: string[] = [];
+      if (view === 'video') {
+        relevantPoseIds = poses.filter(p => p.url_video || (p.gallery_videos && p.gallery_videos.length > 0)).map(p => p.id);
+      } else if (view === 'image') {
+        relevantPoseIds = poses.filter(p => p.url_imagen || (p.gallery_images && p.gallery_images.length > 0)).map(p => p.id);
+      } else { // description
+        relevantPoseIds = poses.map(p => p.id);
+      }
+      setAccordionValue(relevantPoseIds);
+    }
   };
   
-  const handleCollapseAll = () => {
-    setAccordionValue([]);
-    setInitialDisplay('description');
-  };
 
   return (
     <Card>
@@ -197,9 +213,32 @@ export default function PoseExplorer({
             </Popover>
           </div>
           <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => handleExpandAll('video')}><Video className="mr-2 h-4 w-4" /> Expandir (Video)</Button>
-              <Button variant="outline" size="sm" onClick={() => handleExpandAll('image')}><ImageIcon className="mr-2 h-4 w-4" /> Expandir (Imagen)</Button>
-              <Button variant="outline" size="sm" onClick={handleCollapseAll}><Rows3 className="mr-2 h-4 w-4" /> Colapsar</Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="icon" onClick={() => handleToggleView('video')}><Video className="h-4 w-4" /></Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Expandir/Colapsar Videos</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="icon" onClick={() => handleToggleView('image')}><ImageIcon className="h-4 w-4" /></Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Expandir/Colapsar Imágenes</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                     <Button variant="outline" size="icon" onClick={() => handleToggleView('description')}><Text className="h-4 w-4" /></Button>
+                  </TooltipTrigger>
+                   <TooltipContent>
+                    <p>Expandir/Colapsar Contenido</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
           </div>
            <div className="flex items-center space-x-2">
             <Label htmlFor="name-display-select" className="text-sm font-medium">Nombres:</Label>
@@ -267,7 +306,7 @@ export default function PoseExplorer({
                           allPoses={allPoses}
                           concepts={concepts}
                           allPosesMap={allPosesById}
-                          initialDisplay={initialDisplay}
+                          initialDisplay={expandedView}
                           accordionValue={accordionValue}
                           onAccordionChange={setAccordionValue}
                         />

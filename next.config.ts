@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       { protocol: 'https', hostname: 'c8.alamy.com' },
+      { protocol: 'https', hostname: 'c.stocksy.com' },
       { protocol: 'https', hostname: 'cdn.yogajournal.com' },
       { protocol: 'https', hostname: 'www.blueosa.com' },
       { protocol: 'https', hostname: 'camillamia.com' },
@@ -39,6 +40,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'www.christiangieger.de' },
       { protocol: 'https', hostname: 'i.ibb.co' },
       { protocol: 'https', hostname: 'static.wixstatic.com' },
+      { protocol: 'https', hostname: 'partneracrobatics.com' },
     ],
   },
 };

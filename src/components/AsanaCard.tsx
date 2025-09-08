@@ -1,17 +1,23 @@
 
-import type { Asana } from '@/types';
+import type { Asana, Concept, Pose } from '@/types';
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { getYouTubeEmbedUrl } from '@/lib/utils';
+import DetailedDescription from './DetailedDescription';
+
+type NameDisplay = 'es' | 'en' | 'both';
 
 type AsanaCardProps = {
   asana: Asana;
+  allPoses: Pose[];
+  allConcepts: Concept[];
+  nameDisplay: NameDisplay;
 };
 
-export function AsanaCard({ asana }: AsanaCardProps) {
+export function AsanaCard({ asana, allPoses, allConcepts, nameDisplay }: AsanaCardProps) {
   const embedUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
 
   return (
@@ -23,9 +29,12 @@ export function AsanaCard({ asana }: AsanaCardProps) {
         </div>
       </AccordionTrigger>
       <AccordionContent className="space-y-4">
-        <p className="text-base text-muted-foreground whitespace-pre-wrap">
-          {asana.descripcion}
-        </p>
+        <DetailedDescription 
+            content={asana.descripcion} 
+            concepts={allConcepts} 
+            poses={allPoses} 
+            nameDisplay={nameDisplay}
+        />
         {embedUrl && (
            <div className="relative aspect-video rounded-md overflow-hidden">
              <iframe
