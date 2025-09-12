@@ -1,4 +1,5 @@
 
+
 'use client';
 import jsPDF from 'jspdf';
 import type { Pose, SequenceItem } from '@/types';
@@ -146,6 +147,29 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nam
     doc.roundedRect(pageWidth - margin - levelTextWidth, y - 12, levelTextWidth, 16, 3, 3, 'F');
     doc.text(levelTitle, pageWidth - margin, y, { align: 'right' });
     y += 20;
+
+    if (pose.tags && pose.tags.length > 0) {
+        checkPageEnd(30);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Etiquetas:', margin, y);
+        
+        doc.setFont('helvetica', 'normal');
+        let currentX = margin + doc.getTextWidth('Etiquetas:') + 5;
+        pose.tags.forEach(tag => {
+            const tagWidth = doc.getTextWidth(tag) + 10;
+            if (currentX + tagWidth > pageWidth - margin) {
+                currentX = margin;
+                y += 20;
+                checkPageEnd(20);
+            }
+            doc.setFillColor(240, 240, 240);
+            doc.roundedRect(currentX, y - 10, tagWidth, 14, 3, 3, 'F');
+            doc.text(tag, currentX + 5, y);
+            currentX += tagWidth + 5;
+        });
+        y += 30;
+    }
     
     doc.setDrawColor(200, 200, 200);
     doc.line(margin, y, pageWidth - margin, y);
@@ -161,7 +185,14 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nam
     }
 
     const addSection = (title: string, content: string | string[], isList: boolean = false) => {
-        checkPageEnd(40);
+        let neededHeight = 40;
+        if (Array.isArray(content)) {
+            neededHeight += content.reduce((acc, item) => acc + (doc.splitTextToSize(item, pageWidth - margin * 2 - 10).length * 12), 0);
+        } else {
+            neededHeight += doc.splitTextToSize(content, pageWidth - margin * 2).length * 12;
+        }
+
+        checkPageEnd(neededHeight);
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text(title, margin, y);
@@ -172,6 +203,7 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nam
         if (isList && Array.isArray(content)) {
             content.forEach(item => {
                 const itemLines = doc.splitTextToSize(`• ${item}`, pageWidth - margin * 2 - 10);
+                // Individual check inside loop is redundant if we pre-calculate height, but good for safety
                 checkPageEnd(itemLines.length * 12 + 2);
                 doc.text(itemLines, margin + 10, y);
                 y += (itemLines.length * 10) + 4;
@@ -201,36 +233,46 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nam
     }
 
     const isAcroPose = pose.type !== 'Thai-Massage' && pose.type !== 'Therapeutic';
+    
     if (isAcroPose && pose.musculos) {
-        checkPageEnd(50);
+        let neededHeight = 60; // Title + spacing
+        if (pose.musculos.base) neededHeight += pose.musculos.base.length * 15;
+        if (pose.musculos.volador) neededHeight += pose.musculos.volador.length * 15;
+        checkPageEnd(neededHeight);
+
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text('Músculos', margin, y);
         y += 20;
 
-        if (pose.musculos.base.length > 0) {
+        if (pose.musculos.base && pose.musculos.base.length > 0) {
             addSection('Base:', pose.musculos.base, true);
         }
-        if (pose.musculos.volador.length > 0) {
+        if (pose.musculos.volador && pose.musculos.volador.length > 0) {
             addSection('Volador:', pose.musculos.volador, true);
         }
         y += 5;
     }
 
     if (isAcroPose && pose.calibracion) {
-        checkPageEnd(50);
+        let neededHeight = 60; // Title + spacing
+        if (pose.calibracion.base) neededHeight += pose.calibracion.base.length * 15;
+        if (pose.calibracion.volador) neededHeight += pose.calibracion.volador.length * 15;
+        if (pose.calibracion.observador) neededHeight += pose.calibracion.observador.length * 15;
+        checkPageEnd(neededHeight);
+
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text('Calibración', margin, y);
         y += 20;
 
-        if (pose.calibracion.base.length > 0) {
+        if (pose.calibracion.base && pose.calibracion.base.length > 0) {
             addSection('Base:', pose.calibracion.base, true);
         }
-        if (pose.calibracion.volador.length > 0) {
+        if (pose.calibracion.volador && pose.calibracion.volador.length > 0) {
             addSection('Volador:', pose.calibracion.volador, true);
         }
-        if (pose.calibracion.observador.length > 0) {
+        if (pose.calibracion.observador && pose.calibracion.observador.length > 0) {
             addSection('Observador:', pose.calibracion.observador, true);
         }
     }
@@ -459,3 +501,5 @@ export async function exportSequenceToPdf(sequence: SequenceItem[], title: strin
     const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     doc.save(`${safeFilename}_sequence.pdf`);
 }
+
+    

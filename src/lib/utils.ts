@@ -14,7 +14,11 @@ export const getYouTubeEmbedUrl = (url: string) => {
         if (urlObj.hostname === 'youtu.be') {
             videoId = urlObj.pathname.slice(1);
         } else if (urlObj.hostname.includes('youtube.com')) {
-            videoId = urlObj.searchParams.get('v');
+            if (urlObj.pathname.startsWith('/shorts/')) {
+                videoId = urlObj.pathname.split('/shorts/')[1];
+            } else {
+                videoId = urlObj.searchParams.get('v');
+            }
         } else if (urlObj.hostname.includes('yogajournal.com')) {
             return null; // Don't embed yogajournal pages
         }
@@ -26,6 +30,30 @@ export const getYouTubeEmbedUrl = (url: string) => {
         }
     } catch (e) {
         console.error("Invalid video URL", e);
+    }
+    return '';
+};
+
+export const getYouTubeThumbnailUrl = (url: string) => {
+    if (!url) return '';
+    try {
+        const urlObj = new URL(url);
+        let videoId;
+        if (urlObj.hostname === 'youtu.be') {
+            videoId = urlObj.pathname.slice(1);
+        } else if (urlObj.hostname.includes('youtube.com')) {
+            if (urlObj.pathname.startsWith('/shorts/')) {
+                videoId = urlObj.pathname.split('/shorts/')[1];
+            } else {
+                videoId = urlObj.searchParams.get('v');
+            }
+        }
+        
+        if (videoId) {
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+    } catch (e) {
+        console.error("Invalid video URL for thumbnail", e);
     }
     return '';
 };
