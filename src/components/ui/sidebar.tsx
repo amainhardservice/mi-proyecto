@@ -4,7 +4,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft } from "lucide-react"
+import { PanelLeft, ChevronDown } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -22,7 +22,7 @@ import {
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = "16rem"
+const SIDEBAR_WIDTH = "18rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
@@ -537,9 +537,12 @@ const sidebarMenuButtonVariants = cva(
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & {
-    asChild?: boolean
-    isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    asChild?: boolean;
+    isActive?: boolean;
+    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+    isCollapsible?: boolean;
+    isExpanded?: boolean;
+    onToggle?: () => void;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -549,6 +552,11 @@ const SidebarMenuButton = React.forwardRef<
       variant = "default",
       size = "default",
       tooltip,
+      isCollapsible,
+      isExpanded,
+      onToggle,
+      onClick,
+      children,
       className,
       ...props
     },
@@ -557,19 +565,34 @@ const SidebarMenuButton = React.forwardRef<
     const Comp = asChild ? Slot : "button"
     const { isMobile, state } = useSidebar()
 
-    const button = (
+    const buttonContent = (
       <Comp
         ref={ref}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+        onClick={onClick}
         {...props}
-      />
+      >
+        {children}
+        {isCollapsible && (
+          <ChevronDown 
+            className={cn(
+              "ml-auto h-4 w-4 shrink-0 transition-transform duration-200", 
+              isExpanded && "rotate-180"
+            )} 
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggle?.();
+            }}
+          />
+        )}
+      </Comp>
     )
 
     if (!tooltip) {
-      return button
+      return buttonContent
     }
 
     if (typeof tooltip === "string") {
@@ -580,7 +603,7 @@ const SidebarMenuButton = React.forwardRef<
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"

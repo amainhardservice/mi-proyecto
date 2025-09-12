@@ -33,10 +33,12 @@ const ItemTypes = {
   EXERCISE: 'exercise',
   TRANSITION: 'transition',
   FLOW: 'flow',
+  WHIP: 'whip',
+  ICARIAN: 'icarian',
 };
 
 const getDisplayName = (item: any, displayMode: NameDisplay): string => {
-    if (item.itemType === 'pose' || item.itemType === 'transition' || item.itemType === 'flow') { // Pose, Transition, Flow
+    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) { // Pose, Transition, Flow, etc.
         const parts = item.nombre.split('\n');
         const esName = parts[0];
         const enName = parts[1] || '';
@@ -159,7 +161,7 @@ const CanvasItem = ({ item, index, onSelectItem, selectedItemId, moveItem, nameD
 
 export default function FlowBuilderCanvas({ sequence, onDrop, onSelectItem, selectedItemId, moveItem, nameDisplay, onDeleteItem, onCopyToClipboard }: CanvasProps) {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: [ItemTypes.POSE, ItemTypes.CONCEPT, ItemTypes.ASANA, ItemTypes.MODIFIER, ItemTypes.EXERCISE, ItemTypes.TRANSITION, ItemTypes.FLOW],
+    accept: Object.values(ItemTypes).filter(t => t !== 'card'), // Accept all item types except 'card' itself
     drop: (item: { id: string; type: string }) => onDrop(item),
     collect: (monitor) => ({
       isOver: monitor.isOver(),

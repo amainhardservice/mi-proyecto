@@ -2,13 +2,14 @@
 import type { Pose } from '@/types';
 
 export const standingPoses: Pose[] = [
-  // Standing Acro: NIVEL 14 (antes 11)
+  // Standing Acro: NIVEL 15
   {
     id: 'st-high-bird',
     nombre: 'Pájaro Alto\n(High Bird)',
-    nivel: 14,
+    nivel: 15,
     type: 'Standing',
     prerequisites: ['lb-1'],
+    tags: ['Standing', 'Básico'],
     url_video: 'https://www.youtube.com/watch?v=eWu3BxMF1Bg',
     descripcion: 'Una postura de Acro de Pie (Standing Acro) fundamental. Es una transición desde L-Basing hacia acrobacias de pie.',
     narrativa_detallada: `
@@ -38,13 +39,14 @@ export const standingPoses: Pose[] = [
     },
   },
   
-  // Standing Acro: NIVEL 15 (antes 12)
+  // Standing Acro: NIVEL 16
   {
     id: 'st-monkey',
     nombre: 'Mono\n(Monkey)',
-    nivel: 15,
+    nivel: 16,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
+    tags: ['Standing', 'Intermedio'],
     url_video: 'https://www.youtube.com/watch?v=ALaWGbiCIZA',
     descripcion: 'Una transición clásica de standing acro donde el volador se mueve entre los hombros y los pies de la base.',
     narrativa_detallada: `
@@ -66,9 +68,10 @@ export const standingPoses: Pose[] = [
   {
     id: 'st-f2h',
     nombre: 'Pie a Mano\n(Foot-to-Hand)',
-    nivel: 15,
+    nivel: 16,
     type: 'Standing',
     prerequisites: ['st-high-bird', 'lb-14'],
+    tags: ['Standing', 'Intermedio'],
     url_video: 'https://www.youtube.com/watch?v=Fj3cW9ycttY',
     descripcion: 'Una postura icónica de Acro de Pie. La base sostiene los pies del volador en una parada de manos.',
     narrativa_detallada: `
@@ -97,13 +100,14 @@ Se puede entrar desde el suelo o desde **pose:st-high-bird**.
     },
   },
 
-  // Standing Acro: NIVEL 16 (antes 13)
+  // Standing Acro: NIVEL 17
   {
     id: 'st-h2h',
     nombre: 'Mano a Mano\n(H2H)',
-    nivel: 16,
+    nivel: 17,
     type: 'Standing',
     prerequisites: ['st-f2h', 'lb-h2h', 'st-monkey'],
+    tags: ['Standing', 'Avanzado', 'Inversión sobre Manos'],
     url_video: 'https://www.youtube.com/watch?v=r-g6qvL8IjM',
     descripcion: 'El pináculo del Standing Acro. La base sostiene al volador en una parada de manos, mano con mano.',
     narrativa_detallada: `
@@ -135,9 +139,10 @@ La entrada más común es desde **pose:st-high-bird**.
   {
     id: 'st-two-high',
     nombre: 'Dos Alturas\n(Two-High)',
-    nivel: 16,
+    nivel: 17,
     type: 'Standing',
     prerequisites: ['st-high-bird'],
+    tags: ['Standing', 'Avanzado'],
     url_video: 'https://www.youtube.com/watch?v=z3xsHfUFXH8',
     descripcion: 'Una postura icónica de Acro de Pie donde el volador se para sobre los hombros de la base.',
     narrativa_detallada: `

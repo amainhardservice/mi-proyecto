@@ -9,6 +9,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: [],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=z4j7XzwdmJI',
     descripcion: 'Técnica inicial para conectar con el receptor, calentar los pies y empezar a trabajar las líneas Sen de las piernas.',
     narrativa_detallada: `
@@ -24,6 +25,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=QCN02TLWCeQ',
     descripcion: 'Técnica suave para liberar la tensión y mejorar la movilidad en la articulación del tobillo.',
     narrativa_detallada: `
@@ -39,6 +41,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-04'],
+    tags: ['Thai Massage'],
     url_video: 'https://www.youtube.com/watch?v=7hFooTKDF5c',
     descripcion: 'Técnica fundamental para liberar la tensión en los isquiotibiales y la espalda baja del receptor.',
     narrativa_detallada: `
@@ -54,6 +57,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=I-Vpetr9Az0',
     descripcion: 'Aísla el estiramiento en los rotadores externos de la cadera (como el piriforme) y los glúteos.',
     narrativa_detallada: `
@@ -69,6 +73,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-06'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=r8eRZ46Zk-c',
     descripcion: 'Abre ambas caderas y la ingle simultáneamente, aliviando la tensión en la zona pélvica.',
     narrativa_detallada: `
@@ -84,6 +89,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=gkQTSLnii-c',
     descripcion: 'Extiende el trabajo de calentamiento y energía a las extremidades superiores.',
     narrativa_detallada: `
@@ -99,6 +105,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-07'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=Jd8W3CNvKPQ',
     descripcion: 'Un estiramiento pasivo para los músculos pectorales y la parte delantera de los hombros, fomentando una respiración más profunda.',
     narrativa_detallada: `
@@ -114,6 +121,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=eBju06G0C0o',
     descripcion: 'Una torsión suave que libera la tensión en la espalda baja, los glúteos y mejora la digestión.',
     narrativa_detallada: `
@@ -129,6 +137,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=Y06OSOaiva4',
     descripcion: 'Libera la tensión en el psoas, un músculo profundo que conecta la columna con las piernas, a menudo acortado por estar sentado.',
     narrativa_detallada: `
@@ -144,6 +153,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 1,
     type: 'Thai-Massage',
     prerequisites: [],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=Q7wmyU9GuuY',
     descripcion: 'Técnica para aliviar la tensión en el cuello y en la base del cráneo, una zona común de dolores de cabeza tensionales.',
     narrativa_detallada: `
@@ -161,6 +171,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-06', 'tm-supine-08'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=yo007D76wkY',
     descripcion: 'Técnica efectiva para estirar los glúteos y el piriforme, a menudo una fuente de dolor lumbar.',
     narrativa_detallada: `
@@ -176,6 +187,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-05'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=JBvlwGO3m24',
     descripcion: 'Permite un acceso profundo y seguro a la articulación del hombro, liberando la tensión en los rotadores.',
     narrativa_detallada: `
@@ -191,6 +203,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-09'],
+    tags: ['Thai Massage'],
     url_video: 'https://www.youtube.com/watch?v=CMI2O2m0OOU',
     descripcion: 'Una forma segura y efectiva de estirar la parte frontal del muslo (cuádriceps).',
     narrativa_detallada: `
@@ -206,6 +219,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-side-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=wCWBKX2G5nw',
     descripcion: 'Técnica para liberar la tensión en la banda iliotibial (IT), un tejido conectivo grueso en el costado de la pierna.',
     narrativa_detallada: `
@@ -220,6 +234,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-10'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=vymAn79zqvk',
     descripcion: 'Técnicas clásicas para aliviar la tensión acumulada en el cuello y los trapecios, una zona común de estrés.',
     narrativa_detallada: `
@@ -235,6 +250,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-side-01', 'tm-seated-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=dHfyrniGltY',
     descripcion: 'Una torsión asistida que mejora la flexibilidad de la columna vertebral y estimula los órganos internos.',
     narrativa_detallada: `
@@ -250,6 +266,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-seated-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=qekgWZw428U',
     descripcion: 'Ayuda a liberar la tensión en los hombros y el pecho, contrarrestando los efectos de pasar mucho tiempo sentado.',
     narrativa_detallada: `
@@ -265,6 +282,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-seated-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=jfx33DK3aQE',
     descripcion: 'Técnica de presión profunda para liberar la tensión en los músculos alrededor de los omóplatos.',
     narrativa_detallada: `
@@ -280,6 +298,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 2,
     type: 'Thai-Massage',
     prerequisites: ['tm-seated-03'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=OLvbtuYUu1U',
     descripcion: 'Una apertura de hombros y pecho que se puede realizar en la posición sentada.',
     narrativa_detallada: `
@@ -297,6 +316,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-side-01', 'tm-seated-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=W7ylSrBQRP4',
     descripcion: 'Una técnica icónica y avanzada. El dador usa sus pies para aplicar una presión amplia y profunda a lo largo de la espalda del receptor.',
     narrativa_detallada: `
@@ -311,6 +331,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=S94708ZLCok',
     descripcion: 'Permite estirar la parte posterior de la pierna mientras el receptor está cómodamente boca abajo.',
     narrativa_detallada: `
@@ -326,6 +347,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-side-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=r8eRZ46Zk-c',
     descripcion: 'Técnica para aplicar una presión profunda y liberadora en los músculos grandes de los glúteos.',
     narrativa_detallada: `
@@ -341,6 +363,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-seated-03', 'tm-prone-01'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=8ZAUsoP7wbk',
     descripcion: 'Un estiramiento dinámico que abre toda la parte frontal del cuerpo del receptor, imitando la postura de la cobra en yoga.',
     narrativa_detallada: `
@@ -356,6 +379,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-side-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=kziS72DfCF4',
     descripcion: 'Trabajo detallado para liberar la tensión alrededor del omóplato, una zona común de rigidez.',
     narrativa_detallada: `
@@ -371,6 +395,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-prone-08'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=CGUtkU3EbAU',
     descripcion: 'Un estiramiento final para el hombro, pectoral y bíceps.',
     narrativa_detallada: `
@@ -386,6 +411,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-prone-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=wI6bxErHMAM',
     descripcion: 'Una elevación terapéutica que descomprime la espalda baja y estira los flexores de la cadera.',
     narrativa_detallada: `
@@ -401,6 +427,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-prone-04', 'tm-supine-02'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=1pSBvmhMuF4',
     descripcion: 'Una inversión terapéutica avanzada que descomprime profundamente la columna vertebral.',
     narrativa_detallada: `
@@ -416,6 +443,7 @@ export const thaiMassagePoses: Pose[] = [
     nivel: 3,
     type: 'Thai-Massage',
     prerequisites: ['tm-supine-09'],
+    tags: ['Thai Massage'],
     url_video: 'http://www.youtube.com/watch?v=gVRDJ9y0hzM',
     descripcion: 'El "Hara" es el centro energético. Esta técnica se enfoca en liberar la tensión abdominal y mejorar el flujo de energía.',
     narrativa_detallada: `

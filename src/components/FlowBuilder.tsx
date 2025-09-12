@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import type { Pose, Concept, Asana, PoseModifier, SequenceItem, Exercise } from '@/types';
@@ -14,6 +15,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
+import { allPosesData, allConceptsData, allAsanasData, allModifiersData, allExercisesData } from '@/lib/firestore-client';
+import { exportSequenceToPdf } from '@/lib/pdf';
 
 type NameDisplay = 'es' | 'en' | 'both';
 
@@ -23,20 +27,6 @@ interface FlowBuilderProps {
   allModifiers: PoseModifier[];
   allAsanas: Asana[];
   allExercises: Exercise[];
-  sequence: SequenceItem[];
-  selectedItemId: string | null;
-  nameDisplay: NameDisplay;
-  setNameDisplay: (value: NameDisplay) => void;
-  handleDrop: (item: { id: string; type: string }) => void;
-  moveItem: (dragIndex: number, hoverIndex: number) => void;
-  handleSelectItem: (uniqueId: string) => void;
-  updateNotes: (uniqueId: string, notes: string) => void;
-  handleExportPdf: () => void;
-  handleExportToText: () => void;
-  handleCopyToClipboard: () => void;
-  handleImportSequence: (text: string) => void;
-  handleClearSequence: () => void;
-  handleDeleteItem: (uniqueId: string) => void;
 }
 
 export default function FlowBuilder({
@@ -45,24 +35,206 @@ export default function FlowBuilder({
   allModifiers,
   allAsanas,
   allExercises,
-  sequence,
-  selectedItemId,
-  nameDisplay,
-  setNameDisplay,
-  handleDrop,
-  moveItem,
-  handleSelectItem,
-  updateNotes,
-  handleExportPdf,
-  handleExportToText,
-  handleCopyToClipboard,
-  handleImportSequence,
-  handleClearSequence,
-  handleDeleteItem,
 }: FlowBuilderProps) {
+  const [sequence, setSequence] = useState<SequenceItem[]>([]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [nameDisplay, setNameDisplay] = useState<NameDisplay>('en');
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [importText, setImportText] = useState('');
+  
   const selectedItem = sequence.find(item => item.uniqueId === selectedItemId) || null;
+
+  const handleDrop = useCallback((item: { id: string; type: string }) => {
+    let newItem: SequenceItem | null = null;
+    const uniqueId = `${item.type}-${item.id}-${Date.now()}`;
+    const itemType = item.type as SequenceItem['itemType'];
+
+    let foundItem: any = null;
+    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.type)) {
+      foundItem = allPosesData.find(p => p.id === item.id);
+    } else if (item.type === 'concept') {
+      foundItem = allConceptsData.find(c => c.id === item.id);
+    } else if (item.type === 'asana') {
+      foundItem = allAsanasData.find(a => a.id === item.id);
+    } else if (item.type === 'modifier') {
+      foundItem = allModifiersData.find(m => m.id === item.id);
+    } else if (item.type === 'exercise') {
+      foundItem = allExercisesData.find(e => e.id === item.id);
+    }
+    
+    if (foundItem) {
+      newItem = { ...foundItem, uniqueId, itemType, notes: '' };
+      setSequence(prev => [...prev, newItem!]);
+      setSelectedItemId(uniqueId);
+    }
+  }, []);
+
+  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
+    setSequence(prev => {
+      const newSequence = [...prev];
+      const [draggedItem] = newSequence.splice(dragIndex, 1);
+      newSequence.splice(hoverIndex, 0, draggedItem);
+      return newSequence;
+    });
+  }, []);
+
+  const handleSelectItem = (uniqueId: string) => {
+    setSelectedItemId(uniqueId);
+  };
+  
+  const updateNotes = (uniqueId: string, notes: string) => {
+    setSequence(seq => seq.map(item => item.uniqueId === uniqueId ? { ...item, notes } : item));
+  };
+  
+  const handleExportPdf = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "Añade al menos un elemento para exportar.", variant: "destructive" });
+      return;
+    }
+    exportSequenceToPdf(sequence, "Mi Secuencia de Acroyoga");
+  };
+
+  const handleClearSequence = () => {
+    setSequence([]);
+    setSelectedItemId(null);
+    toast({ title: "Secuencia Limpiada", description: "Se ha vaciado el constructor de secuencias." });
+  };
+
+  const handleDeleteItem = (uniqueId: string) => {
+    setSequence(prev => prev.filter(item => item.uniqueId !== uniqueId));
+    if (selectedItemId === uniqueId) {
+      setSelectedItemId(null);
+    }
+    toast({ title: "Elemento Eliminado", description: "El elemento ha sido eliminado de la secuencia." });
+  };
+  
+  const getEnglishName = (item: SequenceItem) => {
+    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) {
+        return item.nombre.split('\n')[1]?.replace(/[()]/g, '') || item.nombre.split('\n')[0];
+    }
+    if (item.itemType === 'asana') {
+        return item.nombre_sans;
+    }
+    if (item.itemType === 'exercise') {
+        return item.titulo.split('\n')[1]?.replace(/[()]/g, '') || item.titulo.split('\n')[0];
+    }
+    return item.titulo;
+  };
+
+  const generateSequenceText = () => {
+    return sequence.map(item => {
+      const name = getEnglishName(item);
+      const note = item.notes ? ` :: ${item.notes.replace(/\n/g, ' ')}` : '';
+      return `${name}${note}`;
+    }).join('\n');
+  };
+
+  const handleExportToText = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "Añade al menos un elemento para exportar.", variant: "destructive" });
+      return;
+    }
+    const textContent = generateSequenceText();
+    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'acro_sequence.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({ title: "Exportación Exitosa", description: "La secuencia ha sido exportada como archivo de texto." });
+  };
+  
+  const handleCopyToClipboard = () => {
+    if (sequence.length === 0) {
+      toast({ title: "Secuencia Vacía", description: "No hay nada que copiar.", variant: "destructive" });
+      return;
+    }
+    const textContent = generateSequenceText();
+    navigator.clipboard.writeText(textContent).then(() => {
+      toast({ title: "¡Copiado!", description: "La secuencia ha sido copiada al portapapeles." });
+    }, (err) => {
+      toast({ title: "Error al Copiar", description: "No se pudo copiar la secuencia.", variant: "destructive" });
+      console.error('Could not copy text: ', err);
+    });
+  };
+
+  const handleImportSequence = (text: string) => {
+    const lines = text.split('\n').filter(Boolean);
+    if (lines.length === 0) {
+        toast({ title: "Importación Vacía", description: "No se encontró contenido para importar.", variant: "destructive" });
+        return;
+    }
+
+    let itemsAddedCount = 0;
+    const newSequenceItems: SequenceItem[] = [];
+
+    lines.forEach(line => {
+        const parts = line.split(' :: ');
+        const name = parts[0].trim().toLowerCase();
+        const notes = parts.length > 1 ? parts.slice(1).join(' :: ').trim() : '';
+
+        let foundItem: any = null;
+        let itemType: SequenceItem['itemType'] | null = null;
+
+        // Search in poses
+        foundItem = allPosesData.find(item => {
+            const enName = (item.nombre.split('\n')[1]?.replace(/[()]/g, '') || item.nombre.split('\n')[0]).toLowerCase();
+            const esName = item.nombre.split('\n')[0].toLowerCase();
+            return enName === name || esName === name;
+        });
+        if (foundItem) itemType = foundItem.type.toLowerCase() as SequenceItem['itemType'];
+        
+        // Search in asanas
+        if (!foundItem) {
+            foundItem = allAsanasData.find(item => item.nombre_sans.toLowerCase() === name || item.nombre_es.toLowerCase() === name);
+            if (foundItem) itemType = 'asana';
+        }
+
+        // Search in concepts
+        if (!foundItem) {
+            foundItem = allConceptsData.find(item => item.titulo.toLowerCase() === name);
+            if (foundItem) itemType = 'concept';
+        }
+        
+        // Search in modifiers
+        if (!foundItem) {
+            foundItem = allModifiersData.find(item => item.titulo.toLowerCase() === name);
+            if (foundItem) itemType = 'modifier';
+        }
+        
+        // Search in exercises
+        if (!foundItem) {
+            foundItem = allExercisesData.find(item => {
+                const enName = (item.titulo.split('\n')[1]?.replace(/[()]/g, '') || item.titulo.split('\n')[0]).toLowerCase();
+                const esName = item.titulo.split('\n')[0].toLowerCase();
+                return enName === name || esName === name;
+            });
+            if (foundItem) itemType = 'exercise';
+        }
+
+        if (foundItem && itemType) {
+            itemsAddedCount++;
+            newSequenceItems.push({
+                ...foundItem,
+                uniqueId: `${itemType}-${foundItem.id}-${Date.now()}-${Math.random()}`,
+                itemType: itemType as SequenceItem['itemType'],
+                notes: notes
+            });
+        }
+    });
+
+    if (newSequenceItems.length > 0) {
+        setSequence(prev => [...prev, ...newSequenceItems]);
+    }
+    
+    toast({ 
+        title: "Importación Completa", 
+        description: `Se añadieron ${itemsAddedCount} de ${lines.length} elementos a la secuencia.` 
+    });
+  };
 
   const onImport = () => {
     handleImportSequence(importText);

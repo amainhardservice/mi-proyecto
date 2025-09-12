@@ -32,6 +32,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'i.pinimg.com' },
       { protocol: 'https', hostname: 'www.thehealthjournals.com' },
       { protocol: 'https', hostname: 'i.ytimg.com' },
+      { protocol: 'https', hostname: 'img.youtube.com' },
       { protocol: 'http', hostname: 'basaho.com' },
       { protocol: 'https', hostname: 'daman.co.id' },
       { protocol: 'https', hostname: 'skillwell-upload-production.s3.amazonaws.com' },
@@ -41,6 +42,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'i.ibb.co' },
       { protocol: 'https', hostname: 'static.wixstatic.com' },
       { protocol: 'https', hostname: 'partneracrobatics.com' },
+      { protocol: 'https', hostname: 'akro.dk' },
+      { protocol: 'https', hostname: 'acroyogabarcelona.com' },
+      { protocol: 'https', hostname: 's3.eu-central-1.amazonaws.com' },
     ],
   },
 };

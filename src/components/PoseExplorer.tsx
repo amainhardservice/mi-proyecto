@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
@@ -15,13 +14,14 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { HelpCircle, Video, Image as ImageIcon, Text, ChevronsDownUp } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 
 type NameDisplay = 'es' | 'en' | 'both';
 type InteractionMode = 'explore' | 'route';
 type ExpandedView = 'video' | 'image' | 'description';
 
-type PoseExplorerProps = {
+type LevelMapProps = {
   poses: Pose[];
   allPoses: Pose[];
   concepts: Concept[];
@@ -29,13 +29,13 @@ type PoseExplorerProps = {
   setNameDisplay: (value: NameDisplay) => void;
 };
 
-export default function PoseExplorer({ 
+export default function LevelMap({ 
   poses,
   allPoses,
   concepts, 
   nameDisplay,
   setNameDisplay
-}: PoseExplorerProps) {
+}: LevelMapProps) {
   
   const [selectedPoseForDialog, setSelectedPoseForDialog] = useState<PoseWithImage | null>(null);
   const [interactionMode, setInteractionMode] = useState<InteractionMode>('explore');
@@ -175,11 +175,13 @@ export default function PoseExplorer({
     }
   };
   
+  const isAnyPoseHighlighted = highlightedPoseIds.length > 0;
+
 
   return (
     <Card>
        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <CardTitle>Explorador de Posturas</CardTitle>
+        <CardTitle>Mapa de Niveles</CardTitle>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <div className="flex items-center space-x-2">
             <RadioGroup 
@@ -277,7 +279,10 @@ export default function PoseExplorer({
           </div>
         )}
         {poses.length > 0 ? (
-          <div className="flex space-x-8 pb-4">
+          <div className={cn(
+            "flex space-x-8 pb-4 transition-opacity",
+             isAnyPoseHighlighted && "opacity-100"
+          )}>
             {Object.entries(posesByLevel).map(([level, posesInLevel]) => (
               <div key={level} className="w-64 flex-shrink-0">
                 <h3 className="text-lg font-semibold mb-4 text-center text-primary">{getAcroLevelTitle(Number(level))}</h3>
@@ -288,7 +293,9 @@ export default function PoseExplorer({
                       value={accordionValue}
                       onValueChange={setAccordionValue}
                     >
-                     {posesInLevel.map((pose) => (
+                     {posesInLevel.map((pose) => {
+                        const isHighlighted = highlightedPoseIds.includes(pose.id);
+                        return (
                         <PoseNode
                           key={pose.id}
                           pose={pose}
@@ -298,7 +305,8 @@ export default function PoseExplorer({
                           onMouseEnter={() => setHoveredPoseId(pose.id)}
                           onMouseLeave={() => setHoveredPoseId(null)}
                           onClick={() => handlePoseClick(pose.id)}
-                          isHighlighted={highlightedPoseIds.includes(pose.id)}
+                          isDimmed={isAnyPoseHighlighted && !isHighlighted}
+                          isHighlighted={isHighlighted}
                           isFixed={fixedPoseId === pose.id}
                           isSelected={selectedRoutePoseIds.includes(pose.id)}
                           showCheckbox={interactionMode === 'route'}
@@ -310,7 +318,8 @@ export default function PoseExplorer({
                           accordionValue={accordionValue}
                           onAccordionChange={setAccordionValue}
                         />
-                      ))}
+                        )
+                     })}
                    </Accordion>
                 </div>
               </div>

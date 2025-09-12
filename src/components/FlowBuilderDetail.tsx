@@ -8,7 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import type { SequenceItem, Pose, Concept, Exercise, PoseWithImage } from '@/types';
-import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare, HeartPulse } from 'lucide-react';
+import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare, HeartPulse, Tags } from 'lucide-react';
 import { getYouTubeEmbedUrl, cn } from '@/lib/utils';
 import DetailedDescription from './DetailedDescription';
 import { PoseDetailDialog } from './PoseDetailDialog';
@@ -25,7 +25,7 @@ interface FlowBuilderDetailProps {
 }
 
 const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
-    if (item.itemType === 'pose' || item.itemType === 'transition' || item.itemType === 'flow') {
+    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) {
         const parts = item.nombre.split('\n');
         const esName = parts[0];
         const enName = parts[1] || '';
@@ -91,18 +91,16 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
   }
 
   const handleTitleClick = () => {
-    if (item.itemType === 'pose') {
+    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) {
         setSelectedPose(item as PoseWithImage);
     }
   }
 
   const renderContent = () => {
     const videoUrl = ('url_video' in item && item.url_video) ? getYouTubeEmbedUrl(item.url_video) : null;
+    const isPoseLike = ['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType);
 
-    switch(item.itemType) {
-      case 'pose':
-      case 'transition':
-      case 'flow':
+    if (isPoseLike) {
         const pose = item as import('@/types').Pose;
         return (
           <>
@@ -117,6 +115,14 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                 </div>
                 <Badge variant="secondary">Nivel {pose.nivel}</Badge>
             </div>
+            {pose.tags && pose.tags.length > 0 && (
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <Tags className="h-4 w-4 text-muted-foreground" />
+                    {pose.tags.map(tag => (
+                        <Badge key={tag} variant="outline" className="text-xs font-normal">{tag}</Badge>
+                    ))}
+                </div>
+            )}
             {pose.url_imagen && (
               <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
                 <Image src={pose.url_imagen} alt={titleParts.join(' ')} fill className="object-cover" />
@@ -161,6 +167,9 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
             )}
           </>
         );
+    }
+    
+    switch(item.itemType) {
       case 'concept':
         const concept = item as import('@/types').Concept;
         return (
