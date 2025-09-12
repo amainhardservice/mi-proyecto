@@ -14,8 +14,9 @@ import GlossaryExporter from './GlossaryExporter';
 import FlowBuilder from '@/components/FlowBuilder';
 import AcroVideos from '@/components/AcroVideos';
 import ExerciseGlossary from '@/components/ExerciseGlossary';
+import { allConceptsData, allAsanasData, allModifiersData } from '@/lib/data/glossary';
+import { allExercisesData } from '@/lib/data/warmup';
 import { 
-  getProcessedGlossaryData, 
   getFullAcroGlossaryContent, 
   getFullThaiGlossaryContent, 
   getFullYogaGlossaryContent 
@@ -67,16 +68,72 @@ export default function MainContent({
 }: MainContentProps) {
 
   // --- Data processing for Glossaries ---
-  const { 
-    acroConceptsByCategory,
-    thaiConceptsByCategory,
-    yogaConceptsByCategory,
-    individualWarmups,
-    partnerWarmups,
-    acroCategoryOrder,
-    thaiCategoryOrder,
-    yogaCategoryOrder,
-  } = getProcessedGlossaryData();
+  const acroConcepts = allConceptsData.filter(c => c.category === 'Principios Fundamentales' || c.category === 'Dinámicas y Transiciones' || c.category === 'Roles y Estilos de Práctica' || c.category === 'Comunicación y Seguridad');
+  const thaiConcepts = allConceptsData.filter(c => c.category === 'Masaje Tailandés');
+  const yogaConcepts = allConceptsData.filter(c => c.category === 'Yoga');
+  const individualWarmups = allExercisesData.filter(e => e.categoria === 'Individual');
+  const partnerWarmups = allExercisesData.filter(e => e.categoria === 'En Pareja');
+  
+  const acroConceptsByCategory = acroConcepts.reduce((acc, concept) => {
+    const { category } = concept;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(concept);
+    return acc;
+  }, {} as Record<string, Concept[]>);
+
+  const thaiConceptsByCategory = thaiConcepts.reduce((acc, concept) => {
+    const { subCategory } = concept;
+    if (subCategory && !acc[subCategory]) {
+      acc[subCategory] = [];
+    }
+    if (subCategory) {
+      acc[subCategory].push(concept);
+    }
+    return acc;
+  }, {} as Record<string, Concept[]>);
+
+  const yogaConceptsByCategory = yogaConcepts.reduce((acc, concept) => {
+    const { subCategory } = concept;
+    if (subCategory && !acc[subCategory]) {
+      acc[subCategory] = [];
+    }
+    if (subCategory) {
+      acc[subCategory].push(concept);
+    }
+    return acc;
+  }, {} as Record<string, Concept[]>);
+
+  const acroCategoryOrder: (keyof typeof acroConceptsByCategory)[] = [
+    'Comunicación y Seguridad',
+    'Principios Fundamentales',
+    'Dinámicas y Transiciones',
+    'Roles y Estilos de Práctica',
+  ];
+
+  const thaiCategoryOrder: (keyof typeof thaiConceptsByCategory)[] = [
+    'Principios Fundamentales y Filosofía',
+    'Contexto Cultural y Ritual',
+    'Anatomía Energética',
+    'Las 10 Líneas Sen Principales',
+    'Técnicas de Aplicación de Presión',
+    'Técnicas de Movimiento y Estiramiento',
+    'Posiciones del Receptor',
+    'Los Cuatro Estados Sublimes (Bhavana)',
+    'Herramientas y Entorno',
+  ];
+
+  const yogaCategoryOrder: (keyof typeof yogaConceptsByCategory)[] = [
+    'Filosofía y Conceptos Clave',
+    'El Ciclo de Samsara y la Liberación',
+    'Términos Comunes',
+    'Tipos de Yoga',
+    'Los 8 Miembros del Yoga (Ashtanga)',
+    'Pranayama y Energía Sutil',
+    'Los 7 Chakras',
+    'Técnicas y Enfoques',
+  ];
   
   if (loading) {
     return <div className="flex justify-center items-center min-h-screen">Cargando...</div>;
