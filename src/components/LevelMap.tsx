@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
@@ -9,19 +7,21 @@ import { PoseNode } from './PoseNode';
 import { PoseDetailDialog } from './PoseDetailDialog';
 import { Label } from '@/components/ui/label';
 import RouteExporter from './RouteExporter';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion } from '@/components/ui/accordion';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { HelpCircle, Video, Image as ImageIcon, Text, Move, ArrowLeftRight, Filter } from 'lucide-react';
+import { HelpCircle, Video, Image as ImageIcon, Text, Move, ArrowLeftRight, Filter, Volume2, FilePlus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn, getYouTubeThumbnailUrl } from '@/lib/utils';
 import Image from 'next/image';
 import LevelFilter, { type SearchQuery } from './LevelFilter';
+import { useAppContext } from '@/contexts/AppContext';
+import { Switch } from './ui/switch';
+import { playSoundForPose } from '@/lib/sounds';
+import { toast } from '@/hooks/use-toast';
 
 
-type NameDisplay = 'es' | 'en' | 'both';
 type InteractionMode = 'explore' | 'route';
 type ExpandedView = 'video' | 'image' | 'description';
 type ConnectionMode = 'off' | 'incoming' | 'outgoing';
@@ -29,7 +29,7 @@ type ConnectionMode = 'off' | 'incoming' | 'outgoing';
 type Connection = {
   from: string;
   to: string;
-  type: 'prerequisite' | 'transition';
+  type: 'prerequisite' | 'transition' | 'route';
   transition?: Pose;
 };
 
@@ -37,11 +37,9 @@ type LevelMapProps = {
   poses: Pose[];
   allPoses: Pose[];
   concepts: Concept[];
-  nameDisplay: NameDisplay;
-  setNameDisplay: (value: NameDisplay) => void;
 };
 
-const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+const getDisplayName = (pose: Pose, displayMode: 'es' | 'en' | 'both'): string => {
     if (!pose || !pose.nombre) return '';
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
@@ -51,32 +49,24 @@ const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
       case 'en':
         return enName || esName;
       case 'es':
-        return esName;
-      case 'both':
       default:
-        return pose.nombre;
+        return esName;
     }
 };
 
-const getPoseFullName = (pose: Pose, displayMode: NameDisplay): string => {
+const getPoseFullName = (pose: Pose): string => {
     if (!pose || !pose.nombre) return '';
     const parts = pose.nombre.split('\n');
     const esName = parts[0] || '';
     const enName = parts[1]?.replace(/[()]/g, '') || '';
-    
-    if (displayMode === 'en') {
-      return enName.toLowerCase() || esName.toLowerCase();
-    }
-    return esName.toLowerCase();
+    return `${esName} ${enName}`.toLowerCase();
 }
 
 
 export default function LevelMap({ 
   poses,
   allPoses,
-  concepts, 
-  nameDisplay,
-  setNameDisplay
+  concepts,
 }: LevelMapProps) {
   
   const [selectedPoseForDialog, setSelectedPoseForDialog] = useState<PoseWithImage | null>(null);
@@ -84,6 +74,7 @@ export default function LevelMap({
   const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const poseNodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const { nameDisplay, soundsEnabled, setSoundsEnabled, soundEffectsVolume, setSequence, addToSequence, setActiveView, setFlowBuilderSequence } = useAppContext();
   
   const [hoveredPoseId, setHoveredPoseId] = useState<string | null>(null);
   const [selectedRoutePoseIds, setSelectedRoutePoseIds] = useState<string[]>([]);
@@ -272,13 +263,26 @@ export default function LevelMap({
 
   }, [hoveredPoseId, allPosesById, interactionMode, connectionState.poseId]);
   
+  const routeConnections = useMemo((): Connection[] => {
+    if (interactionMode !== 'route' || selectedRoutePoseIds.length < 2) return [];
+    const connections: Connection[] = [];
+    for (let i = 0; i < selectedRoutePoseIds.length - 1; i++) {
+        connections.push({
+            from: selectedRoutePoseIds[i],
+            to: selectedRoutePoseIds[i + 1],
+            type: 'route',
+        });
+    }
+    return connections;
+  }, [interactionMode, selectedRoutePoseIds]);
+  
 
   const highlightedPoseIds = useMemo(() => {
     if (interactionMode === 'route') {
       const allHighlighted = new Set<string>();
       selectedRoutePoseIds.forEach(id => {
         allHighlighted.add(id);
-        getAllPrerequisites(id).forEach(pId => allHighlighted.add(pId));
+        // getAllPrerequisites(id).forEach(pId => allHighlighted.add(pId));
       });
       return Array.from(allHighlighted);
     }
@@ -318,7 +322,7 @@ export default function LevelMap({
     setSelectedPoseForDialog(pose as PoseWithImage);
   };
   
-  const getDisplayNameForMap = (pose: Pose, displayMode: NameDisplay): string => {
+  const getDisplayNameForMap = (pose: Pose, displayMode: 'es' | 'en' | 'both'): string => {
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
     const enName = parts[1]?.replace(/[()]/g, '') || '';
@@ -342,24 +346,35 @@ export default function LevelMap({
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Flow 1 – Básico";
         case 5: return "Nivel 5: Intermedio";
-        case 6: return "Nivel 6: Flow 2 – Intermedio";
-        case 7: return "Nivel 7: Washing Machines";
-        case 8: return "Nivel 8: Flow 3 – Avanzado";
-        case 9: return "Nivel 9: Icarian Básico";
-        case 10: return "Nivel 10: Icarian Intermedio";
-        case 11: return "Nivel 11: Whips Básicos";
-        case 12: return "Nivel 12: Whips Intermedios";
-        case 13: return "Nivel 13: Whips Avanzados";
-        case 14: return "Nivel 14: Standing Básico";
-        case 15: return "Nivel 15: Standing Intermedio";
-        case 16: return "Nivel 16: Standing Avanzado";
+        case 6: return "Nivel 6: Transiciones Intermedias";
+        case 7: return "Nivel 7: Flow 2 – Intermedio";
+        case 8: return "Nivel 8: Washing Machines";
+        case 10: return "Nivel 10: Icarian Básico";
+        case 11: return "Nivel 11: Icarian Intermedio";
+        case 12: return "Nivel 12: Whips Básicos";
+        case 13: return "Nivel 13: Whips Intermedios";
+        case 14: return "Nivel 14: Whips Avanzados";
+        case 15: return "Nivel 15: Standing Básico";
+        case 16: return "Nivel 16: Standing Intermedio";
+        case 17: return "Nivel 17: Standing Avanzado";
         default: return `Nivel ${level}`;
     }
   }
 
-  const handlePoseClick = (poseId: string) => {
-    if (interactionMode !== 'explore') return;
-
+  const handlePoseClick = (pose: Pose) => {
+    if (interactionMode === 'route') {
+       setSelectedRoutePoseIds(prev => [...prev, pose.id]);
+       if (soundsEnabled) {
+         playSoundForPose(pose, soundEffectsVolume);
+       }
+       return;
+    }
+    
+    // Explore mode
+    if (soundsEnabled) {
+      playSoundForPose(pose, soundEffectsVolume);
+    }
+    
     setExpandedView('image'); // Force image view on transition click
     
     const poseHasMedia = (pId: string) => {
@@ -371,18 +386,18 @@ export default function LevelMap({
         let newMode: ConnectionMode = 'off';
         let newAccordionValue: string[] = [];
 
-        if (prevState.poseId !== poseId || prevState.mode === 'off') {
+        if (prevState.poseId !== pose.id || prevState.mode === 'off') {
             newMode = 'outgoing';
             const outgoingConnections = transitions
-                .filter(t => t.originPoses?.includes(poseId))
+                .filter(t => t.originPoses?.includes(pose.id))
                 .flatMap(t => t.destinationPoses || []);
-            newAccordionValue = [poseId, ...outgoingConnections].filter(poseHasMedia);
+            newAccordionValue = [pose.id, ...outgoingConnections].filter(poseHasMedia);
         } else if (prevState.mode === 'outgoing') {
             newMode = 'incoming';
              const incomingConnections = transitions
-                .filter(t => t.destinationPoses?.includes(poseId))
+                .filter(t => t.destinationPoses?.includes(pose.id))
                 .flatMap(t => t.originPoses || []);
-            newAccordionValue = [poseId, ...incomingConnections].filter(poseHasMedia);
+            newAccordionValue = [pose.id, ...incomingConnections].filter(poseHasMedia);
         } else if (prevState.mode === 'incoming') {
             newMode = 'off';
             newAccordionValue = [];
@@ -392,14 +407,23 @@ export default function LevelMap({
         if (newMode === 'off') {
           return { poseId: null, mode: 'off' };
         }
-        return { poseId: poseId, mode: newMode };
+        return { poseId: pose.id, mode: newMode };
     });
   };
   
   const handleRouteChange = (poseId: string, checked: boolean) => {
-    setSelectedRoutePoseIds(prev => 
-      checked ? [...prev, poseId] : prev.filter(id => id !== poseId)
-    );
+    if (checked) {
+      setSelectedRoutePoseIds(prev => [...prev, poseId]);
+    } else {
+      setSelectedRoutePoseIds(prev => {
+        const newIds = [...prev];
+        const lastIndex = newIds.lastIndexOf(poseId);
+        if (lastIndex !== -1) {
+          newIds.splice(lastIndex, 1);
+        }
+        return newIds;
+      });
+    }
   };
   
   const handleToggleView = (view: ExpandedView) => {
@@ -421,11 +445,20 @@ export default function LevelMap({
   };
   
   const isAnyPoseHighlighted = highlightedPoseIds.length > 0;
-  const allConnections = [...transitionConnections, ...prerequisiteConnections];
+  const allConnections = [...transitionConnections, ...prerequisiteConnections, ...routeConnections];
 
+  const handleAddToBuilder = () => {
+    if (selectedRoutePoseIds.length === 0) {
+      toast({ title: 'Ruta Vacía', description: 'Por favor, selecciona al menos una postura para añadir.', variant: 'destructive' });
+      return;
+    }
+    setFlowBuilderSequence(selectedRoutePoseIds);
+    setActiveView({ type: 'flow-builder' });
+    toast({ title: 'Ruta Añadida', description: `${selectedRoutePoseIds.length} posturas han sido añadidas al constructor de secuencias.` });
+  };
 
   return (
-    <Card>
+    <div className="bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-lg">
        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <CardTitle>Mapa de Niveles</CardTitle>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -459,10 +492,10 @@ export default function LevelMap({
               <PopoverContent className="w-80 text-sm">
                 <ul className="space-y-2">
                   <li><strong className="text-primary">Explorar:</strong></li>
-                  <li>- 1er Clic: Muestra transiciones de salida (flecha) y expande las fotos.</li>
-                  <li>- 2º Clic: Muestra transiciones de llegada (flecha) y expande las fotos.</li>
+                  <li>- 1er Clic: Muestra transiciones de salida y expande las fotos.</li>
+                  <li>- 2º Clic: Muestra transiciones de llegada y expande las fotos.</li>
                   <li>- 3er Clic: Limpia la selección.</li>
-                  <li><strong className="text-primary">Ruta:</strong> Selecciona posturas para crear y exportar una ruta de aprendizaje.</li>
+                  <li><strong className="text-primary">Ruta:</strong> Haz clic en las posturas para crear una secuencia visual.</li>
                 </ul>
               </PopoverContent>
             </Popover>
@@ -504,20 +537,11 @@ export default function LevelMap({
                     <p>Limpiar Líneas de Transición</p>
                   </TooltipContent>
                 </Tooltip>
+                <div className="flex items-center space-x-2 pl-2 border-l">
+                    <Label htmlFor="sound-switch" className="flex items-center gap-1 text-sm"><Volume2 className="h-4 w-4" /></Label>
+                    <Switch id="sound-switch" checked={soundsEnabled} onCheckedChange={setSoundsEnabled} />
+                </div>
               </TooltipProvider>
-          </div>
-           <div className="flex items-center space-x-2">
-            <Label htmlFor="name-display-select" className="text-sm font-medium">Nombres:</Label>
-            <Select value={nameDisplay} onValueChange={(value: NameDisplay) => setNameDisplay(value)}>
-              <SelectTrigger id="name-display-select" className="w-[150px] h-9 text-sm">
-                <SelectValue placeholder="Seleccionar" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="es">En Español</SelectItem>
-                <SelectItem value="en">En Inglés</SelectItem>
-                <SelectItem value="both">Ambos</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </CardHeader>
@@ -533,7 +557,6 @@ export default function LevelMap({
             setOriginFilter={setOriginFilter}
             destinationFilter={destinationFilter}
             setDestinationFilter={setDestinationFilter}
-            nameDisplay={nameDisplay}
         />
       )}
 
@@ -545,12 +568,34 @@ export default function LevelMap({
             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                 <polygon points="0 0, 10 3.5, 0 7" fill="hsl(var(--primary))" stroke="white" strokeWidth="1" />
             </marker>
+             <marker id="arrowhead-route" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="hsl(var(--accent))" stroke="white" strokeWidth="1" />
+            </marker>
           </defs>
           {allConnections.map(({ from, to, type }, index) => {
             const fromPos = nodePositions[from];
             const toPos = nodePositions[to];
 
             if (!fromPos || !toPos) return null;
+            
+            // Handle self-loops for route mode
+            if (from === to && type === 'route') {
+              const cx = fromPos.x;
+              const cy = fromPos.y - 40; // Adjust position of the loop
+              const r = 15; // Radius of the loop
+              return (
+                <circle
+                  key={`loop-${index}`}
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  stroke="hsl(var(--accent))"
+                  strokeWidth="2"
+                  fill="none"
+                  markerEnd="url(#arrowhead-route)"
+                />
+              )
+            }
             
             const dx = toPos.x - fromPos.x;
             const dy = toPos.y - fromPos.y;
@@ -559,20 +604,23 @@ export default function LevelMap({
             
             const endX = toPos.x - (padding / dist) * dx;
             const endY = toPos.y - (padding / dist) * dy;
+            
+            const strokeColor = type === 'route' ? 'hsl(var(--accent))' : type === 'transition' ? 'hsl(var(--primary))' : 'hsl(var(--border))';
+            const markerEnd = type === 'route' ? "url(#arrowhead-route)" : type === 'transition' ? "url(#arrowhead)" : "none";
 
 
             return (
               <g key={`line-group-${index}`}>
-                 <circle cx={fromPos.x} cy={fromPos.y} r="4" fill="white" />
+                 {type !== 'route' && <circle cx={fromPos.x} cy={fromPos.y} r="4" fill="white" />}
                  <line
                     x1={fromPos.x}
                     y1={fromPos.y}
                     x2={endX}
                     y2={endY}
-                    stroke={type === 'transition' ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
+                    stroke={strokeColor}
                     strokeWidth="2"
                     strokeDasharray={type === 'prerequisite' ? "5,5" : "none"}
-                    markerEnd={type === 'transition' ? "url(#arrowhead)" : "none"}
+                    markerEnd={markerEnd}
                  />
               </g>
             );
@@ -627,7 +675,7 @@ export default function LevelMap({
 
         {interactionMode === 'route' && (
           <div className="flex items-center justify-end gap-4 p-4 border-b mb-4">
-              <RouteExporter 
+               <RouteExporter 
                   title="Ruta de Aprendizaje"
                   posesToExport={selectedRoutePoseIds}
                   allPoses={allPoses}
@@ -643,6 +691,17 @@ export default function LevelMap({
                   exportMode="detailed"
                   buttonText="Imprimir Contenido Detallado"
                 />
+                 <Button 
+                    variant="default" 
+                    size="sm" 
+                    onClick={handleAddToBuilder} 
+                    disabled={selectedRoutePoseIds.length === 0}
+                    aria-label="Añadir al Constructor de Secuencias"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  >
+                    <FilePlus className="mr-2 h-4 w-4" />
+                    Añadir al Constructor
+                  </Button>
           </div>
         )}
         {Object.keys(posesByLevel).length > 0 ? (
@@ -663,20 +722,21 @@ export default function LevelMap({
                     >
                      {posesInLevel.map((pose) => {
                         const isHighlighted = highlightedPoseIds.includes(pose.id);
+                        const selectionCount = selectedRoutePoseIds.filter(id => id === pose.id).length;
                         return (
                         <div key={pose.id} ref={node => poseNodeRefs.current[pose.id] = node}>
                           <PoseNode
                             pose={pose}
                             displayName={getDisplayNameForMap(pose, nameDisplay)}
-                            nameDisplay={nameDisplay}
                             onSelect={() => handleSelectPoseForDialog(pose)}
                             onMouseEnter={() => setHoveredPoseId(pose.id)}
                             onMouseLeave={() => setHoveredPoseId(null)}
-                            onClick={() => handlePoseClick(pose.id)}
+                            onClick={() => handlePoseClick(pose)}
                             isDimmed={isAnyPoseHighlighted && !isHighlighted}
                             isHighlighted={isHighlighted}
                             isFixed={connectionState.poseId === pose.id}
-                            isSelected={selectedRoutePoseIds.includes(pose.id)}
+                            isSelected={selectionCount > 0}
+                            selectionCount={selectionCount}
                             showCheckbox={interactionMode === 'route'}
                             onCheckedChange={(checked) => handleRouteChange(pose.id, checked)}
                             allPoses={allPoses}
@@ -710,8 +770,7 @@ export default function LevelMap({
         open={!!selectedPoseForDialog}
         onOpenChange={(open) => !open && setSelectedPoseForDialog(null)}
         concepts={concepts}
-        nameDisplay={nameDisplay}
       />
-    </Card>
+    </div>
   );
 }

@@ -1,0 +1,34 @@
+.snowfall-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  left: var(--random-x-start);
+  width: var(--random-size);
+  height: var(--random-size);
+  background-color: white;
+  border-radius: 50%;
+  opacity: var(--random-opacity);
+  animation: fall var(--random-duration) var(--random-delay) linear infinite;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-10vh) translateX(0);
+  }
+  to {
+    transform: translateY(calc(100vh + 10px)) translateX(var(--random-y-offset));
+    left: var(--random-x-end);
+  }
+}
+
+    

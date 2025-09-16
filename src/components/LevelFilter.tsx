@@ -12,8 +12,7 @@ import { X, PlusCircle } from 'lucide-react';
 import type { Pose } from '@/types';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
-
-type NameDisplay = 'es' | 'en' | 'both';
+import { useAppContext } from '@/contexts/AppContext';
 
 export type SearchQuery = {
     query: string;
@@ -30,12 +29,11 @@ interface LevelFilterProps {
     setOriginFilter: (poseId: string | null) => void;
     destinationFilter: string | null;
     setDestinationFilter: (poseId: string | null) => void;
-    nameDisplay: NameDisplay;
 }
 
 type FilterStep = 'main' | 'name' | 'tag' | 'origin' | 'destination';
 
-const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+const getDisplayName = (pose: Pose, displayMode: 'es' | 'en' | 'both'): string => {
     if (!pose || !pose.nombre) return '';
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
@@ -69,12 +67,12 @@ export default function LevelFilter({
     setOriginFilter,
     destinationFilter,
     setDestinationFilter,
-    nameDisplay,
 }: LevelFilterProps) {
     const [open, setOpen] = useState(false);
     const [step, setStep] = useState<FilterStep>('main');
     const [localSearch, setLocalSearch] = useState('');
     const [exactMatch, setExactMatch] = useState(false);
+    const { nameDisplay } = useAppContext();
 
 
     const allTags = useMemo(() => {

@@ -6,16 +6,13 @@ import { Accordion } from '@/components/ui/accordion';
 import { AsanaCard } from './AsanaCard';
 import GlossaryExporter from './GlossaryExporter';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type AsanaGlossaryProps = {
   asanas: Asana[];
   allPoses: Pose[];
   allConcepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-export default function AsanaGlossary({ asanas, allPoses, allConcepts, nameDisplay }: AsanaGlossaryProps) {
+export default function AsanaGlossary({ asanas, allPoses, allConcepts }: AsanaGlossaryProps) {
   if (asanas.length === 0) {
     return null;
   }
@@ -46,7 +43,6 @@ export default function AsanaGlossary({ asanas, allPoses, allConcepts, nameDispl
                 asana={asana}
                 allPoses={allPoses}
                 allConcepts={allConcepts}
-                nameDisplay={nameDisplay}
             />
           ))}
         </Accordion>

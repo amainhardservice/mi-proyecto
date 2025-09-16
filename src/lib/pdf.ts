@@ -16,17 +16,17 @@ const getAcroLevelTitle = (level: number) => {
         case 3: return "Nivel 3: Transiciones";
         case 4: return "Nivel 4: Flow 1 – Básico";
         case 5: return "Nivel 5: Intermedio";
-        case 6: return "Nivel 6: Flow 2 – Intermedio";
-        case 7: return "Nivel 7: Washing Machines";
-        case 8: return "Nivel 8: Flow 3 – Avanzado";
-        case 9: return "Nivel 9: Icarian Básico";
-        case 10: return "Nivel 10: Icarian Intermedio";
-        case 11: return "Nivel 11: Whips Básicos";
-        case 12: return "Nivel 12: Whips Intermedios";
-        case 13: return "Nivel 13: Whips Avanzados";
-        case 14: return "Nivel 14: Standing Básico";
-        case 15: return "Nivel 15: Standing Intermedio";
-        case 16: return "Nivel 16: Standing Avanzado";
+        case 6: return "Nivel 6: Transiciones Intermedias";
+        case 7: return "Nivel 7: Flow 2 – Intermedio";
+        case 8: return "Nivel 8: Washing Machines";
+        case 10: return "Nivel 10: Icarian Básico";
+        case 11: return "Nivel 11: Icarian Intermedio";
+        case 12: return "Nivel 12: Whips Básicos";
+        case 13: return "Nivel 13: Whips Intermedios";
+        case 14: return "Nivel 14: Whips Avanzados";
+        case 15: return "Nivel 15: Standing Básico";
+        case 16: return "Nivel 16: Standing Intermedio";
+        case 17: return "Nivel 17: Standing Avanzado";
         default: return `Nivel ${level}`;
     }
 };
@@ -71,37 +71,76 @@ const getDisplayName = (item: Pose | SequenceItem, displayMode: NameDisplay): st
 
 const addImageToPdf = async (doc: jsPDF, url: string, x: number, y: number, width: number, height: number): Promise<boolean> => {
     try {
-        const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(url)}`;
-        const response = await fetch(proxyUrl);
-        if (!response.ok) {
-            console.error(`Failed to fetch image via proxy: ${url}, status: ${response.status}`);
-            return false;
-        }
+        // First attempt: direct fetch
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Direct fetch failed with status ${response.status}`);
+        
         const blob = await response.blob();
         const reader = new FileReader();
         return new Promise((resolve) => {
-            reader.onload = () => {
-                const dataUrl = reader.result as string;
+            reader.onloadend = () => {
                 try {
+                    const dataUrl = reader.result as string;
+                    if (!dataUrl) {
+                        resolve(false);
+                        return;
+                    }
                     const format = (blob.type.split('/')[1] || 'jpeg').toUpperCase();
                     doc.addImage(dataUrl, format, x, y, width, height);
                     resolve(true);
-                } catch (e) {
-                    console.error(`jsPDF error adding image: ${url}`, e);
+                } catch(e) {
+                    console.error("jsPDF addImage error:", e);
                     resolve(false);
                 }
             };
             reader.onerror = () => {
-                console.error(`FileReader error for image: ${url}`);
+                console.error("FileReader error for url:", url);
                 resolve(false);
             };
             reader.readAsDataURL(blob);
         });
-    } catch (e) {
-        console.error(`Network or CORS error for image: ${url}`, e);
-        return false;
+
+    } catch (directFetchError) {
+        console.warn(`Direct fetch failed for ${url}, trying proxy. Error:`, directFetchError);
+        // Fallback to proxy
+        try {
+            const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(url)}`;
+            const proxyResponse = await fetch(proxyUrl);
+            if (!proxyResponse.ok) {
+                console.error(`Failed to fetch image via proxy: ${url}, status: ${proxyResponse.status}`);
+                return false;
+            }
+            const blob = await proxyResponse.blob();
+            const reader = new FileReader();
+            return new Promise((resolve) => {
+                 reader.onloadend = () => {
+                    try {
+                        const dataUrl = reader.result as string;
+                         if (!dataUrl) {
+                            resolve(false);
+                            return;
+                        }
+                        const format = (blob.type.split('/')[1] || 'jpeg').toUpperCase();
+                        doc.addImage(dataUrl, format, x, y, width, height);
+                        resolve(true);
+                    } catch(e) {
+                         console.error("jsPDF addImage error via proxy:", e);
+                         resolve(false);
+                    }
+                };
+                reader.onerror = () => {
+                    console.error("FileReader error for proxy url:", url);
+                    resolve(false);
+                };
+                reader.readAsDataURL(blob);
+            });
+        } catch (proxyError) {
+            console.error(`Proxy fetch also failed for ${url}:`, proxyError);
+            return false;
+        }
     }
 }
+
 
 const allPosesById = allPosesData.reduce((acc, p) => {
     acc[p.id] = p;
@@ -137,7 +176,7 @@ async function exportPoseToPdfPage(doc: jsPDF, pose: Pose, initialY: number, nam
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     
-    const levelTitle = pose.type === 'Therapeutic' ? 'Vuelo Terapéutico' : (pose.type === 'Transition' || pose.type === 'Icarian' || pose.type === 'Flow' ? `${getAcroLevelTitle(pose.nivel)}` : getAcroLevelTitle(pose.nivel));
+    const levelTitle = getAcroLevelTitle(pose.nivel);
     const levelTextWidth = doc.getTextWidth(levelTitle) + 20;
     
     checkPageEnd(30);
@@ -302,6 +341,123 @@ export async function exportRouteToPdf(poses: Pose[], title: string, nameDisplay
 }
 
 export async function exportVisualTreeToPdf(poses: Pose[], nameDisplay: NameDisplay, title: string) {
+    const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 40;
+    let y = margin;
+
+    const checkPageEnd = (neededHeight = 20) => {
+        if (y + neededHeight > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text(title, pageWidth / 2, y, { align: 'center' });
+            y += 40;
+        }
+    };
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(24);
+    doc.text(title, pageWidth / 2, y, { align: 'center' });
+    y += 40;
+
+    const poseCounts: { [key: string]: number } = {};
+
+    for (let i = 0; i < poses.length; i++) {
+        const pose = poses[i];
+        
+        poseCounts[pose.id] = (poseCounts[pose.id] || 0) + 1;
+        const repetition = poseCounts[pose.id] > 1 ? ` (${poseCounts[pose.id]}ª vez)` : '';
+        
+        const stepTitle = `Paso ${i + 1}: ${getDisplayName(pose, nameDisplay)}${repetition}`;
+        const description = pose.descripcion;
+        
+        const imgWidth = 150;
+        const imgHeight = 100;
+        
+        const requiredHeight = (pose.url_imagen ? imgHeight : 0) + 70;
+        checkPageEnd(requiredHeight);
+
+        // --- Draw Step ---
+        if (i > 0) {
+             y += 20; // Add extra space before the separator
+             doc.setDrawColor(220, 220, 220);
+             doc.line(margin, y - 10, pageWidth - margin, y - 10);
+        } else {
+             y -= 10;
+        }
+        
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        const stepTitleLines = doc.splitTextToSize(stepTitle, pageWidth - margin * 2);
+        doc.text(stepTitleLines, margin, y);
+        y += stepTitleLines.length * 16;
+        
+        let textX = margin;
+        let textWidth = pageWidth - margin * 2;
+        
+        if (pose.url_imagen) {
+            const imgX = pageWidth - margin - imgWidth;
+            const added = await addImageToPdf(doc, pose.url_imagen, imgX, y, imgWidth, imgHeight);
+             if (!added) {
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'italic');
+                doc.text('(imagen no disponible)', imgX + imgWidth/2, y + imgHeight/2, { align: 'center' });
+             }
+            textWidth = pageWidth - margin * 2 - imgWidth - 20;
+        }
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        const descriptionLines = doc.splitTextToSize(description, textWidth);
+        doc.text(descriptionLines, textX, y);
+        
+        y += pose.url_imagen ? Math.max(imgHeight, descriptionLines.length * 12) : descriptionLines.length * 12;
+    }
+
+    const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    doc.save(`${safeFilename}_visual_sequence.pdf`);
+}
+
+export async function exportPrerequisitesToPdf(targetPose: Pose, allPoses: Pose[], nameDisplay: NameDisplay) {
+    const allPosesMap = allPoses.reduce((acc, p) => {
+        acc[p.id] = p;
+        return acc;
+    }, {} as Record<string, Pose>);
+
+    const getAllPrereqsRecursive = (poseId: string, processedIds = new Set<string>()): string[] => {
+        if (processedIds.has(poseId)) return [];
+
+        const currentPose = allPosesMap[poseId];
+        if (!currentPose) return [];
+
+        processedIds.add(poseId);
+        
+        const directPrereqs = (currentPose.prerequisites || []).filter(pId => allPosesMap[pId]);
+        
+        const nestedPrereqs = directPrereqs.flatMap(pId => 
+            getAllPrereqsRecursive(pId, processedIds)
+        );
+        
+        return [...nestedPrereqs, ...directPrereqs];
+    };
+
+    const prereqIds = getAllPrereqsRecursive(targetPose.id);
+    const allIds = [...new Set([...prereqIds, targetPose.id])];
+    
+    const posesToExport = allIds
+        .map(id => allPosesMap[id])
+        .filter((p): p is Pose => !!p);
+
+    if (posesToExport.length <= 1) {
+        toast({ title: 'Sin Prerrequisitos', description: 'Esta postura no tiene una ruta de prerrequisitos definida para exportar.' });
+        return;
+    }
+    
+    const title = `Ruta de Aprendizaje para ${getDisplayName(targetPose, nameDisplay)}`;
+    
     const doc = new jsPDF({ orientation: 'l', unit: 'pt', format: 'a4' });
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -317,7 +473,7 @@ export async function exportVisualTreeToPdf(poses: Pose[], nameDisplay: NameDisp
 
     drawHeader();
 
-    const posesByLevel = poses.reduce((acc, pose) => {
+    const posesByLevel = posesToExport.reduce((acc, pose) => {
         const level = pose.nivel;
         if (!acc[level]) acc[level] = [];
         acc[level].push(pose);
@@ -406,12 +562,13 @@ export async function exportVisualTreeToPdf(poses: Pose[], nameDisplay: NameDisp
 
         x += columnWidth;
     }
-
+    
     const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    doc.save(`${safeFilename}_visual.pdf`);
+    doc.save(`${safeFilename}_prereqs_visual.pdf`);
 }
 
-export async function exportSequenceToPdf(sequence: SequenceItem[], title: string) {
+
+export async function exportSequenceToPdf(sequence: SequenceItem[], title: string, nameDisplay: NameDisplay) {
     const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 40;
@@ -442,24 +599,28 @@ export async function exportSequenceToPdf(sequence: SequenceItem[], title: strin
 
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        let itemTitleText: string;
-        if (item.itemType === 'pose') {
-            itemTitleText = item.nombre.replace(/\n/g, ' / ').replace(/→/g, '>');
-        } else if (item.itemType === 'asana') {
-            itemTitleText = item.nombre_sans;
-        } else {
-            itemTitleText = item.titulo.split('\n')[0];
-        }
+        let itemTitleText: string = getDisplayName(item, nameDisplay);
+
 
         const itemTitleLines = doc.splitTextToSize(`${index + 1}. ${itemTitleText}`, pageWidth - margin * 2 - 50);
         doc.text(itemTitleLines, margin, y);
         
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(item.itemType, pageWidth - margin, y, { align: 'right' });
+        
+        let durationText = '';
+        if (item.durationMode === 'quantity') {
+            durationText = `${item.quantity} x ${item.secondsPerRep}s`;
+        } else {
+            durationText = `${item.duration}s`;
+        }
+
+        const itemTypeText = `${item.itemType} | ${durationText}`;
+        doc.text(itemTypeText, pageWidth - margin, y, { align: 'right' });
+
         y += (itemTitleLines.length * 16) + 10;
 
-        if (item.itemType === 'pose' && 'url_imagen' in item && item.url_imagen) {
+        if ('url_imagen' in item && item.url_imagen) {
             const imgWidth = 225;
             const imgHeight = 150;
             const imgX = (pageWidth - imgWidth) / 2;
@@ -501,5 +662,3 @@ export async function exportSequenceToPdf(sequence: SequenceItem[], title: strin
     const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     doc.save(`${safeFilename}_sequence.pdf`);
 }
-
-    

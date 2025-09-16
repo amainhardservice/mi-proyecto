@@ -1,10 +1,9 @@
-
-
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import type { Pose, Concept, PoseWithImage } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Video, Image as ImageIcon, ChevronLeft, ChevronRight, Tags, Workflow, GitCommit, Repeat, Wind, Sparkles, PersonStanding, HeartHandshake, Star, Feather, Crown, ThumbsUp, Hand, GitBranch, Text, FlipHorizontal } from 'lucide-react';
-import { cn, getYouTubeEmbedUrl } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { useAppContext } from '@/contexts/AppContext';
 import {
   AccordionContent,
   AccordionItem,
@@ -21,15 +20,14 @@ import Image from 'next/image';
 import DetailedDescription from './DetailedDescription';
 import { PoseDetailDialog } from './PoseDetailDialog';
 import { Badge } from './ui/badge';
+import { playSoundForPose } from '@/lib/sounds';
 
 
-type NameDisplay = 'es' | 'en' | 'both';
 type ActiveView = 'description' | 'video' | 'image';
 
 type PoseNodeProps = {
   pose: Pose;
   displayName: string;
-  nameDisplay: NameDisplay;
   onSelect: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -38,6 +36,7 @@ type PoseNodeProps = {
   isHighlighted: boolean;
   isFixed: boolean;
   isSelected: boolean;
+  selectionCount: number;
   showCheckbox: boolean;
   onCheckedChange: (checked: boolean) => void;
   allPosesMap: Record<string, Pose>;
@@ -61,7 +60,7 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
 
     const nextImage = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev - 1));
+        setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
         setIsFlipped(false); // Reset flip on image change
     };
     
@@ -70,7 +69,7 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
         setIsFlipped(prev => !prev);
     };
 
-    const imageUrl = `/api/image-proxy?url=${encodeURIComponent(images[currentIndex])}`;
+    const imageUrl = images[currentIndex];
 
     return (
         <div className="relative aspect-video rounded-md overflow-hidden group/carousel cursor-pointer" onClick={onImageClick}>
@@ -116,7 +115,6 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
 export const PoseNode = ({ 
   pose, 
   displayName, 
-  nameDisplay,
   onSelect, 
   onMouseEnter, 
   onMouseLeave,
@@ -125,6 +123,7 @@ export const PoseNode = ({
   isHighlighted,
   isFixed,
   isSelected,
+  selectionCount,
   showCheckbox,
   onCheckedChange,
   allPosesMap,
@@ -137,6 +136,7 @@ export const PoseNode = ({
 }: PoseNodeProps) => {
   const [selectedPrereq, setSelectedPrereq] = useState<PoseWithImage | null>(null);
   const wasOpen = useRef(accordionValue.includes(pose.id));
+  const { nameDisplay, soundsEnabled, soundEffectsVolume } = useAppContext();
 
   useEffect(() => {
     const isOpen = accordionValue.includes(pose.id);
@@ -159,12 +159,23 @@ export const PoseNode = ({
   const handleIconClick = (view: ActiveView, e: React.MouseEvent) => {
     e.stopPropagation();
     onViewChange(view);
+    if (soundsEnabled && !accordionValue.includes(pose.id)) {
+        playSoundForPose(pose, soundEffectsVolume);
+    }
   };
   
   const handlePrereqClick = (prereq: Pose, e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
       setSelectedPrereq(prereq as PoseWithImage);
+  }
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if(soundsEnabled) {
+      playSoundForPose(pose, soundEffectsVolume);
+    }
+    onClick();
   }
 
   const getIcon = (item: Pose) => {
@@ -194,13 +205,13 @@ export const PoseNode = ({
     if (expandedView === 'image' && hasImage) {
       return (
         <div className="p-1">
-          <ImageCarouselNode images={allImages} alt={`Imagen de ${pose.nombre}`} onImageClick={(e) => { e.stopPropagation(); onClick(); }} />
+          <ImageCarouselNode images={allImages} alt={`Imagen de ${pose.nombre}`} onImageClick={handleImageClick} />
         </div>
       );
     }
 
     if (expandedView === 'video' && hasVideo) {
-      const embedUrl = getYouTubeEmbedUrl(allVideos[0]);
+      const embedUrl = allVideos[0] ? `https://www.youtube.com/embed/${new URL(allVideos[0]).searchParams.get('v')}` : '';
       if (embedUrl) {
         return (
           <div className="p-1 relative aspect-video rounded-md overflow-hidden">
@@ -268,7 +279,7 @@ export const PoseNode = ({
         {pose.narrativa_detallada && (
           <div>
             <h4 className="font-semibold text-foreground mb-1">Narrativa Detallada</h4>
-            <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} nameDisplay={nameDisplay} />
+            <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
           </div>
         )}
 
@@ -328,7 +339,7 @@ export const PoseNode = ({
     >
       <div 
         className={cn(
-            "flex items-center w-full bg-card rounded-lg border shadow-sm px-2 py-1.5 transition-all duration-300",
+            "flex items-center w-full bg-card rounded-lg border shadow-sm px-2 py-1.5 transition-all duration-300 relative",
             isFixed && 'border-primary ring-2 ring-primary ring-offset-2 shadow-lg',
             isHighlighted && !isFixed && 'border-primary/50 bg-primary/5 shadow-md',
             isSelected && 'border-accent shadow-md',
@@ -336,9 +347,24 @@ export const PoseNode = ({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {showCheckbox && <Checkbox checked={isSelected} onCheckedChange={onCheckedChange} className="mr-2" />}
+        {showCheckbox && (
+          <div className="flex items-center h-full mr-2">
+            <Checkbox checked={isSelected} onCheckedChange={onCheckedChange} />
+             {selectionCount > 1 && (
+               <span className="absolute -top-2 -left-2 bg-accent text-accent-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                 {selectionCount}
+               </span>
+             )}
+          </div>
+        )}
         
-        <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center mr-2 cursor-pointer" onClick={onClick}>
+        <div 
+          className={cn(
+            "flex-shrink-0 w-6 h-6 flex items-center justify-center mr-2 cursor-pointer",
+            accordionValue.includes(pose.id) && '[&>svg]:fill-yellow-500/30 [&>svg]:text-yellow-500'
+          )} 
+          onClick={onClick}
+        >
             {getIcon(pose)}
         </div>
         
@@ -349,6 +375,9 @@ export const PoseNode = ({
           )}
           onClick={(e) => {
             e.stopPropagation();
+            if (soundsEnabled && !accordionValue.includes(pose.id)) {
+              playSoundForPose(pose, soundEffectsVolume);
+            }
             onSelect();
           }}
         >
@@ -397,12 +426,8 @@ export const PoseNode = ({
         open={!!selectedPrereq}
         onOpenChange={(open) => !open && setSelectedPrereq(null)}
         concepts={concepts}
-        nameDisplay={nameDisplay}
       />
     </AccordionItem>
   );
 };
 PoseNode.displayName = 'PoseNode';
-
-
-

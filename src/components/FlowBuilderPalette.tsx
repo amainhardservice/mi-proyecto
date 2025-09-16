@@ -1,11 +1,12 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { useDrag } from 'react-dnd';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GripVertical, Bot, Sparkles, Dumbbell, HeartHandshake, BrainCircuit, HeartPulse, GitCommit, Repeat, PersonStanding, Wind, Workflow, Star, Hand, Feather, Crown, ThumbsUp, GitBranch, ShieldQuestion } from 'lucide-react';
@@ -14,9 +15,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getYouTubeThumbnailUrl } from '@/lib/utils';
 import { useCategorizedPoses } from '@/hooks/use-categorized-poses';
+import { useAppContext } from '@/contexts/AppContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-
-type NameDisplay = 'es' | 'en' | 'both';
 
 interface PaletteProps {
   poses: Pose[];
@@ -24,7 +26,6 @@ interface PaletteProps {
   modifiers: PoseModifier[];
   asanas: Asana[];
   exercises: Exercise[];
-  nameDisplay: NameDisplay;
 }
 
 const ItemTypes = {
@@ -37,9 +38,14 @@ const ItemTypes = {
   TRANSITION: 'transition',
   WHIP: 'whip',
   ICARIAN: 'icarian',
+  L_BASING: 'l-basing',
+  STANDING: 'standing',
+  THAI_MASSAGE: 'thai-massage',
+  THERAPEUTIC: 'therapeutic',
+  WASHING_MACHINE: 'washing-machine',
 };
 
-const getDisplayName = (item: any, displayMode: NameDisplay): string => {
+const getDisplayName = (item: any, displayMode: 'es' | 'en' | 'both'): string => {
     if (('nombre' in item && 'nivel' in item)) { // Pose
         const parts = item.nombre.split('\n');
         const esName = parts[0];
@@ -62,11 +68,11 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string => {
     }
     if ('categoria' in item && 'enfasis' in item) { // Exercise
         const parts = item.titulo.split('\n');
-        const esName = parts[0];
+        const esTitle = parts[0];
         const enName = parts[1] || '';
         switch (displayMode) {
-            case 'en': return enName.replace(/[()]/g, '') || esName;
-            case 'es': return esName;
+            case 'en': return enName.replace(/[()]/g, '') || esTitle;
+            case 'es': return esTitle;
             case 'both': return item.titulo;
             default: return item.titulo;
         }
@@ -74,25 +80,12 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string => {
     return item.titulo; // Concept or Modifier
 };
 
-const getItemType = (item: any): string => {
-    if ('nivel' in item) {
-        if (item.type === 'Flow') return ItemTypes.FLOW;
-        if (item.type === 'Transition') return ItemTypes.TRANSITION;
-        if (item.type === 'Washing Machine') return ItemTypes.POSE; // Treat as pose for now
-        if (item.type === 'Whip') return ItemTypes.WHIP;
-        if (item.type === 'Icarian') return ItemTypes.ICARIAN;
-        return ItemTypes.POSE;
-    }
-    if ('enfasis' in item) return ItemTypes.EXERCISE;
-    if ('nombre_sans' in item) return ItemTypes.ASANA;
-    if (item.category) return ItemTypes.CONCEPT;
-    
-    // Default fallback
-    return ItemTypes.MODIFIER;
+const getItemType = (item: Pose): string => {
+  return (item.type as string).toLowerCase().replace(' ', '-');
 };
 
 
-const DraggableItem = ({ item, type, nameDisplay }: { item: any, type: string, nameDisplay: NameDisplay }) => {
+const DraggableItem = ({ item, type, nameDisplay }: { item: any, type: string, nameDisplay: 'es' | 'en' | 'both' }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: type,
     item: { id: item.id, type: type },
@@ -184,10 +177,10 @@ const DraggableItem = ({ item, type, nameDisplay }: { item: any, type: string, n
   return itemContent;
 };
 
-const PaletteAccordion = ({ title, items, children }: { title: string, items: any[], children: React.ReactNode }) => {
+const PaletteAccordion = ({ title, items, children, value, onValueChange, type, defaultValue }: { title: string, items: any[], children: React.ReactNode, value: string[], onValueChange: (value: string[]) => void, type: "single" | "multiple", defaultValue: string[] | undefined }) => {
   if (!items || items.length === 0) return null;
   return (
-    <Accordion type="multiple" className="w-full" defaultValue={[title]}>
+    <Accordion type="multiple" className="w-full" value={value} onValueChange={onValueChange} defaultValue={defaultValue}>
         <AccordionItem value={title}>
             <AccordionTrigger>{title} ({items.length})</AccordionTrigger>
             <AccordionContent className="pl-2">
@@ -199,9 +192,27 @@ const PaletteAccordion = ({ title, items, children }: { title: string, items: an
 };
 
 
-export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas, exercises, nameDisplay }: PaletteProps) {
+export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas, exercises }: PaletteProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const { 
+    nameDisplay,
+    defaultDurationMode, setDefaultDurationMode,
+    defaultSeconds, setDefaultSeconds,
+    defaultQuantity, setDefaultQuantity,
+    defaultSecondsPerRep, setDefaultSecondsPerRep,
+  } = useAppContext();
+  const isMobile = useIsMobile();
   const lowerCaseSearch = searchTerm.toLowerCase();
+
+  const [openAccordion, setOpenAccordion] = useState<string[]>(isMobile ? [] : ['Fundamentales', 'Familia Trono', 'Familia Pájaro', 'Familia Murciélago', 'Vuelo Terapéutico', 'Modificadores']);
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpenAccordion([]);
+    } else {
+      setOpenAccordion(['Fundamentales', 'Familia Trono', 'Familia Pájaro', 'Familia Murciélago', 'Vuelo Terapéutico', 'Modificadores']);
+    }
+  }, [isMobile]);
 
   const filterItem = (item: any) => {
     if (!lowerCaseSearch) return true;
@@ -222,15 +233,72 @@ export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas,
  const extras = allItems.filter(item => ['concept', 'modifier', 'asana'].includes(item.itemType));
   
   return (
-    <Card className="w-full md:w-1/3 flex flex-col">
+    <Card className="w-full lg:w-1/3 flex flex-col">
       <CardHeader>
         <CardTitle>Elementos</CardTitle>
-        <Input 
-          placeholder="Buscar en todas las categorías..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mt-2"
-        />
+        <div className="space-y-4 pt-2">
+          <Input 
+            placeholder="Buscar en todas las categorías..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+           <div>
+            <Label className="text-sm font-medium">Modo de Duración por Defecto</Label>
+            <RadioGroup 
+                value={defaultDurationMode} 
+                onValueChange={(value) => setDefaultDurationMode(value as 'seconds' | 'quantity')} 
+                className="flex items-center space-x-4 mt-1"
+              >
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="seconds" id="seconds-mode" />
+                    <Label htmlFor="seconds-mode" className="text-sm font-normal">Por Segundos</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="quantity" id="quantity-mode" />
+                    <Label htmlFor="quantity-mode" className="text-sm font-normal">Por Cantidad</Label>
+                </div>
+            </RadioGroup>
+          </div>
+          
+           {defaultDurationMode === 'seconds' ? (
+                <div>
+                    <Label htmlFor="default-duration" className="text-sm font-medium">Duración (s)</Label>
+                    <Input 
+                    id="default-duration"
+                    type="number"
+                    value={defaultSeconds}
+                    onChange={(e) => setDefaultSeconds(parseInt(e.target.value, 10) || 1)}
+                    className="mt-1"
+                    min="1"
+                    />
+                </div>
+           ) : (
+             <div className="grid grid-cols-2 gap-2">
+                <div>
+                    <Label htmlFor="default-quantity" className="text-sm font-medium">Cantidad</Label>
+                    <Input 
+                    id="default-quantity"
+                    type="number"
+                    value={defaultQuantity}
+                    onChange={(e) => setDefaultQuantity(parseInt(e.target.value, 10) || 1)}
+                    className="mt-1"
+                    min="1"
+                    />
+                </div>
+                 <div>
+                    <Label htmlFor="default-secs-per-rep" className="text-sm font-medium">Segs/Rep</Label>
+                    <Input 
+                    id="default-secs-per-rep"
+                    type="number"
+                    value={defaultSecondsPerRep}
+                    onChange={(e) => setDefaultSecondsPerRep(parseInt(e.target.value, 10) || 1)}
+                    className="mt-1"
+                    min="1"
+                    />
+                </div>
+             </div>
+           )}
+        </div>
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
         <Tabs defaultValue="fundamentals" className="h-full flex flex-col">
@@ -246,79 +314,88 @@ export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas,
           <ScrollArea className="flex-grow mt-2">
             <div className="pr-4">
               <TabsContent value="all" className="h-full">
-                 {allItems.map(item => {
-                    const itemType = getItemType(item);
-                    const uniqueKey = `${itemType}-${item.id}`;
-                    return <DraggableItem key={uniqueKey} item={item} type={itemType} nameDisplay={nameDisplay} />;
-                 })}
+                <Accordion type="multiple" value={openAccordion} onValueChange={setOpenAccordion}>
+                    <AccordionItem value="all-items">
+                        <AccordionTrigger>Todos los elementos</AccordionTrigger>
+                        <AccordionContent>
+                           {allItems.map(item => {
+                              const itemType = (item as any).itemType || 'pose';
+                              const uniqueKey = `${itemType}-${item.id}`;
+                              return <DraggableItem key={uniqueKey} item={item} type={itemType} nameDisplay={nameDisplay} />;
+                           })}
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
               </TabsContent>
               
               <TabsContent value="fundamentals">
-                <PaletteAccordion title="Fundamentales" items={categorizedPoses.staticFundamentals}>
-                  {categorizedPoses.staticFundamentals.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Fundamentales" items={categorizedPoses.staticFundamentals} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Fundamentales']}>
+                  {categorizedPoses.staticFundamentals.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Familia Trono" items={categorizedPoses.throneFamily}>
-                   {categorizedPoses.throneFamily.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Familia Trono" items={categorizedPoses.throneFamily} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Familia Trono']}>
+                   {categorizedPoses.throneFamily.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Familia Pájaro" items={categorizedPoses.birdFamily}>
-                   {categorizedPoses.birdFamily.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Familia Pájaro" items={categorizedPoses.birdFamily} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Familia Pájaro']}>
+                   {categorizedPoses.birdFamily.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Familia Murciélago" items={categorizedPoses.batFamily}>
-                   {categorizedPoses.batFamily.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Familia Murciélago" items={categorizedPoses.batFamily} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Familia Murciélago']}>
+                   {categorizedPoses.batFamily.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Vuelo Terapéutico" items={categorizedPoses.therapeutic}>
-                   {categorizedPoses.therapeutic.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Vuelo Terapéutico" items={categorizedPoses.therapeutic} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Vuelo Terapéutico']}>
+                   {categorizedPoses.therapeutic.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
               </TabsContent>
 
               <TabsContent value="balances">
-                <PaletteAccordion title="Familia Estrella" items={categorizedPoses.starFamily}>
-                   {categorizedPoses.starFamily.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Familia Estrella" items={categorizedPoses.starFamily} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Familia Estrella']}>
+                   {categorizedPoses.starFamily.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Inversiones sobre Hombros" items={categorizedPoses.shoulderstands}>
-                  {categorizedPoses.shoulderstands.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Inversiones sobre Hombros" items={categorizedPoses.shoulderstands} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Inversiones sobre Hombros']}>
+                  {categorizedPoses.shoulderstands.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
-                <PaletteAccordion title="Inversiones sobre Manos" items={categorizedPoses.handstands}>
-                   {categorizedPoses.handstands.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Inversiones sobre Manos" items={categorizedPoses.handstands} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Inversiones sobre Manos']}>
+                   {categorizedPoses.handstands.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
               </TabsContent>
 
                <TabsContent value="dynamics">
-                  <PaletteAccordion title="Transiciones" items={categorizedPoses.transitions}>
-                     {categorizedPoses.transitions.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.TRANSITION} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Transiciones" items={categorizedPoses.transitions} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Transiciones']}>
+                     {categorizedPoses.transitions.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Lavadoras" items={categorizedPoses.washingMachines}>
-                     {categorizedPoses.washingMachines.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Lavadoras" items={categorizedPoses.washingMachines} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Lavadoras']}>
+                     {categorizedPoses.washingMachines.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Flujos" items={categorizedPoses.flows}>
-                     {categorizedPoses.flows.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.FLOW} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Flujos" items={categorizedPoses.flows} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Flujos']}>
+                     {categorizedPoses.flows.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Whips" items={categorizedPoses.whips}>
-                     {categorizedPoses.whips.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.WHIP} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Whips" items={categorizedPoses.whips} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Whips']}>
+                     {categorizedPoses.whips.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Icarian" items={categorizedPoses.icarian}>
-                    {categorizedPoses.icarian.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.ICARIAN} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Icarian" items={categorizedPoses.icarian} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Icarian']}>
+                    {categorizedPoses.icarian.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
               </TabsContent>
               
               <TabsContent value="standing">
-                <PaletteAccordion title="Standing Acro" items={categorizedPoses.standing}>
-                    {categorizedPoses.standing.map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.POSE} nameDisplay={nameDisplay} />)}
+                <PaletteAccordion title="Standing Acro" items={categorizedPoses.standing} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Standing Acro']}>
+                    {categorizedPoses.standing.map(item => <DraggableItem key={item.id} item={item} type={getItemType(item)} nameDisplay={nameDisplay} />)}
                 </PaletteAccordion>
               </TabsContent>
 
               <TabsContent value="warmup">
-                {filteredExercises.map(ex => <DraggableItem key={ex.id} item={ex} type={ItemTypes.EXERCISE} nameDisplay={nameDisplay} />)}
+                  <PaletteAccordion title="Ejercicios de Calentamiento" items={filteredExercises} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Ejercicios de Calentamiento']}>
+                    {filteredExercises.map(ex => <DraggableItem key={ex.id} item={ex} type={ItemTypes.EXERCISE} nameDisplay={nameDisplay} />)}
+                  </PaletteAccordion>
               </TabsContent>
 
               <TabsContent value="extras">
-                  <PaletteAccordion title="Modificadores" items={modifiers.filter(filterItem)} defaultOpen>
+                  <PaletteAccordion title="Modificadores" items={modifiers.filter(filterItem)} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Modificadores']}>
                     {modifiers.filter(filterItem).map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.MODIFIER} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Conceptos" items={concepts.filter(filterItem)}>
+                  <PaletteAccordion title="Conceptos" items={concepts.filter(filterItem)} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Conceptos']}>
                      {concepts.filter(filterItem).map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.CONCEPT} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
-                  <PaletteAccordion title="Asanas" items={asanas.filter(filterItem)}>
+                  <PaletteAccordion title="Asanas" items={asanas.filter(filterItem)} value={openAccordion} onValueChange={setOpenAccordion} type="multiple" defaultValue={isMobile ? [] : ['Asanas']}>
                      {asanas.filter(filterItem).map(item => <DraggableItem key={item.id} item={item} type={ItemTypes.ASANA} nameDisplay={nameDisplay} />)}
                   </PaletteAccordion>
               </TabsContent>
@@ -329,3 +406,5 @@ export default function FlowBuilderPalette({ poses, concepts, modifiers, asanas,
     </Card>
   );
 }
+
+    

@@ -87,10 +87,36 @@ export interface Exercise {
   categoria: 'Individual' | 'En Pareja';
 }
 
+export type DurationMode = 'seconds' | 'quantity';
+
+// Base type for duration properties
+interface DurationBase {
+    durationMode: DurationMode;
+}
+
+// Properties for 'seconds' mode
+interface DurationSeconds extends DurationBase {
+    durationMode: 'seconds';
+    duration: number;
+    quantity?: never;
+    secondsPerRep?: never;
+}
+
+// Properties for 'quantity' mode
+interface DurationQuantity extends DurationBase {
+    durationMode: 'quantity';
+    duration?: never;
+    quantity: number;
+    secondsPerRep: number;
+}
+
+// Union type for duration
+export type SequenceDuration = DurationSeconds | DurationQuantity;
+
 
 // Type for items in the sequence builder
-export type SequenceItem = (Pose | Concept | Asana | PoseModifier | Exercise) & {
+export type SequenceItem = Omit<Pose | Concept | Asana | PoseModifier | Exercise, 'duration'> & {
   uniqueId: string;
-  itemType: 'pose' | 'concept' | 'asana' | 'modifier' | 'exercise' | 'transition' | 'flow' | 'whip' | 'icarian';
+  itemType: 'pose' | 'concept' | 'asana' | 'modifier' | 'exercise' | 'transition' | 'flow' | 'whip' | 'icarian' | 'l-basing' | 'standing' | 'thai-massage' | 'therapeutic' | 'washing-machine';
   notes: string;
-};
+} & SequenceDuration;

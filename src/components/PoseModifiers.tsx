@@ -6,16 +6,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import GlossaryExporter from './GlossaryExporter';
 import DetailedDescription from './DetailedDescription';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type PoseModifiersProps = {
   modifiers: PoseModifier[];
   poses: Pose[];
   concepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-export default function PoseModifiers({ modifiers, poses, concepts, nameDisplay }: PoseModifiersProps) {
+export default function PoseModifiers({ modifiers, poses, concepts }: PoseModifiersProps) {
   const contentToExport = () => {
     let content = 'Modificadores de Postura\n\n';
     modifiers.forEach(modifier => {
@@ -47,7 +44,6 @@ export default function PoseModifiers({ modifiers, poses, concepts, nameDisplay 
                         content={modifier.descripcion}
                         concepts={concepts}
                         poses={poses}
-                        nameDisplay={nameDisplay}
                     />
                 </AccordionContent>
               </AccordionItem>

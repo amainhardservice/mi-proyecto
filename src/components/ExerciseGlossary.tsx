@@ -5,17 +5,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import DetailedDescription from './DetailedDescription';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type ExerciseGlossaryProps = {
   title: string;
   exercises: Exercise[];
   allPoses: Pose[];
   allConcepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-export default function ExerciseGlossary({ title, exercises, allPoses, allConcepts, nameDisplay }: ExerciseGlossaryProps) {
+export default function ExerciseGlossary({ title, exercises, allPoses, allConcepts }: ExerciseGlossaryProps) {
   if (exercises.length === 0) {
     return null;
   }
@@ -94,7 +91,6 @@ export default function ExerciseGlossary({ title, exercises, allPoses, allConcep
                             content={exercise.descripcion}
                             concepts={allConcepts}
                             poses={allPoses}
-                            nameDisplay={nameDisplay}
                         />
                       </AccordionContent>
                     </AccordionItem>

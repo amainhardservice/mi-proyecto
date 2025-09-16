@@ -9,7 +9,7 @@ export const lBasingLevel2Poses: Pose[] = [
     type: 'L-Basing',
     prerequisites: ['lb-1', 'lb-shoulderstand-on-shins'],
     url_video: 'https://www.youtube.com/watch?v=JZ2VFYTUYHQ',
-    url_imagen: 'https://acroyogabarcelona.com/wp-content/uploads/2019/10/Invertidas-Acroyoga-2-e1571128101753.jpg',
+    url_imagen: 'https://i.ibb.co/9ktyCWRy/Invertidas-Acroyoga-2-e1571128101753.jpg',
     tags: ['Equilibrio', 'Inversión sobre Hombros'],
     descripcion: 'Una inversión fundamental con agarre de manos, donde el volador se apoya en los pies de la base, desarrollando equilibrio y alineación.',
     narrativa_detallada: `
@@ -80,7 +80,7 @@ export const lBasingLevel2Poses: Pose[] = [
     prerequisites: ['th-back-bird', 'th-whale'],
     url_video: 'https://www.youtube.com/watch?v=ks-4IzTcNSk',
     url_imagen: 'https://i.ibb.co/VYYttHvQ/Acroyoga-Haltung-Pose042.webp',
-    tags: ['Estática', 'Terapéutico', 'Familia Pájaro'],
+    tags: ['Familia Pájaro', 'Estática', 'Terapéutico'],
     descripcion: 'La versión acrobática del Pájaro de Espaldas Terapéutico. El volador mantiene una línea corporal activa y arqueada, sin agarre de manos.',
     narrativa_detallada: `
 **Inicio:**
@@ -529,5 +529,7 @@ Se entra comúnmente desde una **pose:lb-10** estable.
     },
   },
 ];
+
+    
 
     

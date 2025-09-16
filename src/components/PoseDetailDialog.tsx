@@ -1,16 +1,25 @@
 
-
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect, useId } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Pose, PoseWithImage, Concept } from '@/types';
+import { useAppContext } from '@/contexts/AppContext';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -21,7 +30,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
-import { Binary, Video, Image as ImageIcon, FileDown, Loader2, Tags, ArrowRight, ArrowLeft, FlipHorizontal } from 'lucide-react';
+import { Binary, Video, Image as ImageIcon, FileDown, Loader2, Tags, ArrowRight, ArrowLeft, FlipHorizontal, Workflow, Map, Plus, List, ChevronDown, Bot, Copy, Share2 } from 'lucide-react';
 import { cn, getYouTubeEmbedUrl } from '@/lib/utils';
 import {
   Tooltip,
@@ -30,11 +39,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from './ui/button';
-import { exportPoseToPdf } from '@/lib/pdf';
+import { exportPoseToPdf, exportPrerequisitesToPdf } from '@/lib/pdf';
 import { toast } from '@/hooks/use-toast';
 import DetailedDescription from './DetailedDescription';
-
-type NameDisplay = 'es' | 'en' | 'both';
+import { Textarea } from './ui/textarea';
+import { Label } from './ui/label';
 
 type PoseDetailDialogProps = {
   pose: PoseWithImage | null;
@@ -42,10 +51,9 @@ type PoseDetailDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   concepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+const getDisplayName = (pose: Pose, displayMode: 'es' | 'en' | 'both'): string => {
     if (!pose || !pose.nombre) return '';
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
@@ -175,7 +183,7 @@ function MediaCarousel({ images, videos, altPrefix }: { images: string[], videos
   );
 }
 
-const ConnectedTransitions = ({ pose, allPoses, nameDisplay, onSelectTransition }: { pose: Pose, allPoses: Pose[], nameDisplay: NameDisplay, onSelectTransition: (pose: Pose) => void }) => {
+const ConnectedTransitions = ({ pose, allPoses, nameDisplay, onSelectTransition }: { pose: Pose, allPoses: Pose[], nameDisplay: 'es' | 'en' | 'both', onSelectTransition: (pose: Pose) => void }) => {
     const transitions = allPoses.filter(p => p.type === 'Transition' || p.type === 'Flow');
 
     const outgoing = transitions.filter(t => t.originPoses?.includes(pose.id));
@@ -226,6 +234,29 @@ const ConnectedTransitions = ({ pose, allPoses, nameDisplay, onSelectTransition 
     );
 };
 
+const PrerequisitesSection = ({ pose, allPoses, nameDisplay, onSelectPrerequisite }: { pose: Pose, allPoses: Pose[], nameDisplay: 'es' | 'en' | 'both', onSelectPrerequisite: (pose: Pose) => void }) => {
+    if (!pose.prerequisites || pose.prerequisites.length === 0) return null;
+
+    const prereqPoses = pose.prerequisites
+        .map(id => allPoses.find(p => p.id === id))
+        .filter((p): p is Pose => !!p);
+
+    if (prereqPoses.length === 0) return null;
+
+    return (
+        <section className="mt-6">
+            <h3 className="font-semibold text-xl text-primary mb-4">Prerrequisitos</h3>
+            <div className="flex flex-wrap gap-2">
+                {prereqPoses.map(prereq => (
+                    <Button key={prereq.id} variant="outline" size="sm" onClick={() => onSelectPrerequisite(prereq)}>
+                        {getDisplayName(prereq, nameDisplay)}
+                    </Button>
+                ))}
+            </div>
+        </section>
+    );
+};
+
 
 export function PoseDetailDialog({
   pose,
@@ -233,25 +264,31 @@ export function PoseDetailDialog({
   open,
   onOpenChange,
   concepts,
-  nameDisplay,
 }: PoseDetailDialogProps) {
   const [isExporting, setIsExporting] = useState(false);
-  const [selectedTransition, setSelectedTransition] = useState<PoseWithImage | null>(null);
+  const [selectedConnectedPose, setSelectedConnectedPose] = useState<PoseWithImage | null>(null);
+  const [isPromptDialogOpen, setIsPromptDialogOpen] = useState(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
+  const { nameDisplay, addToSequence, addWithPrerequisites, addDirectPrerequisites } = useAppContext();
 
   useEffect(() => {
-    // When the main dialog closes, also close the transition dialog
     if (!open) {
-      setSelectedTransition(null);
+      setSelectedConnectedPose(null);
+      setIsPromptDialogOpen(false);
     }
   }, [open]);
   
   if (!pose) return null;
 
-  const handleExport = async () => {
+  const handleExport = async (type: 'pose' | 'prereqs') => {
     if (!pose) return;
     setIsExporting(true);
     try {
-        await exportPoseToPdf(pose, nameDisplay);
+        if (type === 'prereqs') {
+            await exportPrerequisitesToPdf(pose, allPoses, nameDisplay);
+        } else {
+            await exportPoseToPdf(pose, nameDisplay);
+        }
     } catch(error) {
         console.error("Error exporting PDF:", error);
         toast({ title: 'Error de Exportación', description: 'Hubo un problema al generar el PDF. Por favor, inténtalo de nuevo.', variant: 'destructive' });
@@ -260,9 +297,71 @@ export function PoseDetailDialog({
     }
   };
 
-  const handleSelectTransition = (transitionPose: Pose) => {
-      setSelectedTransition(transitionPose as PoseWithImage);
+  const handleSelectConnectedPose = (connectedPose: Pose) => {
+      setSelectedConnectedPose(connectedPose as PoseWithImage);
   }
+
+  const handleGeneratePrompt = () => {
+    const prereqPoses = pose.prerequisites
+      .map(id => allPoses.find(p => p.id === id))
+      .filter((p): p is Pose => !!p);
+    
+    const prereqNames = prereqPoses.length > 0 ? prereqPoses.map(p => getDisplayName(p, 'en')).join(', ') : 'None';
+    
+    const poseName = ['Transition', 'Flow', 'Washing Machine'].includes(pose.type)
+        ? pose.nombre.replace(/\n/g, ' → ')
+        : getDisplayName(pose, 'en');
+
+    const promptText = `
+Eres un experto entrenador de Acroyoga de clase mundial. Tu tarea es crear un plan de entrenamiento completo, progresivo y seguro para alcanzar la postura objetivo: "${poseName}".
+
+**INFORMACIÓN DE LA POSTURA (GUION DE PRUEBA):**
+*   **Postura Objetivo:** ${poseName}
+*   **Nivel:** ${pose.nivel}
+*   **Prerrequisitos Sugeridos:** ${prereqNames}
+*   **Descripción:** ${pose.descripcion}
+
+**TU MISIÓN:**
+Genera un plan de entrenamiento dividido en dos secciones principales: **1. Acondicionamiento Individual** y **2. Progresión en Pareja**.
+
+**FORMATO DE SALIDA (MUY IMPORTANTE - INSTRUCCIÓN ESTRICTA):**
+Debes presentar CADA ejercicio o postura del plan en un formato específico compatible con nuestro constructor de secuencias. **Debes priorizar el uso de los nombres en INGLÉS para cada ejercicio o postura.** No debe haber texto explicativo fuera de este formato. Si sugieres un ejercicio de transición, debes expresarlo como "Origen → Destino".
+Existen tres formatos posibles por línea, separados por '::':
+
+1.  **Formato por Tiempo:** \`Nombre del Ejercicio en Inglés :: segundos\`
+    *   Ejemplo: \`Front Bird :: 30\`
+
+2.  **Formato por Repeticiones:** \`Nombre del Ejercicio en Inglés :: cantidad :: segs/repetición\`
+    *   Ejemplo: \`Bodyweight Squats :: 15 :: 3\`
+
+3.  **Formato con Notas (opcional):** Las notas SIEMPRE deben ir al final, después de los números, precedidas por '::'.
+    *   Ejemplo con tiempo y nota: \`Twisting Seated Stretch :: 30 :: (15s por lado)\`
+    *   Ejemplo con repeticiones y nota: \`Side Plank Hip Lifts :: 24 :: 2 :: (12 por lado)\`
+
+**SECCIONES DEL PLAN:**
+
+**1. Plan de Acondicionamiento Individual:**
+Ejercicios que una persona puede hacer sola para desarrollar la fuerza, flexibilidad, equilibrio y conciencia corporal necesarios.
+
+**2. Plan de Progresión en Pareja:**
+Ejercicios y posturas para practicar con un compañero que construyan de manera segura hacia la postura objetivo. Incluye posturas de calentamiento, calibraciones, progresiones y la postura final.
+
+**INSTRUCCIÓN CRÍTICA DE EXPERTO:**
+La información proporcionada arriba es un "guion de prueba". Como experto, si detectas que la lista de prerrequisitos es incompleta, que la descripción es ambigua o que existe una progresión más segura y efectiva, **confía en tu instinto y conocimiento**. Tienes la autonomía para modificar, añadir o reordenar los pasos para crear el mejor plan de entrenamiento posible. Tu objetivo es la seguridad y la eficacia, incluso si eso significa contradecir ligeramente el guion inicial.
+`.trim();
+
+    setGeneratedPrompt(promptText);
+    setIsPromptDialogOpen(true);
+  };
+
+  const handleCopyPrompt = () => {
+    navigator.clipboard.writeText(generatedPrompt).then(() => {
+        toast({ title: "¡Prompt Copiado!", description: "El prompt ha sido copiado al portapapeles." });
+    }, (err) => {
+        toast({ title: "Error al Copiar", description: "No se pudo copiar el prompt.", variant: "destructive" });
+        console.error('Could not copy text: ', err);
+    });
+  };
 
   const isAcroPose = pose.type !== 'Thai-Massage';
   const isStaticPose = !['Transition', 'Flow', 'Washing Machine'].includes(pose.type);
@@ -274,27 +373,17 @@ export function PoseDetailDialog({
     <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col">
       <DialogHeader>
         <div className="flex justify-between items-start">
-          <div className="flex items-center gap-4">
+          <div className="flex-grow">
             <DialogTitle className="text-3xl font-headline text-primary">
               {getDisplayName(pose, nameDisplay)}
             </DialogTitle>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleExport} 
-                disabled={isExporting}
-                aria-label="Export to PDF"
-              >
-                {isExporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
-                Exportar PDF
-              </Button>
           </div>
-          <Badge variant="secondary" className="bg-accent text-accent-foreground text-sm shrink-0">
+          <Badge variant="secondary" className="bg-accent text-accent-foreground text-sm shrink-0 ml-4">
             Nivel {pose.nivel}
           </Badge>
         </div>
          {pose.tags && pose.tags.length > 0 && (
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <div className="flex items-center gap-2 pt-2 flex-wrap">
                   <Tags className="h-4 w-4 text-muted-foreground" />
                   {pose.tags.map(tag => (
                       <Badge key={tag} variant="outline" className="text-xs font-normal">{tag}</Badge>
@@ -302,6 +391,63 @@ export function PoseDetailDialog({
               </div>
           )}
       </DialogHeader>
+      
+      <DialogFooter className="flex-wrap items-center gap-2 pt-2 sm:justify-start">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" disabled={isExporting}>
+                    {isExporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
+                    Exportar PDF
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={() => handleExport('pose')}>
+                <FileDown className="mr-2 h-4 w-4" />
+                <span>Imprimir Postura Actual</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport('prereqs')}>
+                <Share2 className="mr-2 h-4 w-4" />
+                <span>Imprimir Ruta de Prerrequisitos</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleGeneratePrompt} 
+            aria-label="Generate AI Prompt"
+          >
+            <Bot className="mr-2 h-4 w-4" />
+            Generar Prompt para IA
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="default" size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Workflow className="mr-2 h-4 w-4" />
+                Añadir a Secuencia
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={() => addToSequence(pose)}>
+                <Plus className="mr-2 h-4 w-4" />
+                <span>Añadir Postura Actual</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addDirectPrerequisites(pose)}>
+                <List className="mr-2 h-4 w-4" />
+                <span>Añadir Prerrequisitos Directos</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => addWithPrerequisites(pose)}>
+                <Map className="mr-2 h-4 w-4" />
+                <span>Crear Ruta Completa</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+      </DialogFooter>
+
       <div className="flex-1 overflow-y-auto pr-4 -mr-6">
          <div className="space-y-6">
             <section 
@@ -322,7 +468,13 @@ export function PoseDetailDialog({
               </TabsList>
               <TabsContent value="description" className="mt-4 text-base text-foreground/90">
                  <div className="italic text-muted-foreground mb-4">{pose.descripcion}</div>
-                 <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} nameDisplay={nameDisplay}/>
+                 <DetailedDescription content={pose.narrativa_detallada} concepts={concepts} poses={allPoses} />
+                 <PrerequisitesSection 
+                    pose={pose} 
+                    allPoses={allPoses} 
+                    nameDisplay={nameDisplay}
+                    onSelectPrerequisite={handleSelectConnectedPose} 
+                 />
               </TabsContent>
                {isAcroPose && (
                   <>
@@ -382,7 +534,7 @@ export function PoseDetailDialog({
                     pose={pose}
                     allPoses={allPoses}
                     nameDisplay={nameDisplay}
-                    onSelectTransition={handleSelectTransition}
+                    onSelectTransition={handleSelectConnectedPose}
                 />
             )}
          </div>
@@ -392,22 +544,49 @@ export function PoseDetailDialog({
 
   return (
     <>
-      <Dialog open={open && !selectedTransition} onOpenChange={onOpenChange}>
+      <Dialog open={open && !selectedConnectedPose && !isPromptDialogOpen} onOpenChange={onOpenChange}>
         {MainDialogContent}
+      </Dialog>
+      
+      <Dialog open={isPromptDialogOpen} onOpenChange={setIsPromptDialogOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Prompt para IA Generativa</DialogTitle>
+            <DialogDescription>
+              Copia este prompt y pégalo en tu IA de texto favorita (como Gemini, ChatGPT, etc.) para generar un plan de entrenamiento personalizado.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid w-full gap-1.5">
+              <Label htmlFor="ai-prompt">Prompt Generado</Label>
+              <Textarea
+                id="ai-prompt"
+                readOnly
+                value={generatedPrompt}
+                className="min-h-[300px] text-xs bg-muted"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleCopyPrompt}>
+                <Copy className="mr-2 h-4 w-4" />
+                Copiar Prompt
+            </Button>
+          </DialogFooter>
+        </DialogContent>
       </Dialog>
 
       {/* This is a nested dialog for showing transition details */}
       <PoseDetailDialog
-        pose={selectedTransition}
+        pose={selectedConnectedPose}
         allPoses={allPoses}
-        open={!!selectedTransition}
+        open={!!selectedConnectedPose}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
-            setSelectedTransition(null);
+            setSelectedConnectedPose(null);
           }
         }}
         concepts={concepts}
-        nameDisplay={nameDisplay}
       />
     </>
   );

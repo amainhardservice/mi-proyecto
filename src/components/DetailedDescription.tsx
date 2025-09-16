@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import type { Concept, Pose, PoseWithImage } from '@/types';
+import { useAppContext } from '@/contexts/AppContext';
 import {
   Tooltip,
   TooltipContent,
@@ -11,9 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { PoseDetailDialog } from './PoseDetailDialog';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
-const getDisplayName = (pose: Pose, displayMode: NameDisplay): string => {
+const getDisplayName = (pose: Pose, displayMode: 'es' | 'en' | 'both'): string => {
     const parts = pose.nombre.split('\n');
     const esName = parts[0];
     const enName = parts[1] || '';
@@ -31,11 +30,11 @@ interface DetailedDescriptionProps {
   content?: string;
   concepts: Concept[];
   poses: Pose[];
-  nameDisplay: NameDisplay;
 }
 
-export default function DetailedDescription({ content, concepts, poses, nameDisplay }: DetailedDescriptionProps) {
+export default function DetailedDescription({ content, concepts, poses }: DetailedDescriptionProps) {
     const [selectedPose, setSelectedPose] = useState<PoseWithImage | null>(null);
+    const { nameDisplay } = useAppContext();
 
     if (!content) return null;
 

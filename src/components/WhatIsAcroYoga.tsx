@@ -67,17 +67,14 @@ const calibrationPoints = [
   },
 ];
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 interface WhatIsAcroYogaProps {
   featuredItem: Pose | Concept | null;
-  nameDisplay: NameDisplay;
 }
 
-export default function WhatIsAcroYoga({ featuredItem, nameDisplay }: WhatIsAcroYogaProps) {
+export default function WhatIsAcroYoga({ featuredItem }: WhatIsAcroYogaProps) {
   return (
     <div className="space-y-8">
-      {featuredItem && <FocusFeature item={featuredItem} nameDisplay={nameDisplay}/>}
+      {featuredItem && <FocusFeature item={featuredItem} />}
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-primary">¿Qué es el Acroyoga?</CardTitle>

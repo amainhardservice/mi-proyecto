@@ -8,13 +8,10 @@ import { cn } from '@/lib/utils';
 import { LucideIcon, Aperture, Dna, Anchor, Heart, MessageCircle, Brain, Crown, Zap } from 'lucide-react';
 import DetailedDescription from './DetailedDescription';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type ConceptCardProps = {
   concept: Concept;
   allPoses: Pose[];
   allConcepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
 // Map string names to actual Lucide components
@@ -29,7 +26,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   Zap,
 };
 
-export function ConceptCard({ concept, allPoses, allConcepts, nameDisplay }: ConceptCardProps) {
+export function ConceptCard({ concept, allPoses, allConcepts }: ConceptCardProps) {
   const Icon = concept.simbolo ? iconMap[concept.simbolo] : undefined;
   
   return (
@@ -53,7 +50,6 @@ export function ConceptCard({ concept, allPoses, allConcepts, nameDisplay }: Con
             content={concept.descripcion} 
             concepts={allConcepts} 
             poses={allPoses} 
-            nameDisplay={nameDisplay}
         />
       </AccordionContent>
     </AccordionItem>

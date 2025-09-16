@@ -10,9 +10,8 @@ import { Button } from './ui/button';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAppContext } from '@/contexts/AppContext';
 
-
-type NameDisplay = 'es' | 'en' | 'both';
 
 type SearchResult = {
   id: string;
@@ -23,10 +22,9 @@ type SearchResult = {
 
 interface GlobalSearchProps {
     onSelect: (item: Pose | Concept | Asana | PoseModifier | Exercise) => void;
-    nameDisplay: NameDisplay;
 }
 
-const getDisplayName = (item: Pose | Concept | Asana | PoseModifier | Exercise, displayMode: NameDisplay): string => {
+const getDisplayName = (item: Pose | Concept | Asana | PoseModifier | Exercise, displayMode: 'es' | 'en' | 'both'): string => {
     if ('nombre' in item && 'nivel' in item) { // Pose
         const parts = item.nombre.split('\n');
         const esName = parts[0];
@@ -47,12 +45,13 @@ const getDisplayName = (item: Pose | Concept | Asana | PoseModifier | Exercise, 
 };
 
 
-export default function GlobalSearch({ onSelect, nameDisplay }: GlobalSearchProps) {
+export default function GlobalSearch({ onSelect }: GlobalSearchProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { setOpen, setOpenMobile, state } = useSidebar();
   const isMobile = useIsMobile();
+  const { nameDisplay } = useAppContext();
 
 
   const allData = useMemo(() => [

@@ -5,7 +5,6 @@ import { useState } from 'react';
 import jsPDF from 'jspdf';
 import { Button } from '@/components/ui/button';
 import { FileDown, Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 
 interface GlossaryExporterProps {
@@ -21,9 +20,9 @@ const GlossaryExporter: React.FC<GlossaryExporterProps> = ({ title, content, isG
     setIsExporting(true);
     try {
       const doc = new jsPDF({
-          orientation: 'p',
-          unit: 'pt',
-          format: 'a4'
+        orientation: 'p',
+        unit: 'pt',
+        format: 'a4'
       });
 
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -36,6 +35,13 @@ const GlossaryExporter: React.FC<GlossaryExporterProps> = ({ title, content, isG
         if (y + neededHeight > pageHeight - margin) {
           doc.addPage();
           y = margin;
+          // Re-add header on new page if it's a multi-page global export
+          if (isGlobal) {
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text(title, margin, y);
+            y += 30;
+          }
         }
       };
 
@@ -45,48 +51,57 @@ const GlossaryExporter: React.FC<GlossaryExporterProps> = ({ title, content, isG
       const titleLines = doc.splitTextToSize(title, maxLineWidth);
       checkPageEnd(titleLines.length * 20 + 20);
       doc.text(titleLines, margin, y);
-      y += (titleLines.length * 20) + 20;
+      y += (titleLines.length * 20) + 30;
 
-      const sections = content.split('\n\n');
+      const entries = content.split('\n\n').filter(Boolean);
 
-      sections.forEach(section => {
-        if (!section.trim()) return;
-
-        const lines = section.split('\n');
-        const firstLine = lines[0];
-
-        if (firstLine.startsWith('**') && firstLine.endsWith('**')) { // Concept/Modifier
-          const conceptTitle = firstLine.substring(2, firstLine.length - 2);
-          const conceptDesc = lines.slice(1).join('\n');
-          
-          checkPageEnd(15);
-          y += 5; // Space before concept
-          doc.setFontSize(12);
-          doc.setFont('helvetica', 'bold');
-          const conceptTitleLines = doc.splitTextToSize(conceptTitle, maxLineWidth);
-          checkPageEnd(conceptTitleLines.length * 12 + 12);
-          doc.text(conceptTitleLines, margin, y);
-          y += (conceptTitleLines.length * 12) + 6;
-
-          doc.setFontSize(10);
-          doc.setFont('helvetica', 'normal');
-          const conceptDescLines = doc.splitTextToSize(conceptDesc, maxLineWidth);
-          checkPageEnd(conceptDescLines.length * 10 + 10);
-          doc.text(conceptDescLines, margin, y);
-          y += (conceptDescLines.length * 10) + 10;
-
-        } else { // Category title
-          checkPageEnd(20);
-          y += 10; // Space before category
+      for (const entry of entries) {
+        // Check if it's a category title (doesn't start with **)
+        if (!entry.startsWith('**')) {
+          checkPageEnd(40);
           doc.setFontSize(14);
           doc.setFont('helvetica', 'bold');
-          const categoryLines = doc.splitTextToSize(firstLine, maxLineWidth);
-          checkPageEnd(categoryLines.length * 14 + 14);
+          const categoryLines = doc.splitTextToSize(entry, maxLineWidth);
           doc.text(categoryLines, margin, y);
-          y += (categoryLines.length * 14) + 8;
+          y += (categoryLines.length * 14) + 15;
+          continue;
         }
-      });
-      
+
+        // It's a concept block (title + description)
+        const parts = entry.split('**');
+        if (parts.length < 3) continue;
+
+        // The title is between the first and second '**'
+        const conceptTitleRaw = parts[1].trim();
+        // The description is everything after the second '**'
+        const conceptDescription = parts.slice(2).join('**').trim();
+
+        // Process title to combine Spanish and English parts
+        const conceptTitle = conceptTitleRaw.replace(/\n/g, ' ');
+
+        const titleHeight = doc.getTextDimensions(conceptTitle, {maxWidth: maxLineWidth}).h;
+        const descHeight = doc.getTextDimensions(conceptDescription, {maxWidth: maxLineWidth}).h;
+        checkPageEnd(titleHeight + descHeight + 25);
+
+        // Draw concept title
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        const conceptTitleLines = doc.splitTextToSize(conceptTitle, maxLineWidth);
+        doc.text(conceptTitleLines, margin, y);
+        y += (conceptTitleLines.length * 12) + 6;
+
+        // Draw concept description
+        if (conceptDescription) {
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          const conceptDescLines = doc.splitTextToSize(conceptDescription, maxLineWidth);
+          doc.text(conceptDescLines, margin, y);
+          y += (conceptDescLines.length * 10) + 15;
+        } else {
+            y += 15;
+        }
+      }
+
       const safeFilename = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
       doc.save(`${safeFilename}_glossary.pdf`);
     } catch (error) {

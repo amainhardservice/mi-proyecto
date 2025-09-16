@@ -67,6 +67,11 @@ export const allExercisesData: Exercise[] = [
   { id: 'ex-ind-49', titulo: 'Torsiones de Escorpión\n(Scorpion Twists)', descripcion: 'Tumbado boca abajo, lleva un pie hacia la mano opuesta para una torsión dinámica de la columna lumbar.', enfasis: 'Movilidad de Columna', categoria: 'Individual' },
   { id: 'ex-ind-50', titulo: 'Estiramiento del Flexor de la Cadera Arrodillado\n(Kneeling Hip Flexor Stretch)', descripcion: 'Desde una posición de zancada con la rodilla de atrás en el suelo, empuja la cadera hacia adelante.', enfasis: 'Flexibilidad', categoria: 'Individual' },
   { id: 'ex-ind-51', titulo: 'Estiramiento del Piriforme en 90/90\n(90/90 Piriformis Stretch)', descripcion: 'Sentado con ambas piernas dobladas a 90 grados, una adelante y otra atrás, para movilizar la rotación interna y externa de la cadera.', enfasis: 'Movilidad de Cadera', categoria: 'Individual' },
+  { id: 'ex-ind-52', titulo: 'Preparación de Brújula\n(Compass Prep)', descripcion: 'Estira isquiotibiales intensamente mientras se mantiene equilibrio. Prepara específicamente la flexibilidad de piernas para la posición final.', enfasis: 'Flexibilidad', categoria: 'Individual' },
+  { id: 'ex-ind-53', titulo: 'Puente de Glúteo a una Pierna\n(Single Leg Glute Bridge)', descripcion: 'Fortalece glúteos unilateralmente y mejora estabilidad pélvica. Desarrolla la fuerza posterior necesaria para extender las piernas.', enfasis: 'Activación de Glúteos', categoria: 'Individual' },
+  { id: 'ex-ind-54', titulo: 'Plancha Lateral con Torsión\n(Twisted Side Plank)', descripcion: 'Combina fuerza lateral con rotación. Prepara el core para los movimientos complejos y multidireccionales.', enfasis: 'Activación del Core', categoria: 'Individual' },
+  { id: 'ex-ind-55', titulo: 'Perro Pájaro\n(Bird Dog)', descripcion: 'Mejora coordinación y estabilidad opuesta (brazo-pierna contraria). Desarrolla el control motor fino necesario para balances complejos.', enfasis: 'Coordinación y Core', categoria: 'Individual' },
+  { id: 'ex-ind-56', titulo: 'Posición Hueca\n(Hollow Hold)', descripcion: 'Fortalece profundamente el core anterior. Crea la base de fuerza abdominal necesaria para levantar el cuerpo del suelo.', enfasis: 'Activación del Core', categoria: 'Individual' },
   
   // --- CALENTAMIENTO EN PAREJA ---
 

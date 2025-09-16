@@ -6,17 +6,14 @@ import { Accordion } from '@/components/ui/accordion';
 import { ConceptCard } from './ConceptCard';
 import GlossaryExporter from './GlossaryExporter';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type ConceptGlossaryProps = {
   title: string;
   concepts: Concept[];
   allPoses: Pose[];
   allConcepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-export default function ConceptGlossary({ title, concepts, allPoses, allConcepts, nameDisplay }: ConceptGlossaryProps) {
+export default function ConceptGlossary({ title, concepts, allPoses, allConcepts }: ConceptGlossaryProps) {
   if (concepts.length === 0) {
     return null; 
   }
@@ -44,7 +41,6 @@ export default function ConceptGlossary({ title, concepts, allPoses, allConcepts
                 concept={concept}
                 allPoses={allPoses}
                 allConcepts={allConcepts}
-                nameDisplay={nameDisplay}
              />
           ))}
         </Accordion>

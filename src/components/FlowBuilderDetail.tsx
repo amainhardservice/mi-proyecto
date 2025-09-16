@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -8,24 +7,25 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import type { SequenceItem, Pose, Concept, Exercise, PoseWithImage } from '@/types';
-import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare, HeartPulse, Tags } from 'lucide-react';
+import { BookText, Bot, BrainCircuit, HeartHandshake, Dumbbell, Sparkles, Scale, MessageSquare, HeartPulse, Tags, Timer, Repeat, FlipHorizontal } from 'lucide-react';
 import { getYouTubeEmbedUrl, cn } from '@/lib/utils';
 import DetailedDescription from './DetailedDescription';
 import { PoseDetailDialog } from './PoseDetailDialog';
+import { useAppContext } from '@/contexts/AppContext';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 
-
-type NameDisplay = 'es' | 'en' | 'both';
 
 interface FlowBuilderDetailProps {
     item: SequenceItem | null;
-    onUpdateNotes: (uniqueId: string, notes: string) => void;
-    nameDisplay: NameDisplay;
+    onUpdateItem: (uniqueId: string, updates: Partial<SequenceItem>) => void;
     allPoses: Pose[];
     allConcepts: Concept[];
 }
 
-const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
-    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) {
+const getDisplayName = (item: any, displayMode: 'es' | 'en' | 'both'): string[] => {
+    if (['pose', 'transition', 'flow', 'whip', 'icarian', 'l-basing', 'standing', 'thai-massage', 'therapeutic', 'washing-machine'].includes(item.itemType)) {
         const parts = item.nombre.split('\n');
         const esName = parts[0];
         const enName = parts[1] || '';
@@ -60,12 +60,14 @@ const getDisplayName = (item: any, displayMode: NameDisplay): string[] => {
 };
 
 
-export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, allPoses, allConcepts }: FlowBuilderDetailProps) {
+export default function FlowBuilderDetail({ item, onUpdateItem, allPoses, allConcepts }: FlowBuilderDetailProps) {
   const [selectedPose, setSelectedPose] = useState<PoseWithImage | null>(null);
+  const { nameDisplay } = useAppContext();
+  const [isFlipped, setIsFlipped] = useState(false);
   
   if (!item) {
     return (
-      <Card className="w-full md:w-1/3 flex-col hidden md:flex">
+      <Card className="w-full md:w-2/3 flex-col hidden lg:flex">
         <CardHeader>
           <CardTitle>Detalles</CardTitle>
         </CardHeader>
@@ -91,17 +93,17 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
   }
 
   const handleTitleClick = () => {
-    if (['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType)) {
+    if (['pose', 'transition', 'flow', 'whip', 'icarian', 'l-basing', 'standing', 'thai-massage', 'therapeutic', 'washing-machine'].includes(item.itemType)) {
         setSelectedPose(item as PoseWithImage);
     }
   }
 
   const renderContent = () => {
     const videoUrl = ('url_video' in item && item.url_video) ? getYouTubeEmbedUrl(item.url_video) : null;
-    const isPoseLike = ['pose', 'transition', 'flow', 'whip', 'icarian'].includes(item.itemType);
+    const isPoseLike = ['pose', 'transition', 'flow', 'whip', 'icarian', 'l-basing', 'standing', 'thai-massage', 'therapeutic', 'washing-machine'].includes(item.itemType);
 
     if (isPoseLike) {
-        const pose = item as import('@/types').Pose;
+        const pose = item as import('@types').Pose;
         return (
           <>
             <div className="flex justify-between items-start">
@@ -124,8 +126,22 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                 </div>
             )}
             {pose.url_imagen && (
-              <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4">
-                <Image src={pose.url_imagen} alt={titleParts.join(' ')} fill className="object-cover" />
+              <div className="relative aspect-video w-full rounded-lg overflow-hidden my-4 group">
+                <Image 
+                    src={pose.url_imagen} 
+                    alt={titleParts.join(' ')} 
+                    fill 
+                    className={cn("object-cover transition-transform duration-300", isFlipped && "transform -scale-x-100")}
+                    data-ai-hint="acroyoga pose"
+                 />
+                 <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2 h-8 w-8 bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    onClick={() => setIsFlipped(!isFlipped)}
+                >
+                    <FlipHorizontal className="h-5 w-5" />
+                </Button>
               </div>
             )}
             <p className="text-muted-foreground italic mb-4">{pose.descripcion}</p>
@@ -134,7 +150,6 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                 content={pose.narrativa_detallada} 
                 concepts={allConcepts} 
                 poses={allPoses} 
-                nameDisplay={nameDisplay} 
               />
             )}
             
@@ -171,7 +186,7 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
     
     switch(item.itemType) {
       case 'concept':
-        const concept = item as import('@/types').Concept;
+        const concept = item as import('@types').Concept;
         return (
             <>
                 <div className="flex justify-between items-start">
@@ -185,12 +200,11 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                     content={concept.descripcion} 
                     concepts={allConcepts} 
                     poses={allPoses} 
-                    nameDisplay={nameDisplay} 
                 />
             </>
         )
       case 'asana':
-        const asana = item as import('@/types').Asana & { notes: string };
+        const asana = item as import('@types').Asana & { notes: string };
         const asanaVideoUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
         return (
             <>
@@ -220,7 +234,6 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
                     content={item.descripcion} 
                     concepts={allConcepts} 
                     poses={allPoses} 
-                    nameDisplay={nameDisplay} 
                 />
             </>
         )
@@ -248,7 +261,7 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
 
   return (
     <>
-      <Card className="w-full md:w-1/3 flex-col hidden md:flex">
+      <Card className="w-full md:w-2/3 flex-col flex lg:flex-grow">
         <CardHeader>
           <CardTitle>Detalles</CardTitle>
         </CardHeader>
@@ -256,14 +269,59 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
           <ScrollArea className="h-full pr-4">
             <div className="space-y-4">
               {renderContent()}
-              <div className="mt-6">
-                <h4 className="font-semibold text-lg text-primary mb-2">Notas Personales</h4>
-                <Textarea 
-                  placeholder="Añade tus propios consejos, recordatorios o puntos de enfoque aquí..."
-                  value={item.notes}
-                  onChange={(e) => onUpdateNotes(item.uniqueId, e.target.value)}
-                  className="min-h-[100px]"
-                />
+              <div className="mt-6 space-y-4">
+                <div>
+                   {item.durationMode === 'seconds' ? (
+                        <div>
+                            <Label htmlFor="duration" className="font-semibold text-lg text-primary mb-2 flex items-center gap-2"><Timer className="h-5 w-5" /> Duración (segundos)</Label>
+                            <Input
+                                id="duration"
+                                type="number"
+                                value={item.duration}
+                                onChange={(e) => onUpdateItem(item.uniqueId, { duration: parseInt(e.target.value, 10) || 0 })}
+                                className="mt-1"
+                                min="1"
+                            />
+                        </div>
+                   ) : (
+                        <div className="space-y-2">
+                            <Label className="font-semibold text-lg text-primary flex items-center gap-2"><Repeat className="h-5 w-5" /> Repeticiones</Label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="quantity" className="text-sm">Cantidad</Label>
+                                    <Input
+                                        id="quantity"
+                                        type="number"
+                                        value={item.quantity}
+                                        onChange={(e) => onUpdateItem(item.uniqueId, { quantity: parseInt(e.target.value, 10) || 1 })}
+                                        className="mt-1"
+                                        min="1"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="secondsPerRep" className="text-sm">Segs/Rep</Label>
+                                    <Input
+                                        id="secondsPerRep"
+                                        type="number"
+                                        value={item.secondsPerRep}
+                                        onChange={(e) => onUpdateItem(item.uniqueId, { secondsPerRep: parseInt(e.target.value, 10) || 1 })}
+                                        className="mt-1"
+                                        min="1"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                   )}
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-primary mb-2">Notas Personales</h4>
+                  <Textarea 
+                    placeholder="Añade tus propios consejos, recordatorios o puntos de enfoque aquí..."
+                    value={item.notes}
+                    onChange={(e) => onUpdateItem(item.uniqueId, { notes: e.target.value })}
+                    className="min-h-[100px]"
+                  />
+                </div>
               </div>
             </div>
           </ScrollArea>
@@ -275,7 +333,6 @@ export default function FlowBuilderDetail({ item, onUpdateNotes, nameDisplay, al
         open={!!selectedPose}
         onOpenChange={(open) => !open && setSelectedPose(null)}
         concepts={allConcepts}
-        nameDisplay={nameDisplay}
       />
     </>
   );

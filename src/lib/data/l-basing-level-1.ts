@@ -119,7 +119,7 @@ export const lBasingLevel1Poses: Pose[] = [
     prerequisites: ['lb-15'],
     url_video: 'https://www.youtube.com/watch?v=kT4KNu4sDC8',
     gallery_videos: ['https://www.youtube.com/watch?v=usu93tTl1HQ'],
-    url_imagen: 'https://s3.eu-central-1.amazonaws.com/acrodicted/poses/original/img068.png',
+    url_imagen: 'https://i.ibb.co/bk0GRwj/img068.png',
     gallery_images: ['https://camillamia.com/wp-content/uploads/2020/03/shoulderstand-4-500x498.jpg'],
     tags: ['Equilibrio', 'Inversión sobre Hombros'],
     descripcion: 'Una inversión segura sobre las espinillas de la base. Enseña la alineación de caderas sobre hombros en una plataforma estable.',
@@ -324,7 +324,7 @@ export const lBasingLevel1Poses: Pose[] = [
     type: 'L-Basing',
     prerequisites: ['lb-1', 'lb-2'],
     url_video: 'https://www.youtube.com/watch?v=LQacjmL6c1w',
-    url_imagen: 'https://media.istockphoto.com/id/636545454/es/foto/acroyoga-pajarito-pose.jpg?s=1024x1024&w=is&k=20&c=xzIatBnBFLUmhnKdBO2VSGbyLSCOmrnJk-I5QIfjy-g=',
+    url_imagen: 'https://i.ibb.co/kL48nzL/image.png',
     tags: ['Estática', 'Fundamental', 'Familia Pájaro'],
     descripcion: 'Una postura de equilibrio juguetona donde el volador se equilibra en las rodillas de la base, fomentando la conexión y el juego.',
     narrativa_detallada: `

@@ -8,16 +8,13 @@ import {
 import { getYouTubeEmbedUrl } from '@/lib/utils';
 import DetailedDescription from './DetailedDescription';
 
-type NameDisplay = 'es' | 'en' | 'both';
-
 type AsanaCardProps = {
   asana: Asana;
   allPoses: Pose[];
   allConcepts: Concept[];
-  nameDisplay: NameDisplay;
 };
 
-export function AsanaCard({ asana, allPoses, allConcepts, nameDisplay }: AsanaCardProps) {
+export function AsanaCard({ asana, allPoses, allConcepts }: AsanaCardProps) {
   const embedUrl = asana.url_video ? getYouTubeEmbedUrl(asana.url_video) : null;
 
   return (
@@ -33,7 +30,6 @@ export function AsanaCard({ asana, allPoses, allConcepts, nameDisplay }: AsanaCa
             content={asana.descripcion} 
             concepts={allConcepts} 
             poses={allPoses} 
-            nameDisplay={nameDisplay}
         />
         {embedUrl && (
            <div className="relative aspect-video rounded-md overflow-hidden">
