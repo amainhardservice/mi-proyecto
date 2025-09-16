@@ -1,35 +1,31 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const imageUrl = searchParams.get('url');
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const url = searchParams.get('url');
 
-  if (!imageUrl) {
-    return new NextResponse('Image URL is required', { status: 400 });
+  if (!url) {
+    return NextResponse.json({ error: 'URL is required' }, { status: 400 });
   }
 
   try {
-    const response = await fetch(imageUrl, {
+    const imageRes = await fetch(url);
+    if (!imageRes.ok) {
+      throw new Error(`Failed to fetch image: ${imageRes.statusText}`);
+    }
+    const imageBuffer = await imageRes.arrayBuffer();
+    const contentType = imageRes.headers.get('content-type') || 'image/jpeg';
+    
+    return new NextResponse(imageBuffer, {
+      status: 200,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      }
+        'Content-Type': contentType,
+      },
     });
 
-    if (!response.ok) {
-      return new NextResponse(`Failed to fetch image: ${response.statusText}`, {
-        status: response.status,
-      });
-    }
-
-    const imageBlob = await response.blob();
-    const headers = new Headers();
-    headers.set('Content-Type', response.headers.get('Content-Type') || 'image/jpeg');
-    headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-
-    return new NextResponse(imageBlob, { status: 200, headers });
   } catch (error) {
-    console.error('Image proxy error:', error);
-    return new NextResponse('Error fetching image', { status: 500 });
+    console.error(`[Image Proxy] Error fetching image:`, error);
+    return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });
   }
 }
