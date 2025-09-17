@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import type { Pose, Concept, PoseWithImage } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Video, Image as ImageIcon, ChevronLeft, ChevronRight, Tags, Workflow, GitCommit, Repeat, Wind, Sparkles, PersonStanding, HeartHandshake, Star, Feather, Crown, ThumbsUp, Hand, GitBranch, Text, FlipHorizontal } from 'lucide-react';
+import { Video, Image as ImageIcon, ChevronLeft, ChevronRight, Tags, Workflow, GitCommit, Repeat, Wind, Sparkles, PersonStanding, HeartHandshake, Star, Feather, Crown, ThumbsUp, Hand, GitBranch, Text, FlipHorizontal, LogIn, LogOut, ListTree } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/contexts/AppContext';
 import {
@@ -46,9 +46,26 @@ type PoseNodeProps = {
   onViewChange: (view: ActiveView) => void;
   accordionValue: string[];
   updatePositions: () => void;
+  onSetOutgoing: () => void;
+  onSetIncoming: () => void;
+  onSetPrerequisites: () => void;
 };
 
-const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], alt: string, onImageClick: (e: React.MouseEvent) => void }) => {
+const ImageCarouselNode = ({ 
+    images, 
+    alt, 
+    onImageClick, 
+    onSetIncoming,
+    onSetPrerequisites,
+    onSetOutgoing
+}: { 
+    images: string[], 
+    alt: string, 
+    onImageClick: (e: React.MouseEvent) => void,
+    onSetIncoming: () => void,
+    onSetPrerequisites: () => void,
+    onSetOutgoing: () => void,
+}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -69,6 +86,11 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
         setIsFlipped(prev => !prev);
     };
 
+    const handleIconClick = (e: React.MouseEvent, action: () => void) => {
+        e.stopPropagation();
+        action();
+    }
+
     const imageUrl = images[currentIndex];
 
     return (
@@ -80,6 +102,9 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
                 className={cn("object-cover transition-transform duration-300", isFlipped && "transform -scale-x-100")}
                 data-ai-hint="acroyoga pose"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity"></div>
+             
+             {/* Top-right icon */}
              <Button
                 variant="ghost"
                 size="icon"
@@ -88,6 +113,31 @@ const ImageCarouselNode = ({ images, alt, onImageClick }: { images: string[], al
             >
                 <FlipHorizontal className="h-5 w-5" />
             </Button>
+            
+            {/* Bottom icons */}
+            <div className="absolute bottom-1 left-1 right-1 flex justify-between items-center opacity-0 group-hover/carousel:opacity-100 transition-opacity">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 bg-black/30 hover:bg-black/50 text-white" onClick={(e) => handleIconClick(e, onSetIncoming)}> <LogIn className="h-5 w-5" /> </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom"><p>Transiciones de Llegada</p></TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 bg-black/30 hover:bg-black/50 text-white" onClick={(e) => handleIconClick(e, onSetPrerequisites)}> <ListTree className="h-5 w-5" /> </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom"><p>Prerrequisitos</p></TooltipContent>
+                    </Tooltip>
+                     <Tooltip>
+                        <TooltipTrigger asChild>
+                             <Button variant="ghost" size="icon" className="h-7 w-7 bg-black/30 hover:bg-black/50 text-white" onClick={(e) => handleIconClick(e, onSetOutgoing)}> <LogOut className="h-5 w-5" /> </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom"><p>Transiciones de Salida</p></TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </div>
+
             {images.length > 1 && (
                 <>
                     <Button 
@@ -133,6 +183,9 @@ export const PoseNode = ({
   onViewChange,
   accordionValue,
   updatePositions,
+  onSetOutgoing,
+  onSetIncoming,
+  onSetPrerequisites,
 }: PoseNodeProps) => {
   const [selectedPrereq, setSelectedPrereq] = useState<PoseWithImage | null>(null);
   const wasOpen = useRef(accordionValue.includes(pose.id));
@@ -205,7 +258,14 @@ export const PoseNode = ({
     if (expandedView === 'image' && hasImage) {
       return (
         <div className="p-1">
-          <ImageCarouselNode images={allImages} alt={`Imagen de ${pose.nombre}`} onImageClick={handleImageClick} />
+          <ImageCarouselNode 
+            images={allImages} 
+            alt={`Imagen de ${pose.nombre}`} 
+            onImageClick={handleImageClick}
+            onSetIncoming={onSetIncoming}
+            onSetPrerequisites={onSetPrerequisites}
+            onSetOutgoing={onSetOutgoing}
+          />
         </div>
       );
     }

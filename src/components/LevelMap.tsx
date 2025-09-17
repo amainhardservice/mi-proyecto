@@ -11,7 +11,7 @@ import { Accordion } from '@/components/ui/accordion';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { HelpCircle, Video, Image as ImageIcon, Text, Move, ArrowLeftRight, Filter, Volume2, FilePlus } from 'lucide-react';
+import { HelpCircle, Video, Image as ImageIcon, Text, Move, ArrowLeftRight, Filter, Volume2, FilePlus, LogIn, LogOut, ListTree } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn, getYouTubeThumbnailUrl } from '@/lib/utils';
 import Image from 'next/image';
@@ -20,11 +20,12 @@ import { useAppContext } from '@/contexts/AppContext';
 import { Switch } from './ui/switch';
 import { playSoundForPose } from '@/lib/sounds';
 import { toast } from '@/hooks/use-toast';
+import RouteActions from './RouteActions';
 
 
 type InteractionMode = 'explore' | 'route';
 type ExpandedView = 'video' | 'image' | 'description';
-type ConnectionMode = 'off' | 'incoming' | 'outgoing';
+type ConnectionMode = 'off' | 'incoming' | 'outgoing' | 'prerequisites';
 
 type Connection = {
   from: string;
@@ -74,7 +75,7 @@ export default function LevelMap({
   const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const poseNodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const { nameDisplay, soundsEnabled, setSoundsEnabled, soundEffectsVolume, setSequence, addToSequence, setActiveView, setFlowBuilderSequence } = useAppContext();
+  const { nameDisplay, soundsEnabled, setSoundsEnabled, soundEffectsVolume, setActiveView, setFlowBuilderSequence } = useAppContext();
   
   const [hoveredPoseId, setHoveredPoseId] = useState<string | null>(null);
   const [selectedRoutePoseIds, setSelectedRoutePoseIds] = useState<string[]>([]);
@@ -223,7 +224,7 @@ export default function LevelMap({
 
 
   const transitionConnections = useMemo((): Connection[] => {
-    if (interactionMode !== 'explore' || connectionState.mode === 'off' || !connectionState.poseId) return [];
+    if (interactionMode !== 'explore' || !connectionState.poseId || (connectionState.mode !== 'incoming' && connectionState.mode !== 'outgoing')) return [];
     
     const poseId = connectionState.poseId;
     
@@ -254,19 +255,35 @@ export default function LevelMap({
 
 
   const prerequisiteConnections = useMemo((): Connection[] => {
-     if(interactionMode !== 'explore' || !hoveredPoseId || connectionState.poseId) return [];
-    const pose = allPosesById[hoveredPoseId];
-    if (!pose) return [];
+     if (interactionMode !== 'explore' || !connectionState.poseId || connectionState.mode !== 'prerequisites') {
+        // Also show prereqs on hover, but only if no pose is fixed
+        if(interactionMode !== 'explore' || !hoveredPoseId || connectionState.poseId) return [];
+        const pose = allPosesById[hoveredPoseId];
+        if (!pose) return [];
+        return (pose.prerequisites || [])
+          .map(id => ({ from: id, to: hoveredPoseId, type: 'prerequisite' }));
+     }
     
+    const pose = allPosesById[connectionState.poseId];
+    if (!pose) return [];
     return (pose.prerequisites || [])
-      .map(id => ({ from: id, to: hoveredPoseId, type: 'prerequisite' }));
+      .map(id => ({ from: id, to: connectionState.poseId!, type: 'prerequisite' }));
 
-  }, [hoveredPoseId, allPosesById, interactionMode, connectionState.poseId]);
+  }, [hoveredPoseId, allPosesById, interactionMode, connectionState]);
   
   const routeConnections = useMemo((): Connection[] => {
     if (interactionMode !== 'route' || selectedRoutePoseIds.length < 2) return [];
     const connections: Connection[] = [];
     for (let i = 0; i < selectedRoutePoseIds.length - 1; i++) {
+        const from = selectedRoutePoseIds[i];
+        const to = selectedRoutePoseIds[i + 1];
+
+        // Handle self-loops
+        if (from === to) {
+           connections.push({ from, to, type: 'route' });
+           continue;
+        }
+
         connections.push({
             from: selectedRoutePoseIds[i],
             to: selectedRoutePoseIds[i + 1],
@@ -282,22 +299,24 @@ export default function LevelMap({
       const allHighlighted = new Set<string>();
       selectedRoutePoseIds.forEach(id => {
         allHighlighted.add(id);
-        // getAllPrerequisites(id).forEach(pId => allHighlighted.add(pId));
       });
       return Array.from(allHighlighted);
     }
   
     if (interactionMode === 'explore') {
-      if (hoveredPoseId && !connectionState.poseId) {
-        return [hoveredPoseId, ...getAllPrerequisites(hoveredPoseId)];
-      }
       if (connectionState.mode !== 'off' && connectionState.poseId) {
+        if (connectionState.mode === 'prerequisites') {
+            return [connectionState.poseId, ...prerequisiteConnections.map(c => c.from)];
+        }
         const connectedIds = transitionConnections.flatMap(c => [c.from, c.to]);
         return [connectionState.poseId, ...connectedIds];
       }
+      if (hoveredPoseId && !connectionState.poseId) {
+        return [hoveredPoseId, ...prerequisiteConnections.map(c => c.from)];
+      }
     }
     return [];
-  }, [interactionMode, selectedRoutePoseIds, transitionConnections, connectionState, hoveredPoseId, getAllPrerequisites]);
+  }, [interactionMode, selectedRoutePoseIds, transitionConnections, prerequisiteConnections, connectionState, hoveredPoseId]);
 
 
   const posesByLevel = useMemo(() => {
@@ -361,54 +380,58 @@ export default function LevelMap({
     }
   }
 
-  const handlePoseClick = (pose: Pose) => {
-    if (interactionMode === 'route') {
-       setSelectedRoutePoseIds(prev => [...prev, pose.id]);
-       if (soundsEnabled) {
-         playSoundForPose(pose, soundEffectsVolume);
-       }
-       return;
-    }
-    
-    // Explore mode
-    if (soundsEnabled) {
-      playSoundForPose(pose, soundEffectsVolume);
-    }
-    
-    setExpandedView('image'); // Force image view on transition click
-    
+  const setConnectionMode = (pose: Pose, mode: ConnectionMode) => {
     const poseHasMedia = (pId: string) => {
-        const pose = allPosesById[pId];
-        return pose && (pose.url_imagen || pose.gallery_images?.length || pose.url_video || pose.gallery_videos?.length);
+      const poseData = allPosesById[pId];
+      return poseData && (poseData.url_imagen || poseData.gallery_images?.length || poseData.url_video || poseData.gallery_videos?.length);
     };
 
-    setConnectionState(prevState => {
-        let newMode: ConnectionMode = 'off';
-        let newAccordionValue: string[] = [];
-
-        if (prevState.poseId !== pose.id || prevState.mode === 'off') {
-            newMode = 'outgoing';
+    let newAccordionValue: string[] = [];
+    if (mode !== 'off') {
+        if (mode === 'outgoing') {
             const outgoingConnections = transitions
                 .filter(t => t.originPoses?.includes(pose.id))
                 .flatMap(t => t.destinationPoses || []);
             newAccordionValue = [pose.id, ...outgoingConnections].filter(poseHasMedia);
-        } else if (prevState.mode === 'outgoing') {
-            newMode = 'incoming';
-             const incomingConnections = transitions
+        } else if (mode === 'incoming') {
+            const incomingConnections = transitions
                 .filter(t => t.destinationPoses?.includes(pose.id))
                 .flatMap(t => t.originPoses || []);
             newAccordionValue = [pose.id, ...incomingConnections].filter(poseHasMedia);
-        } else if (prevState.mode === 'incoming') {
-            newMode = 'off';
-            newAccordionValue = [];
+        } else if (mode === 'prerequisites') {
+            const prereqConnections = (allPosesById[pose.id]?.prerequisites || []).filter(poseHasMedia);
+            newAccordionValue = [pose.id, ...prereqConnections];
         }
+    }
+    
+    setAccordionValue(newAccordionValue);
+    setConnectionState(mode === 'off' ? { poseId: null, mode: 'off' } : { poseId: pose.id, mode });
+  };
 
-        setAccordionValue(newAccordionValue);
-        if (newMode === 'off') {
-          return { poseId: null, mode: 'off' };
-        }
-        return { poseId: pose.id, mode: newMode };
-    });
+  const handlePoseClick = (pose: Pose) => {
+    if (interactionMode === 'route') {
+      if (soundsEnabled) playSoundForPose(pose, soundEffectsVolume);
+      setSelectedRoutePoseIds(prev => [...prev, pose.id]);
+      return;
+    }
+
+    if (soundsEnabled) playSoundForPose(pose, soundEffectsVolume);
+    setExpandedView('image');
+
+    const currentState = connectionState;
+    let newMode: ConnectionMode;
+
+    if (currentState.poseId !== pose.id || currentState.mode === 'off') {
+      newMode = 'outgoing';
+    } else if (currentState.mode === 'outgoing') {
+      newMode = 'incoming';
+    } else if (currentState.mode === 'incoming') {
+      newMode = 'prerequisites';
+    } else { // if mode is 'prerequisites'
+      newMode = 'off';
+    }
+
+    setConnectionMode(pose, newMode);
   };
   
   const handleRouteChange = (poseId: string, checked: boolean) => {
@@ -456,6 +479,10 @@ export default function LevelMap({
     setActiveView({ type: 'flow-builder' });
     toast({ title: 'Ruta Añadida', description: `${selectedRoutePoseIds.length} posturas han sido añadidas al constructor de secuencias.` });
   };
+  
+  const handleClearRoute = () => {
+    setSelectedRoutePoseIds([]);
+  }
 
   return (
     <div className="bg-background/80 backdrop-blur-sm rounded-lg border border-border/50 shadow-lg">
@@ -492,10 +519,13 @@ export default function LevelMap({
               <PopoverContent className="w-80 text-sm">
                 <ul className="space-y-2">
                   <li><strong className="text-primary">Explorar:</strong></li>
-                  <li>- 1er Clic: Muestra transiciones de salida y expande las fotos.</li>
-                  <li>- 2º Clic: Muestra transiciones de llegada y expande las fotos.</li>
-                  <li>- 3er Clic: Limpia la selección.</li>
-                  <li><strong className="text-primary">Ruta:</strong> Haz clic en las posturas para crear una secuencia visual.</li>
+                  <li>- 1er Clic: Transiciones de Salida.</li>
+                  <li>- 2º Clic: Transiciones de Llegada.</li>
+                  <li>- 3er Clic: Prerrequisitos.</li>
+                  <li>- 4º Clic: Limpiar selección.</li>
+                  <li>- Hover: Muestra prerrequisitos si no hay nada fijado.</li>
+                  <li>- Iconos en imagen: Acceso directo a cada vista.</li>
+                  <li><strong className="text-primary">Ruta:</strong> Usa los checkboxes para crear una secuencia.</li>
                 </ul>
               </PopoverContent>
             </Popover>
@@ -675,7 +705,7 @@ export default function LevelMap({
 
         {interactionMode === 'route' && (
           <div className="flex items-center justify-end gap-4 p-4 border-b mb-4">
-               <RouteExporter 
+              <RouteExporter 
                   title="Ruta de Aprendizaje"
                   posesToExport={selectedRoutePoseIds}
                   allPoses={allPoses}
@@ -691,17 +721,13 @@ export default function LevelMap({
                   exportMode="detailed"
                   buttonText="Imprimir Contenido Detallado"
                 />
-                 <Button 
-                    variant="default" 
-                    size="sm" 
-                    onClick={handleAddToBuilder} 
-                    disabled={selectedRoutePoseIds.length === 0}
-                    aria-label="Añadir al Constructor de Secuencias"
-                    className="bg-accent text-accent-foreground hover:bg-accent/90"
-                  >
-                    <FilePlus className="mr-2 h-4 w-4" />
-                    Añadir al Constructor
-                  </Button>
+                 <RouteActions 
+                  title="Acciones de Ruta"
+                  poseIds={selectedRoutePoseIds}
+                  allPoses={allPoses}
+                  onClear={handleClearRoute}
+                  onSubmit={handleAddToBuilder}
+                 />
           </div>
         )}
         {Object.keys(posesByLevel).length > 0 ? (
@@ -746,6 +772,9 @@ export default function LevelMap({
                             onViewChange={setExpandedView}
                             accordionValue={accordionValue}
                             updatePositions={updateAllPositions}
+                            onSetOutgoing={() => setConnectionMode(pose, 'outgoing')}
+                            onSetIncoming={() => setConnectionMode(pose, 'incoming')}
+                            onSetPrerequisites={() => setConnectionMode(pose, 'prerequisites')}
                           />
                         </div>
                         )
